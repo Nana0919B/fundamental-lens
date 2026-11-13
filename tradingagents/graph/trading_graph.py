@@ -73,11 +73,11 @@ class TradingAgentsGraph:
         """
         self.macro_context = deepcopy(macro_context)
         self.seed_reports = deepcopy(seed_reports or {})
-        allowed = {"fundamentals_report", "operating_report", "metrics_report"}
+        allowed = {"fundamentals_report", "operating_report", "metrics_report", "news_report"}
         if not set(self.seed_reports).issubset(allowed) or any(
             not isinstance(value, str) or not value.strip() for value in self.seed_reports.values()
         ):
-            raise ValueError("Only nonempty frozen financial reports may be reused")
+            raise ValueError("Only nonempty frozen analyst reports may be reused")
         self.research_snapshot = deepcopy(research_snapshot)
         self.debug = debug
         self.config = config or DEFAULT_CONFIG
@@ -327,9 +327,17 @@ class TradingAgentsGraph:
         """
         trade_date = _validate_trade_date(trade_date)
         snapshot = getattr(self, "research_snapshot", None)
+        # A failed archived run can finish after midnight without fetching newer
+        # evidence. Require every analyst report so no dated tools are rerun.
+        archived_replay = (
+            set(getattr(self, "seed_reports", {}))
+            == {"fundamentals_report", "operating_report", "metrics_report", "news_report"}
+            and set(self.selected_analysts) == {"fundamentals", "operating", "metrics", "news"}
+        )
         if snapshot is not None and (
             snapshot['company']['symbol'] != company_name
-            or snapshot['as_of_date'] != trade_date or is_historical(trade_date)
+            or snapshot['as_of_date'] != trade_date
+            or (is_historical(trade_date) and not archived_replay)
         ):
             raise ValueError("Current financial snapshot must match the ticker and today's run date")
         state = self.propagator.create_initial_state(

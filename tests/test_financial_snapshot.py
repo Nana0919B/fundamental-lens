@@ -275,3 +275,23 @@ def test_macro_evidence_reaches_original_news_and_all_decision_roles_without_fin
     assert state["macro_context"]["reports"][0].startswith("DGS10: 4.98")
     path = next((tmp_path / "results").rglob("full_states_log_*.json"))
     assert json.loads(path.read_text())["macro_context"] == state["macro_context"]
+
+
+def test_archived_retry_replays_all_four_analysts_without_current_vendor_data(monkeypatch, tmp_path, snapshot):
+    import yfinance
+
+    from tradingagents.graph import trading_graph
+
+    monkeypatch.setattr(yfinance, "Ticker", lambda *a: pytest.fail("No current data in archived replay"))
+    monkeypatch.setattr(trading_graph, "is_historical", lambda date: True)
+    seeds = {key: "archived " + key for key in (
+        "fundamentals_report", "operating_report", "metrics_report", "news_report"
+    )}
+    graph, seen = make_graph(
+        monkeypatch, tmp_path, snapshot,
+        selected=["fundamentals", "operating", "metrics", "news"], seed_reports=seeds,
+    )
+    state, rating = graph.propagate("AAPL", snapshot["as_of_date"])
+    assert rating == "Hold" and len(seen) == 8
+    for key, report in seeds.items():
+        assert state[key] == report

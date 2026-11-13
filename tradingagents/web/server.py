@@ -102,7 +102,12 @@ def run_job(job_id):
         if job.get("research_snapshot") is not None:
             snapshot = job["research_snapshot"]
             archive = ResearchStore(STORE / "research.sqlite3")
-            update(job_id, error=None, phase="复用已归档财务数据，重新生成研究与新闻分析")
+            phase = (
+                "复用财务数据与已完成的四份分析，恢复综合判断"
+                if job.get("seed_reports", {}).get("news_report")
+                else "复用已归档财务数据，重新生成研究与新闻分析"
+            )
+            update(job_id, error=None, phase=phase)
         else:
             data = company_data(job["ticker"])
             update(job_id, data=data, phase="正在获取同行估值与财务指标")
@@ -151,9 +156,9 @@ def run_job(job_id):
 
         graph_options = {}
         if job.get("macro_context") is not None:
-            graph_options.update(
-                macro_context=job["macro_context"], seed_reports=job.get("seed_reports", {})
-            )
+            graph_options["macro_context"] = job["macro_context"]
+        if job.get("seed_reports"):
+            graph_options["seed_reports"] = job["seed_reports"]
         graph = TradingAgentsGraph(
             selected_analysts=["fundamentals", "operating", "metrics", "news"],
             config=config,
@@ -214,6 +219,41 @@ def run_job(job_id):
             phase="分析未完成，可查看已获取的数据",
             error=f"{type(exc).__name__}：请检查模型服务、网络及终端日志后重试。",
         )
+
+
+def retry_job(job_id):
+    """Finish a failed run using its archived evidence, including after midnight."""
+    with LOCK:
+        job = JOBS.get(job_id)
+        if not job or job.get("status") != "failed":
+            raise ValueError("只可重试失败的研究")
+        seeds = {
+            key: job.get("reports", {}).get(key, "")
+            for key in ("fundamentals_report", "operating_report", "metrics_report", "news_report")
+        }
+        snapshot = job.get("research_snapshot")
+        complete_analysts = all(isinstance(text, str) and text.strip() for text in seeds.values())
+        if job.get("date") != today() and not (snapshot and complete_analysts):
+            raise ValueError("历史失败任务缺少完整分析报告，请新建研究")
+        if snapshot:
+            if snapshot.get("as_of_date") != job["date"] or snapshot["company"]["symbol"] != job["ticker"]:
+                raise ValueError("财务归档日期或股票代码不匹配")
+            digest = hashlib.sha256(
+                json.dumps(snapshot, ensure_ascii=False, sort_keys=True, allow_nan=False).encode()
+            ).hexdigest()
+            if digest != job.get("snapshot_digest"):
+                raise ValueError("财务归档校验失败，不能重用")
+        if sum(j["status"] in ("running", "queued") for j in JOBS.values()) >= 3:
+            raise ValueError("已有三个任务，请等待完成")
+        if snapshot and complete_analysts:
+            job["seed_reports"] = deepcopy(seeds)
+        job.update(
+            status="queued", phase="等待恢复：复用已完成的分析与财务数据", error=None,
+            retried_at=datetime.now().astimezone().isoformat(),
+        )
+        persist(job)
+    POOL.submit(run_job, job_id)
+    return job
 
 
 def create_macro_reanalysis(source_id):
@@ -439,17 +479,11 @@ class Handler(BaseHTTPRequestHandler):
             except ValueError as exc:
                 return self.send({"error": str(exc)}, 400)
         if self.path.startswith("/api/jobs/") and self.path.endswith("/retry"):
-            job_id = self.path.split("/")[-2]
-            with LOCK:
-                job = JOBS.get(job_id)
-                if not job or job.get("status") != "failed" or job.get("date") != today():
-                    return self.send({"error": "只可重试今日失败的研究；历史研究请新建任务"}, 400)
-                if any(j["status"] in ("running", "queued") for j in JOBS.values()):
-                    return self.send({"error": "请等待当前研究完成"}, 409)
-                job.update(status="queued", phase="等待重试", error=None)
-                persist(job)
-            POOL.submit(run_job, job_id)
-            return self.send({"id": job_id, "status": "queued"}, 202)
+            try:
+                job = retry_job(self.path.split("/")[-2])
+                return self.send({"id": job["id"], "status": "queued"}, 202)
+            except ValueError as exc:
+                return self.send({"error": str(exc)}, 400)
         if self.path != "/api/jobs":
             return self.send({"error": "接口不存在"}, 404)
         try:

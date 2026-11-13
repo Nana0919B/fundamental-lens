@@ -97,3 +97,58 @@ def test_macro_context_rejects_unfinished_wrong_date_and_empty_values():
     ):
         with pytest.raises(ValueError):
             validate_macro_context({**macro, **update}, "2026-11-13")
+
+
+def test_failed_hong_kong_run_can_finish_after_midnight_without_replacing_inputs(monkeypatch, tmp_path):
+    from tradingagents.web import server
+
+    snapshot, _ = data()
+    snapshot["company"]["symbol"] = "0700.HK"
+    digest = hashlib.sha256(
+        json.dumps(snapshot, ensure_ascii=False, sort_keys=True, allow_nan=False).encode()
+    ).hexdigest()
+    reports = {key: "original " + key for key in (
+        "fundamentals_report", "operating_report", "metrics_report", "news_report"
+    )}
+    job = {
+        "id": "hk", "ticker": "0700.HK", "date": "2026-11-13", "status": "failed",
+        "error": "AnthropicConnectionError", "research_snapshot": snapshot,
+        "snapshot_digest": digest, "reports": reports,
+    }
+    monkeypatch.setattr(server, "JOBS", {"hk": job})
+    monkeypatch.setattr(server, "STORE", tmp_path)
+    monkeypatch.setattr(server, "today", lambda: "2026-11-14")
+    calls = []
+    monkeypatch.setattr(server, "POOL", SimpleNamespace(submit=lambda fn, id: calls.append(id)))
+    original = deepcopy(job)
+    result = server.retry_job("hk")
+    assert result["status"] == "queued" and result["error"] is None
+    assert calls == ["hk"] and result["seed_reports"] == reports
+    for key in ("date", "reports", "research_snapshot", "snapshot_digest"):
+        assert result[key] == original[key]
+    result["reports"]["news_report"] = "changed"
+    assert result["seed_reports"]["news_report"] == "original news_report"
+
+
+@pytest.mark.parametrize("damage", ["incomplete", "digest"])
+def test_old_failed_runs_require_complete_untampered_inputs(monkeypatch, tmp_path, damage):
+    from tradingagents.web import server
+
+    snapshot, _ = data()
+    reports = dict.fromkeys(("fundamentals_report", "operating_report", "metrics_report", "news_report"), "saved")
+    digest = hashlib.sha256(
+        json.dumps(snapshot, ensure_ascii=False, sort_keys=True, allow_nan=False).encode()
+    ).hexdigest()
+    if damage == "incomplete":
+        del reports["news_report"]
+    else:
+        digest = "invalid"
+    job = {
+        "id": "old", "ticker": "MSFT", "date": "2026-11-13", "status": "failed",
+        "research_snapshot": snapshot, "snapshot_digest": digest, "reports": reports,
+    }
+    monkeypatch.setattr(server, "JOBS", {"old": job})
+    monkeypatch.setattr(server, "today", lambda: "2026-11-14")
+    with pytest.raises(ValueError):
+        server.retry_job("old")
+    assert job["status"] == "failed"
