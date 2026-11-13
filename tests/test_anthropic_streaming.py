@@ -90,3 +90,28 @@ def test_stream_timeout_retries_are_specific_bounded_and_return_complete_result(
         with pytest.raises(APIStatusError):
             llm.invoke("original evidence")
     assert calls == ["original evidence"] * expected_calls
+
+
+def test_timeout_switches_to_configured_model_and_reuses_it_for_remaining_roles(monkeypatch):
+    calls = []
+
+    def invoke(self, input, config=None, **kwargs):
+        calls.append((self.model, input, kwargs))
+        if self.model == "claude-haiku-4-5":
+            response = httpx.Response(200, request=httpx.Request("POST", "https://model.invalid/messages"))
+            raise APIStatusError(
+                "Gateway timeout", response=response, body={"error": {"code": "first_output_timeout"}}
+            )
+        return AIMessage(content="Complete fallback report")
+
+    monkeypatch.setattr(ChatAnthropic, "invoke", invoke)
+    llm = AnthropicClient(
+        model="claude-haiku-4-5", api_key="test", streaming=True,
+        max_retries=0, fallback_model="claude-sonnet-5",
+    ).get_llm()
+    tools = [{"name": "report", "input_schema": {"type": "object", "properties": {}}}]
+    assert llm.invoke("original evidence", tools=tools).content == "Complete fallback report"
+    assert llm.invoke("next role", tools=tools).content == "Complete fallback report"
+    assert [model for model, _, _ in calls] == ["claude-haiku-4-5", "claude-sonnet-5", "claude-sonnet-5"]
+    assert all(kwargs["tools"] == tools for _, _, kwargs in calls)
+    assert llm.model == "claude-haiku-4-5" and llm._fallback_llm.model == "claude-sonnet-5"

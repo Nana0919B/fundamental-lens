@@ -92,7 +92,15 @@ class TradingAgentsGraph:
         if self.config.get("llm_timeout_seconds"):
             extra["timeout"] = self.config["llm_timeout_seconds"]
         self.deep_thinking_llm = create_tier_client(self.config, "deep", **extra).get_llm()
-        self.quick_thinking_llm = create_tier_client(self.config, "quick", **extra).get_llm()
+        quick_extra = dict(extra)
+        if (
+            self.config.get("llm_fallback_to_deep")
+            and tier_provider(self.config, "quick") == tier_provider(self.config, "deep") == "anthropic"
+            and (self.config.get("quick_think_backend_url") or self.config.get("backend_url"))
+            == (self.config.get("deep_think_backend_url") or self.config.get("backend_url"))
+        ):
+            quick_extra["fallback_model"] = self.config["deep_think_llm"]
+        self.quick_thinking_llm = create_tier_client(self.config, "quick", **quick_extra).get_llm()
 
         self.memory_log = TradingMemoryLog(self.config)
 
@@ -287,6 +295,8 @@ class TradingAgentsGraph:
         local paths are never recorded.
         """
         cfg = self.config
+        quick_llm = getattr(self, "quick_thinking_llm", None)
+        fallback = getattr(quick_llm, "_fallback_llm", None)
         return {
             "version": tradingagents.__version__,
             "llm_provider": cfg.get("llm_provider"),
@@ -294,6 +304,7 @@ class TradingAgentsGraph:
             "deep_think_llm": cfg.get("deep_think_llm"),
             "quick_think_provider": tier_provider(cfg, "quick") if cfg.get("llm_provider") else None,
             "quick_think_llm": cfg.get("quick_think_llm"),
+            "quick_think_effective_llm": getattr(fallback, "model", cfg.get("quick_think_llm")),
             "analysts": list(self.selected_analysts),
             "max_debate_rounds": cfg.get("max_debate_rounds"),
             "max_risk_discuss_rounds": cfg.get("max_risk_discuss_rounds"),

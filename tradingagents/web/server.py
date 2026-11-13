@@ -150,6 +150,7 @@ def run_job(job_id):
             # SSE starts the response before a long report finishes, avoiding
             # proxy disconnects while waiting for non-streaming headers.
             anthropic_streaming=True,
+            llm_fallback_to_deep=True,
         )
 
         def on_report(key, text):

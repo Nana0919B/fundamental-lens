@@ -5,14 +5,14 @@ from typing import Any
 
 from anthropic import APIStatusError
 from langchain_anthropic import ChatAnthropic
-from pydantic import RootModel
+from pydantic import PrivateAttr, RootModel
 
 from .base_client import BaseLLMClient, normalize_content
 from .validators import validate_model
 
 _PASSTHROUGH_KWARGS = (
     "timeout", "max_retries", "api_key", "max_tokens", "temperature",
-    "callbacks", "http_client", "http_async_client", "effort", "streaming",
+    "callbacks", "http_client", "http_async_client", "effort", "streaming", "fallback_model",
 )
 
 # Anthropic's extended-thinking ``effort`` parameter is accepted by Opus 4.5+,
@@ -52,7 +52,12 @@ class NormalizedChatAnthropic(ChatAnthropic):
     downstream handling.
     """
 
+    fallback_model: str | None = None
+    _fallback_llm: Any = PrivateAttr(default=None)
+
     def invoke(self, input, config=None, **kwargs):
+        if self._fallback_llm is not None:
+            return self._fallback_llm.invoke(input, config=config, **kwargs)
         # A gateway can accept SSE with HTTP 200, then signal an upstream
         # timeout inside the stream. SDK HTTP retries do not cover that case.
         retries = self.max_retries or 0
@@ -63,7 +68,20 @@ class NormalizedChatAnthropic(ChatAnthropic):
                 body = exc.body if isinstance(exc.body, dict) else {}
                 error = body.get("error", {})
                 code = error.get("code") if isinstance(error, dict) else None
-                if code != "first_output_timeout" or attempt == retries:
+                if code != "first_output_timeout":
+                    raise
+                if self.fallback_model and self.fallback_model != self.model:
+                    logger.warning(
+                        "Anthropic %s first_output_timeout; using configured fallback %s for this run",
+                        self.model, self.fallback_model,
+                    )
+                    fallback = self.model_copy(
+                        update={"model": self.fallback_model, "fallback_model": None}
+                    )
+                    fallback._fallback_llm = None
+                    self._fallback_llm = fallback
+                    return self._fallback_llm.invoke(input, config=config, **kwargs)
+                if attempt == retries:
                     raise
                 logger.warning("Anthropic stream first_output_timeout; retry %d/%d", attempt + 1, retries)
                 time.sleep(min(2 ** attempt, 4))
