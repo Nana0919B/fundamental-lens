@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from zoneinfo import ZoneInfo
 
 from markdown_it import MarkdownIt
@@ -27,7 +27,7 @@ from tradingagents.dataflows.research_store import ResearchStore
 from tradingagents.dataflows.vendors.sec_edgar import get_filing_documents
 from tradingagents.dataflows.web_data import company_data, peer_data
 from tradingagents.dataflows.files import replace_file
-from tradingagents.dataflows.symbols import normalize_symbol, safe_ticker_component
+from tradingagents.dataflows.symbols import resolve_equity_symbol
 
 ROOT = Path(__file__).parent / "static"
 STORE = Path(build_default_config()["results_dir"]) / "web"
@@ -42,10 +42,10 @@ def today():
     return datetime.now(ZoneInfo("Asia/Shanghai")).date().isoformat()
 
 
-def symbol(value):
+def symbol(value, market="auto"):
     if not isinstance(value, str) or not value.strip():
         raise ValueError("请输入股票代码")
-    return safe_ticker_component(normalize_symbol(value))
+    return resolve_equity_symbol(value, market)
 
 
 def persist(job):
@@ -268,7 +268,10 @@ class Handler(BaseHTTPRequestHandler):
             )
         if path.startswith("/api/peers/"):
             try:
-                ticker = symbol(path.rsplit("/", 1)[-1])
+                ticker = symbol(
+                    path.rsplit("/", 1)[-1],
+                    parse_qs(urlparse(self.path).query).get("market", ["auto"])[0],
+                )
                 return self.send(
                     {
                         "ticker": ticker,
@@ -353,7 +356,7 @@ class Handler(BaseHTTPRequestHandler):
             payload = json.loads(self.rfile.read(length))
             if not isinstance(payload, dict):
                 raise ValueError("请求格式无效")
-            ticker = symbol(payload.get("ticker"))
+            ticker = symbol(payload.get("ticker"), payload.get("market", "auto"))
             peers = payload.get("peers", [])
             if not isinstance(peers, list) or len(peers) > 5:
                 raise ValueError("最多比较 5 家同行")
