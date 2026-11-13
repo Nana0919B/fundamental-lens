@@ -69,34 +69,41 @@ def run_job(job_id):
     try:
         job = JOBS[job_id]
         update(job_id, status="running", phase="正在获取公司资料与财务报表")
-        data = company_data(job["ticker"])
-        update(job_id, data=data, phase="正在获取同行估值与财务指标")
-        peers = [peer_data(peer) for peer in job["peers"]]
-        try:
-            data["filings"] = get_filing_documents(job["ticker"], job["date"])
-        except Exception as exc:
-            data["filings"] = {
-                "documents": [],
-                "note": "原始披露索引暂不可用：" + type(exc).__name__,
+        if job.get("research_snapshot") is not None:
+            snapshot = job["research_snapshot"]
+            archive = ResearchStore(STORE / "research.sqlite3")
+            update(job_id, error=None, phase="复用已归档财务数据，重新生成研究与新闻分析")
+        else:
+            data = company_data(job["ticker"])
+            update(job_id, data=data, phase="正在获取同行估值与财务指标")
+            peers = [peer_data(peer) for peer in job["peers"]]
+            try:
+                data["filings"] = get_filing_documents(job["ticker"], job["date"])
+            except Exception as exc:
+                data["filings"] = {
+                    "documents": [],
+                    "note": "原始披露索引暂不可用：" + type(exc).__name__,
+                }
+            snapshot = {
+                "id": job_id,
+                "schema_version": 2,
+                "as_of_date": job["date"],
+                "company": data,
+                "peers": peers,
             }
-        snapshot = {
-            "id": job_id,
-            "schema_version": 2,
-            "as_of_date": job["date"],
-            "company": data,
-            "peers": peers,
-        }
-        enrich_snapshot(snapshot)
-        archive = ResearchStore(STORE / "research.sqlite3")
-        changes = archive.profile_changes(snapshot)
-        digest = archive.archive_snapshot(snapshot)
-        archive.save_peers(job["ticker"], job["peers"])
-        update(job_id, research_snapshot=snapshot, snapshot_digest=digest, profile_changes=changes)
-        update(
-            job_id,
-            peers_data=peers,
-            phase="基本面、经营、财务指标与新闻智能体并行研究；随后进行多空辩论与风险评估",
-        )
+            enrich_snapshot(snapshot)
+            archive = ResearchStore(STORE / "research.sqlite3")
+            changes = archive.profile_changes(snapshot)
+            digest = archive.archive_snapshot(snapshot)
+            archive.save_peers(job["ticker"], job["peers"])
+            update(
+                job_id, research_snapshot=snapshot, snapshot_digest=digest, profile_changes=changes
+            )
+            update(
+                job_id,
+                peers_data=peers,
+                phase="基本面、经营、财务指标与新闻智能体并行研究；随后进行多空辩论与风险评估",
+            )
         config = build_default_config()
         # Isolate mutable graph, memory and checkpoints from CLI/other runs.
         config.update(
@@ -104,11 +111,19 @@ def run_job(job_id):
             data_cache_dir=str(STORE / "cache"),
             memory_log_path=str(STORE / "memory.md"),
             checkpoint_enabled=False,
+            llm_timeout_seconds=120,
         )
+
+        def on_report(key, text):
+            with LOCK:
+                JOBS[job_id].setdefault("reports", {})[key] = text
+                persist(JOBS[job_id])
+
         graph = TradingAgentsGraph(
             selected_analysts=["fundamentals", "operating", "metrics", "news"],
             config=config,
             research_snapshot=snapshot,
+            on_report=on_report,
         )
         state, rating = graph.propagate(job["ticker"], job["date"])
         reports = {
@@ -303,6 +318,18 @@ class Handler(BaseHTTPRequestHandler):
         }
         if not self.trusted() or (origin and origin not in allowed):
             return self.send({"error": "请求来源不允许"}, 403)
+        if self.path.startswith("/api/jobs/") and self.path.endswith("/retry"):
+            job_id = self.path.split("/")[-2]
+            with LOCK:
+                job = JOBS.get(job_id)
+                if not job or job.get("status") != "failed" or job.get("date") != today():
+                    return self.send({"error": "只可重试今日失败的研究；历史研究请新建任务"}, 400)
+                if any(j["status"] in ("running", "queued") for j in JOBS.values()):
+                    return self.send({"error": "请等待当前研究完成"}, 409)
+                job.update(status="queued", phase="等待重试", error=None)
+                persist(job)
+            POOL.submit(run_job, job_id)
+            return self.send({"id": job_id, "status": "queued"}, 202)
         if self.path != "/api/jobs":
             return self.send({"error": "接口不存在"}, 404)
         try:

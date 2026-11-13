@@ -52,7 +52,7 @@ def _tools_or_done(state) -> str:
     return "tools" if state["messages"][-1].tool_calls else END
 
 
-def _analyst_graph(spec, agent, max_tool_rounds: int):
+def _analyst_graph(spec, agent, max_tool_rounds: int, on_report=None):
     """One analyst as a graph of its own: the model and its tools, on a private message history.
 
     It returns only its report, so analysts running side by side never write the
@@ -65,8 +65,18 @@ def _analyst_graph(spec, agent, max_tool_rounds: int):
     graph = StateGraph(AgentState, output_schema=output)
     graph.add_node("agent", agent)
     graph.add_edge(START, "agent")
+    destination = END
+    if on_report is not None:
+        def publish(state):
+            text = state.get(spec.report_key, '')
+            if text:
+                on_report(spec.report_key, text)
+            return {spec.report_key:text}
+        graph.add_node('publish', publish)
+        graph.add_edge('publish', END)
+        destination = 'publish'
     if not spec.tools:
-        graph.add_edge("agent", END)
+        graph.add_edge("agent", destination)
         return graph.compile()
 
     def calls(messages):
@@ -86,9 +96,9 @@ def _analyst_graph(spec, agent, max_tool_rounds: int):
 
     graph.add_node("tools", ToolNode(list(spec.tools)))
     graph.add_node("wrap_up", wrap_up)
-    graph.add_conditional_edges("agent", _tools_or_done, ["tools", END])
+    graph.add_conditional_edges("agent", _tools_or_done, {"tools":"tools", END:destination})
     graph.add_conditional_edges("tools", more_or_wrap_up, ["agent", "wrap_up"])
-    graph.add_edge("wrap_up", END)
+    graph.add_edge("wrap_up", destination)
     return graph.compile()
 
 
@@ -109,7 +119,7 @@ class GraphSetup:
         self.max_tool_rounds = max_tool_rounds
 
     def setup_graph(
-        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None, snapshot_mode=False
+        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None, snapshot_mode=False, on_report=None
     ):
         """Set up and compile the agent workflow graph.
 
@@ -127,8 +137,8 @@ class GraphSetup:
             raise ValueError("Operating and metrics analysts require a shared financial snapshot")
 
         analyst_factories = {
-            "operating": lambda: create_financial_specialist(self.quick_thinking_llm, "operating"),
-            "metrics": lambda: create_financial_specialist(self.quick_thinking_llm, "metrics"),
+            "operating": lambda: create_financial_specialist(self.deep_thinking_llm, "operating"),
+            "metrics": lambda: create_financial_specialist(self.deep_thinking_llm, "metrics"),
             "market": lambda: create_market_analyst(self.quick_thinking_llm),
             "social": lambda: create_sentiment_analyst(self.quick_thinking_llm),
             "news": lambda: create_news_analyst(self.quick_thinking_llm),
@@ -151,7 +161,7 @@ class GraphSetup:
             if snapshot_mode and spec.key == "fundamentals":
                 spec = replace(spec, tools=())
             workflow.add_node(spec.agent_node,
-                              _analyst_graph(spec, analyst_factories[spec.key](), self.max_tool_rounds))
+                              _analyst_graph(spec, analyst_factories[spec.key](), self.max_tool_rounds, on_report))
 
         workflow.add_node("Bull Researcher", bull_researcher_node)
         workflow.add_node("Bear Researcher", bear_researcher_node)

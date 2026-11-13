@@ -59,6 +59,7 @@ class TradingAgentsGraph:
         config: dict[str, Any] = None,
         callbacks: list | None = None,
         research_snapshot: dict | None = None,
+        on_report=None,
     ):
         """Initialize the trading agents graph and components.
 
@@ -79,6 +80,8 @@ class TradingAgentsGraph:
         os.makedirs(self.config["results_dir"], exist_ok=True)
 
         extra = {"callbacks": self.callbacks} if self.callbacks else {}
+        if self.config.get("llm_timeout_seconds"):
+            extra["timeout"] = self.config["llm_timeout_seconds"]
         self.deep_thinking_llm = create_tier_client(self.config, "deep", **extra).get_llm()
         self.quick_thinking_llm = create_tier_client(self.config, "quick", **extra).get_llm()
 
@@ -113,7 +116,7 @@ class TradingAgentsGraph:
 
         # Set up the graph: keep the workflow for recompilation with a checkpointer.
         self.workflow = self.graph_setup.setup_graph(selected_analysts, memory_node=self._memory_step,
-                                                    snapshot_mode=research_snapshot is not None)
+                                                    snapshot_mode=research_snapshot is not None, on_report=on_report)
         self.graph = self.workflow.compile()
         self._checkpointer_ctx = None
         self._resuming = False

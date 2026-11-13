@@ -38,7 +38,47 @@ def snapshot_context(snapshot, *, full=False):
         "comparison_note": "User-selected peers; ratio comparison only, no cross-currency amount aggregation.",
     }
     if full:
-        evidence["statements"] = company.get("statements", {})
+        from tradingagents.dataflows.research_analytics import ALIASES
+
+        selected = {name for _, names in ALIASES.values() for name in names}
+        selected.update(
+            {
+                "Cost Of Revenue",
+                "Operating Expense",
+                "Research And Development",
+                "Selling General And Administration",
+                "Interest Expense",
+                "EBITDA",
+                "Diluted EPS",
+                "Inventory",
+                "Accounts Receivable",
+            }
+        )
+        excerpts = {}
+        for frequency, tables in company.get("statements", {}).items():
+            excerpts[frequency] = {}
+            for name, table in tables.items():
+                periods = table.get("periods", [])[:6]
+                rows = []
+                for row_index, row in enumerate(table.get("rows", [])):
+                    if row["name"] not in selected:
+                        continue
+                    rows.append(
+                        {
+                            "name": row["name"],
+                            "values": row.get("values", [])[:6],
+                            "evidence_refs": [
+                                f"{frequency}.{name}.{row_index}.{i}" for i in range(len(periods))
+                            ],
+                        }
+                    )
+                excerpts[frequency][name] = {"periods": periods, "rows": rows}
+        evidence["statements"] = excerpts
+        evidence["statement_scope"] = (
+            "Selected core line items, up to six recent periods per table, "
+            "from the same archived dataset. Explicit evidence_refs preserve ORIGINAL row/period indices. "
+            "Do not derive new IDs from the excerpt row positions. Full statements remain in the UI/archive."
+        )
         evidence["insider_transactions"] = company.get("insider_transactions", {})
         evidence["filing_documents"] = company.get("filings", {})
     else:

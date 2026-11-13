@@ -41,7 +41,7 @@ class FinancialSpecialistReport(BaseModel):
 
 
 COMMON = """Use only the supplied frozen financial snapshot. No external tools or additional data retrieval.
-Write an independent analysis, not a list of data and not a Buy/Sell recommendation.
+Write an independent concise analysis, not a list of data and not a Buy/Sell recommendation. Limit to six findings, four explanations, four risks and four follow-up questions; do not repeat the entire dataset.
 Separate observed facts, financial relationships and unverified causal hypotheses. A change in two numbers
 is not proof of a business cause. Product mix, prices, sales volumes, regional demand, competition,
 management actions and one-off events are UNKNOWN unless explicitly disclosed in the snapshot.
@@ -145,7 +145,20 @@ def create_financial_specialist(llm, focus):
 
         text = invoke_structured_or_freetext(structured, llm, prompt, render_verified, agent_name)
         if not isinstance(text, str) or not text.strip():
-            raise ValueError(f"{agent_name} returned an empty report")
+            retry = llm.invoke(
+                [
+                    *prompt,
+                    (
+                        "human",
+                        "Your previous answer contained no readable text. "
+                        "Return a concise plain-text report now, under the six requested headings. "
+                        "Do not call tools, return JSON or output only reasoning. If evidence is insufficient, say so.",
+                    ),
+                ]
+            )
+            text = retry.content
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError(f"{agent_name} returned an empty report after retry")
         # Deterministic provenance remains present even on the free-text fallback.
         company = snapshot["company"]
         provenance = (
