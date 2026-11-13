@@ -46,14 +46,19 @@ def test_background_job_persists_reports_without_exposing_engine_config(monkeypa
     )
 
     class Graph:
-        def __init__(self, selected_analysts, config):
-            assert selected_analysts == ["fundamentals"]
+        def __init__(self, selected_analysts, config, research_snapshot):
+            assert selected_analysts == ["fundamentals", "operating", "metrics"]
             assert config["checkpoint_enabled"] is False
+            assert research_snapshot["company"]["symbol"] == "AAPL"
+
+        def run_settings(self):
+            return {}
 
         def propagate(self, ticker, date):
             return {"fundamentals_report": "Evidence", "final_trade_decision": "Hold"}, "Hold"
 
     monkeypatch.setattr(trading_graph, "TradingAgentsGraph", Graph)
+    monkeypatch.setattr(server, "get_filing_documents", lambda *a: {"documents": []})
     server.run_job("test")
     assert server.JOBS["test"]["status"] == "completed"
     assert server.JOBS["test"]["reports"]["fundamentals_report"] == "Evidence"
@@ -83,3 +88,35 @@ def test_worker_failure_retains_data_and_redacts_exception(monkeypatch, tmp_path
     assert result["status"] == "failed"
     assert result["data"]["symbol"] == "AAPL"
     assert "secret-token" not in result["error"]
+
+
+def test_ui_reads_the_canonical_snapshot(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+
+    snapshot = {"id": "canonical", "company": {"symbol": "AAPL"}, "peers": []}
+    from tradingagents.web import server
+
+    monkeypatch.setattr(
+        server,
+        "JOBS",
+        {
+            "one": {
+                "id": "one",
+                "research_snapshot": snapshot,
+                "data": {"stale": True},
+                "peers_data": [],
+            }
+        },
+    )
+    monkeypatch.setattr(server, "STORE", tmp_path)
+    response = []
+    handler = object.__new__(server.Handler)
+    handler.path = "/api/jobs/one"
+    handler.headers = {"Host": "127.0.0.1:8765"}
+    handler.server = SimpleNamespace(server_port=8765)
+    handler.send = lambda payload, status=200: response.append((status, payload))
+    handler.do_GET()
+    status, data = response[0]
+    assert status == 200
+    assert data["data"] == snapshot["company"]
+    assert data["peers_data"] == snapshot["peers"]

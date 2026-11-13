@@ -18,6 +18,11 @@ from zoneinfo import ZoneInfo
 from markdown_it import MarkdownIt
 
 from tradingagents.default_config import build_default_config
+from tradingagents.report_brief import make_company_brief
+from tradingagents.reporting import write_report_tree
+from tradingagents.dataflows.research_analytics import enrich_snapshot
+from tradingagents.dataflows.research_store import ResearchStore
+from tradingagents.dataflows.vendors.sec_edgar import get_filing_documents
 from tradingagents.dataflows.web_data import company_data, peer_data
 from tradingagents.dataflows.files import replace_file
 from tradingagents.dataflows.symbols import normalize_symbol, safe_ticker_component
@@ -66,7 +71,31 @@ def run_job(job_id):
         data = company_data(job["ticker"])
         update(job_id, data=data, phase="正在获取同行估值与财务指标")
         peers = [peer_data(peer) for peer in job["peers"]]
-        update(job_id, peers_data=peers, phase="基本面分析师正在研究；随后进行多空辩论与风险评估")
+        try:
+            data["filings"] = get_filing_documents(job["ticker"], job["date"])
+        except Exception as exc:
+            data["filings"] = {
+                "documents": [],
+                "note": "原始披露索引暂不可用：" + type(exc).__name__,
+            }
+        snapshot = {
+            "id": job_id,
+            "schema_version": 2,
+            "as_of_date": job["date"],
+            "company": data,
+            "peers": peers,
+        }
+        enrich_snapshot(snapshot)
+        archive = ResearchStore(STORE / "research.sqlite3")
+        changes = archive.profile_changes(snapshot)
+        digest = archive.archive_snapshot(snapshot)
+        archive.save_peers(job["ticker"], job["peers"])
+        update(job_id, research_snapshot=snapshot, snapshot_digest=digest, profile_changes=changes)
+        update(
+            job_id,
+            peers_data=peers,
+            phase="基本面、经营与财务指标智能体并行研究；随后进行多空辩论与风险评估",
+        )
         config = build_default_config()
         # Isolate mutable graph, memory and checkpoints from CLI/other runs.
         config.update(
@@ -75,17 +104,31 @@ def run_job(job_id):
             memory_log_path=str(STORE / "memory.md"),
             checkpoint_enabled=False,
         )
-        graph = TradingAgentsGraph(selected_analysts=["fundamentals"], config=config)
+        graph = TradingAgentsGraph(
+            selected_analysts=["fundamentals", "operating", "metrics"],
+            config=config,
+            research_snapshot=snapshot,
+        )
         state, rating = graph.propagate(job["ticker"], job["date"])
         reports = {
             k: state.get(k, "")
             for k in (
                 "fundamentals_report",
+                "operating_report",
+                "metrics_report",
                 "investment_plan",
                 "trader_investment_plan",
                 "final_trade_decision",
             )
         }
+        reports["company_brief"] = make_company_brief(snapshot, reports)
+        write_report_tree(
+            {**state, "company_brief": reports["company_brief"]},
+            job["ticker"],
+            STORE / "exports" / job_id,
+            settings=graph.run_settings(),
+        )
+        archive.archive_reports(snapshot, reports)
         update(job_id, status="completed", phase="分析完成", reports=reports, rating=rating)
     except Exception as exc:
         log.exception("Research job %s failed", job_id)
@@ -121,6 +164,8 @@ def load_history():
         ticker = path.parent.name.rsplit("_", 2)[0]
         files = {
             "fundamentals_report": "1_analysts/fundamentals.md",
+            "operating_report": "1_analysts/operating.md",
+            "metrics_report": "1_analysts/metrics.md",
             "investment_plan": "2_research/manager.md",
             "trader_investment_plan": "3_trading/trader.md",
             "final_trade_decision": "5_portfolio/decision.md",
@@ -158,7 +203,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header(
             "Content-Security-Policy",
-            "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'",
+            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'",
         )
         self.end_headers()
         self.wfile.write(body)
@@ -176,7 +221,11 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/jobs":
             with LOCK:
                 jobs = [
-                    {k: v for k, v in job.items() if k not in ("data", "reports", "peers_data")}
+                    {
+                        k: v
+                        for k, v in job.items()
+                        if k not in ("data", "reports", "peers_data", "research_snapshot")
+                    }
                     for job in JOBS.values()
                 ]
             return self.send(
@@ -185,12 +234,39 @@ class Handler(BaseHTTPRequestHandler):
                     "today": today(),
                 }
             )
+        if path.startswith("/api/peers/"):
+            try:
+                ticker = symbol(path.rsplit("/", 1)[-1])
+                return self.send(
+                    {
+                        "ticker": ticker,
+                        "peers": ResearchStore(STORE / "research.sqlite3").peer_pool(ticker),
+                    }
+                )
+            except ValueError as exc:
+                return self.send({"error": str(exc)}, 400)
+        if path.startswith("/api/jobs/") and path.endswith("/export"):
+            job_id = path.split("/")[-2]
+            if job_id not in JOBS:
+                return self.send({"error": "任务不存在"}, 404)
+            file = STORE / "exports" / job_id / "complete_report.html"
+            if not file.exists():
+                return self.send({"error": "该任务尚无完整导出文件"}, 404)
+            return self.send(file.read_bytes(), content_type="text/html; charset=utf-8")
         if path.startswith("/api/jobs/"):
             with LOCK:
                 job = JOBS.get(path.rsplit("/", 1)[-1])
                 result = json.loads(json.dumps(job)) if job else None
             if result is None:
                 return self.send({"error": "任务不存在"}, 404)
+            if result.get("research_snapshot") is not None:
+                result["data"] = result["research_snapshot"]["company"]
+                result["peers_data"] = result["research_snapshot"]["peers"]
+            ticker = result.get("ticker") or result.get("research_snapshot", {}).get(
+                "company", {}
+            ).get("symbol")
+            archive = ResearchStore(STORE / "research.sqlite3")
+            result["versions"] = archive.history(ticker) if ticker else []
             result["report_html"] = {
                 k: MARKDOWN.render(v) for k, v in result.get("reports", {}).items()
             }
@@ -229,7 +305,7 @@ class Handler(BaseHTTPRequestHandler):
             peers = payload.get("peers", [])
             if not isinstance(peers, list) or len(peers) > 5:
                 raise ValueError("最多比较 5 家同行")
-            peers = list(dict.fromkeys(symbol(p) for p in peers if p and p != ticker))
+            peers = [p for p in dict.fromkeys(symbol(p) for p in peers if p) if p != ticker]
             with LOCK:
                 if sum(j["status"] in ("running", "queued") for j in JOBS.values()) >= 3:
                     return self.send({"error": "已有 3 个任务，请等待完成"}, 429)
