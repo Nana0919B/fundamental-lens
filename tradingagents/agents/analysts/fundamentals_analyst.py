@@ -1,3 +1,6 @@
+from langchain_core.messages import AIMessage
+from tradingagents.agents.financial_snapshot import snapshot_context
+
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from tradingagents.agents.analysts.turn import take_turn
@@ -24,6 +27,27 @@ def create_fundamentals_analyst(llm):
     def fundamentals_analyst_node(state):
         current_date = state["trade_date"]
         instrument_context = get_instrument_context_from_state(state)
+
+        if state.get("research_snapshot") is not None:
+            evidence = snapshot_context(state["research_snapshot"], full=True)
+            result = llm.invoke(
+                [
+                    (
+                        "system",
+                        "Write a comprehensive company fundamentals report, including business, "
+                        "financial quality, trends, valuation, explicit peer comparison and data limitations. "
+                        "Finish with a summary table. You have no external tools. "
+                        + get_language_instruction(),
+                    ),
+                    ("human", instrument_context + "\n" + evidence),
+                ]
+            )
+            if getattr(result, "tool_calls", None):
+                raise ValueError("Snapshot-only analyst must not request external tools")
+            return {
+                "messages": [AIMessage(content=result.content)],
+                "fundamentals_report": result.content,
+            }
 
         system_message = (
             "You are a researcher tasked with analyzing fundamental information over the past week about a company. Please write a comprehensive report of the company's fundamental information such as financial documents, company profile, basic company financials, and company financial history to gain a full view of the company's fundamental information to inform traders. Make sure to include as much detail as possible. Provide specific, actionable insights with supporting evidence to help traders make informed decisions."

@@ -48,6 +48,11 @@ class AgentState(MessagesState):
     instrument_context: Annotated[str, "Deterministic ticker identity resolved at run start"]
     trade_date: Annotated[str, "The analysis date; data is served as of it"]
 
+    research_snapshot: Annotated[dict, "Frozen company and peer financial evidence shared with the UI"]
+
+    operating_report: Annotated[str, "Independent operating performance analysis"]
+    metrics_report: Annotated[str, "Independent financial metrics analysis"]
+
     # research step
     market_report: Annotated[str, "Report from the Market Analyst"]
     sentiment_report: Annotated[str, "Report from the Sentiment Analyst"]

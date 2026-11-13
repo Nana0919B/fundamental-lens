@@ -1,5 +1,6 @@
 import logging
 from collections import Counter
+from dataclasses import replace
 from typing import Any, TypedDict
 
 from langchain_core.messages import HumanMessage
@@ -21,6 +22,7 @@ from tradingagents.agents import (
     create_trader,
 )
 from tradingagents.agents.analysts.turn import WRAP_UP
+from tradingagents.agents.analysts.financial_specialists import create_financial_specialist
 from tradingagents.agents.state import AgentState
 
 from .analyst_execution import build_analyst_execution_plan
@@ -107,7 +109,7 @@ class GraphSetup:
         self.max_tool_rounds = max_tool_rounds
 
     def setup_graph(
-        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None
+        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None, snapshot_mode=False
     ):
         """Set up and compile the agent workflow graph.
 
@@ -121,8 +123,12 @@ class GraphSetup:
                 ``past_context``. It runs alongside the analysts.
         """
         plan = build_analyst_execution_plan(selected_analysts)
+        if not snapshot_mode and any(spec.key in ("operating", "metrics") for spec in plan.specs):
+            raise ValueError("Operating and metrics analysts require a shared financial snapshot")
 
         analyst_factories = {
+            "operating": lambda: create_financial_specialist(self.quick_thinking_llm, "operating"),
+            "metrics": lambda: create_financial_specialist(self.quick_thinking_llm, "metrics"),
             "market": lambda: create_market_analyst(self.quick_thinking_llm),
             "social": lambda: create_sentiment_analyst(self.quick_thinking_llm),
             "news": lambda: create_news_analyst(self.quick_thinking_llm),
@@ -142,6 +148,8 @@ class GraphSetup:
         workflow = StateGraph(AgentState)
 
         for spec in plan.specs:
+            if snapshot_mode and spec.key == "fundamentals":
+                spec = replace(spec, tools=())
             workflow.add_node(spec.agent_node,
                               _analyst_graph(spec, analyst_factories[spec.key](), self.max_tool_rounds))
 

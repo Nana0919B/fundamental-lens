@@ -58,6 +58,8 @@ class Propagator:
                     "count": 0,
                 }
             ),
+            "operating_report": "",
+            "metrics_report": "",
             "market_report": "",
             "fundamentals_report": "",
             "sentiment_report": "",

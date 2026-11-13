@@ -18,6 +18,8 @@ class AnalystExecutionPlan:
 
 
 ANALYST_NODE_SPECS: dict[str, AnalystNodeSpec] = {
+    "operating": AnalystNodeSpec("operating", "Operating Analyst", "operating_report"),
+    "metrics": AnalystNodeSpec("metrics", "Metrics Analyst", "metrics_report"),
     "market": AnalystNodeSpec(
         key="market",
         agent_node="Market Analyst",

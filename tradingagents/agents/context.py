@@ -178,13 +178,21 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
     state was constructed without it (bare programmatic states, tests), so a
     consumer is never forced to make a yfinance call mid-graph.
     """
+    from tradingagents.agents.financial_snapshot import snapshot_context
+
+    evidence = state.get("research_snapshot")
+    shared = "\n" + snapshot_context(evidence) if evidence is not None else ""
+    for key, title in (("operating_report", "Operating performance analysis"),
+                       ("metrics_report", "Financial metrics analysis")):
+        if state.get(key):
+            shared += f"\n{title} (analyst conclusions; verify against snapshot facts):\n{state[key]}\n"
     context = state.get("instrument_context")
     if isinstance(context, str) and context.strip():
-        return context
+        return context + shared
     return build_instrument_context(
         str(state["company_of_interest"]),
         state.get("asset_type", "stock"),
-    )
+    ) + shared
 
 
 def report_or_absent(text: str, source: str) -> str:

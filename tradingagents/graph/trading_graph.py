@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -57,6 +58,7 @@ class TradingAgentsGraph:
         debug=False,
         config: dict[str, Any] = None,
         callbacks: list | None = None,
+        research_snapshot: dict | None = None,
     ):
         """Initialize the trading agents graph and components.
 
@@ -66,6 +68,7 @@ class TradingAgentsGraph:
             config: Configuration dictionary. If None, uses default config
             callbacks: Optional list of callback handlers (e.g., for tracking LLM/tool stats)
         """
+        self.research_snapshot = deepcopy(research_snapshot)
         self.debug = debug
         self.config = config or DEFAULT_CONFIG
         self.callbacks = callbacks or []
@@ -109,7 +112,8 @@ class TradingAgentsGraph:
         self.selected_analysts = tuple(selected_analysts)
 
         # Set up the graph: keep the workflow for recompilation with a checkpointer.
-        self.workflow = self.graph_setup.setup_graph(selected_analysts, memory_node=self._memory_step)
+        self.workflow = self.graph_setup.setup_graph(selected_analysts, memory_node=self._memory_step,
+                                                    snapshot_mode=research_snapshot is not None)
         self.graph = self.workflow.compile()
         self._checkpointer_ctx = None
         self._resuming = False
@@ -124,7 +128,13 @@ class TradingAgentsGraph:
         path and the CLI call this so the resolved identity reaches the whole
         graph regardless of entry point.
         """
-        identity = resolve_instrument_identity(ticker)
+        snapshot = getattr(self, "research_snapshot", None)
+        if snapshot is not None:
+            profile = snapshot['company'].get('profile', {})
+            identity = {'company_name': profile.get('longName'), 'sector': profile.get('sector'),
+                        'industry': profile.get('industry')}
+        else:
+            identity = resolve_instrument_identity(ticker)
         return build_instrument_context(ticker, asset_type, identity, trade_date)
 
     def _memory_as_of(self, trade_date) -> str | None:
@@ -148,6 +158,8 @@ class TradingAgentsGraph:
         the run keeps its files and how it retries are left out.
         """
         settings = {k: v for k, v in self.config.items() if k not in _NOT_IN_SIGNATURE}
+        if getattr(self, "research_snapshot", None) is not None:
+            settings['research_snapshot'] = self.research_snapshot
         digest = hashlib.sha256(json.dumps(settings, sort_keys=True, default=str).encode()).hexdigest()[:12]
         return "|".join([
             "analysts=" + ",".join(self.selected_analysts),
@@ -298,13 +310,22 @@ class TradingAgentsGraph:
         and loads them alongside the analysts (see ``_memory_step``).
         """
         trade_date = _validate_trade_date(trade_date)
-        return self.propagator.create_initial_state(
+        snapshot = getattr(self, "research_snapshot", None)
+        if snapshot is not None:
+            if (snapshot['company']['symbol'] != company_name
+                    or snapshot['as_of_date'] != trade_date or is_historical(trade_date)):
+                raise ValueError("Current financial snapshot must match the ticker and today's run date")
+        state = self.propagator.create_initial_state(
             company_name,
             trade_date,
             asset_type=asset_type,
             instrument_context=self.resolve_instrument_context(company_name, asset_type, trade_date),
             portfolio_context=portfolio.render(company_name) if portfolio is not None else "",
         )
+
+        if snapshot is not None:
+            state['research_snapshot'] = deepcopy(snapshot)
+        return state
 
     def _memory_step(self, state):
         """The graph's Memory Log step, alongside the analysts (#1428): settle every
@@ -463,6 +484,9 @@ class TradingAgentsGraph:
             "final_trade_decision": final_state["final_trade_decision"],
             "final_rating": run_rating(final_state),
             "run_settings": self.run_settings(),
+            "research_snapshot": final_state.get("research_snapshot"),
+            "operating_report": final_state.get("operating_report", ""),
+            "metrics_report": final_state.get("metrics_report", ""),
         }
 
         # A ticker that would escape the results directory is rejected.
