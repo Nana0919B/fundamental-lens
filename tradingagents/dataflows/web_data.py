@@ -15,7 +15,7 @@ def number(value):
 def frame_data(frame):
     if frame is None or frame.empty:
         return {"periods": [], "rows": []}
-    frame = frame.iloc[:, :8]
+    frame = frame.sort_index(axis=1, ascending=False)
     return {
         "periods": [str(c.date()) if hasattr(c, "date") else str(c) for c in frame.columns],
         "rows": [
@@ -36,6 +36,14 @@ def company_data(ticker):
         info = {}
         errors.append("公司概览暂不可用：" + type(exc).__name__)
     fields = (
+        "companyOfficers",
+        "heldPercentInsiders",
+        "heldPercentInstitutions",
+        "mostRecentQuarter",
+        "address1",
+        "zip",
+        "phone",
+        "exchange",
         "longName",
         "sector",
         "industry",
@@ -69,7 +77,9 @@ def company_data(ticker):
         "sharesOutstanding",
         "dividendYield",
     )
-    profile = {k: info.get(k) for k in fields}
+    profile = {
+        k: number(info[k]) if isinstance(info.get(k), (int, float)) else info.get(k) for k in fields
+    }
     tables = {}
     for frequency, prefix in [("annual", ""), ("quarterly", "quarterly_")]:
         tables[frequency] = {}
@@ -80,6 +90,8 @@ def company_data(ticker):
         ]:
             try:
                 tables[frequency][name] = frame_data(getattr(item, prefix + attr))
+                if not tables[frequency][name]["rows"]:
+                    errors.append(f"{frequency}/{name} 数据源未提供报表")
             except Exception as exc:
                 tables[frequency][name] = frame_data(None)
                 errors.append(f"{frequency}/{name} 暂不可用：{type(exc).__name__}")
@@ -101,6 +113,8 @@ def peer_data(ticker):
     try:
         info = yf.Ticker(ticker).info or {}
         keys = [
+            "industry",
+            "mostRecentQuarter",
             "longName",
             "currency",
             "financialCurrency",
@@ -110,6 +124,14 @@ def peer_data(ticker):
             "profitMargins",
             "revenueGrowth",
         ]
-        return {"symbol": ticker, **{k: info.get(k) for k in keys}}
+        return {
+            "symbol": ticker,
+            "source": "Yahoo Finance / yfinance",
+            "retrieved_at": datetime.now().astimezone().isoformat(),
+            **{
+                k: number(info[k]) if isinstance(info.get(k), (int, float)) else info.get(k)
+                for k in keys
+            },
+        }
     except Exception:
         return {"symbol": ticker, "error": "数据暂不可用"}

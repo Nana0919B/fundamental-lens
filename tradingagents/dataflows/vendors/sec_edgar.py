@@ -268,3 +268,33 @@ def get_income_statement(ticker: str, freq: str = "quarterly", as_of_date: str |
 def get_cashflow(ticker: str, freq: str = "quarterly", as_of_date: str | None = None) -> str:
     """Cash flow statement as filed on or before ``as_of_date``."""
     return _statement("cashflow", ticker, freq, as_of_date, "Cash Flow Statement")
+
+
+def get_filing_documents(ticker: str, as_of_date: str) -> dict:
+    """Original filings/amendments, reusing the EDGAR identity and JSON cache.
+
+    Links point to original documents (including notes); no claim is made that
+    notes or segment tables have been extracted. Recent submissions only.
+    """
+    from urllib.parse import quote
+    cik = cik_for(ticker)
+    if not cik:
+        return {'source':'SEC EDGAR','documents':[], 'note':'该代码未匹配 SEC 披露主体；非美股请查当地交易所。'}
+    data = _cached_json(f'https://data.sec.gov/submissions/CIK{cik}.json', f'submissions-{cik}.json')
+    recent = data.get('filings',{}).get('recent',{})
+    documents=[]
+    for i, form in enumerate(recent.get('form',[])):
+        if form not in ('10-K','10-K/A','10-Q','10-Q/A','20-F','20-F/A','40-F','40-F/A'): continue
+        def field(name):
+            values=recent.get(name,[])
+            return values[i] if i<len(values) else ''
+        filed=field('filingDate')
+        if not filed or filed>as_of_date: continue
+        accession=field('accessionNumber'); primary=field('primaryDocument')
+        if not accession or not primary: continue
+        documents.append({'form':form,'filed':filed,'period':field('reportDate'),
+                          'accession':accession,'amendment':form.endswith('/A'),
+                          'url':f'https://www.sec.gov/Archives/edgar/data/{int(cik)}/{accession.replace("-", "")}/{quote(primary, safe="")}'})
+        if len(documents)>=16: break
+    return {'source':'SEC EDGAR','cik':cik,'documents':documents,
+            'note':'原文包含附注和经营披露；仅列最近提交，修订文件单独列出。修订并不自动替换 Yahoo 表格。'}
