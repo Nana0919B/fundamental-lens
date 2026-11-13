@@ -277,6 +277,9 @@ def get_filing_documents(ticker: str, as_of_date: str) -> dict:
     notes or segment tables have been extracted. Recent submissions only.
     """
     from urllib.parse import quote
+    if ticker.upper().endswith(('.HK','.SS','.SZ')):
+        return {'source':'交易所披露','documents':[],
+                'note':'港股和沪深 A 股不适用 SEC 财报索引；当前展示 Yahoo 财务数据，交易所原始公告接口尚未接入。'}
     cik = cik_for(ticker)
     if not cik:
         return {'source':'SEC EDGAR','documents':[], 'note':'该代码未匹配 SEC 披露主体；非美股请查当地交易所。'}

@@ -125,6 +125,22 @@ def normalize_symbol(raw: str) -> str:
     # Broker CFD/qualifier suffixes Yahoo never uses.
     s = s.rstrip("+")
 
+    # Chinese exchange prefixes and common bare equity codes.
+    prefix = re.fullmatch(r'(SH|SZ|HK)[.:-]?(\d{1,6})', s)
+    if prefix:
+        exchange, digits = prefix.groups()
+        if exchange == 'HK' and len(digits) <= 5:
+            s = f'{int(digits):04d}.HK'
+        elif exchange in ('SH', 'SZ') and len(digits) == 6:
+            s = digits + ('.SS' if exchange == 'SH' else '.SZ')
+    elif s.isdigit():
+        if 1 <= len(s) <= 5:
+            s = f'{int(s):04d}.HK'
+        elif len(s) == 6 and s.startswith('6'):
+            s += '.SS'
+        elif len(s) == 6 and s.startswith(('0', '3')):
+            s += '.SZ'
+
     crypto = _normalize_crypto(s)
     if s in _ALIASES:
         canonical = _ALIASES[s]
@@ -178,3 +194,41 @@ def safe_ticker_component(value: str, *, max_len: int = 32) -> str:
     if set(value) == {"."}:
         raise ValueError(f"ticker cannot consist solely of dots: {value!r}")
     return value
+
+
+def resolve_equity_symbol(raw: str, market: str = 'auto') -> str:
+    """Resolve an explicit UI market without silently accepting conflicting suffixes."""
+    if not isinstance(raw, str) or not raw.strip():
+        raise ValueError('请输入股票代码')
+    if market not in ('auto','us','hk','cn','sh','sz'):
+        raise ValueError('不支持的股票市场')
+    value = raw.strip().upper()
+    if market == 'hk' and value.isdigit():
+        if len(value)>5 or int(value)==0:
+            raise ValueError('港股代码应为 1 至 5 位有效数字，例如 00700')
+        value = f'{int(value):04d}.HK'
+    elif market in ('sh','sz') and value.isdigit():
+        if len(value)!=6:
+            raise ValueError('沪深股票代码应为六位数字')
+        value += '.SS' if market=='sh' else '.SZ'
+    canonical = safe_ticker_component(normalize_symbol(value))
+    suffix = canonical.rsplit('.',1)[-1]
+    allowed = {'hk':{'HK'},'cn':{'SS','SZ'},'sh':{'SS'},'sz':{'SZ'}}
+    if market in allowed and suffix not in allowed[market]:
+        raise ValueError('股票代码与所选市场不一致，请检查交易所后缀')
+    if market == 'us' and (suffix in ('HK','SS','SZ') or value.isdigit()):
+        raise ValueError('该代码不属于所选美股市场')
+    if canonical.isdigit():
+        raise ValueError('无法确定数字代码的交易所；请使用港股 .HK、沪市 .SS 或深市 .SZ 后缀。暂不自动识别北交所代码。')
+    return canonical
+
+
+def equity_market(ticker: str) -> dict:
+    suffix = ticker.upper().rsplit('.',1)[-1]
+    names = {'HK':('hk','港股','香港交易所'), 'SS':('sh','沪市 A 股','上海证券交易所'),
+             'SZ':('sz','深市 A 股','深圳证券交易所')}
+    if suffix in names:
+        code,label,exchange = names[suffix]
+        return {'code':code,'label':label,'exchange':exchange,
+                'coverage_note':'财报、内部人交易及新闻的覆盖程度取决于 Yahoo；缺失数据不代表不存在。SEC 原始报告索引不适用于此市场。'}
+    return {'code':'other','label':'其他市场','exchange':None,'coverage_note':''}

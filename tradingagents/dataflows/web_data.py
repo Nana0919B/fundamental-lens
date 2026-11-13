@@ -2,6 +2,7 @@
 
 import math
 from datetime import datetime
+from tradingagents.dataflows.symbols import normalize_symbol, equity_market
 
 
 def number(value):
@@ -28,6 +29,7 @@ def frame_data(frame):
 def company_data(ticker):
     import yfinance as yf
 
+    ticker = normalize_symbol(ticker)
     item = yf.Ticker(ticker)
     errors = []
     try:
@@ -126,6 +128,7 @@ def company_data(ticker):
         insiders = {"columns": [], "rows": [], "note": "内部人交易暂不可用：" + type(exc).__name__}
     return {
         "symbol": ticker,
+        "market": equity_market(ticker),
         "insider_transactions": insiders,
         "profile": profile,
         "statements": tables,
@@ -140,6 +143,7 @@ def peer_data(ticker):
     """Current peer ratios for the local UI; provider failures are explicit."""
     import yfinance as yf
 
+    ticker = normalize_symbol(ticker)
     try:
         info = yf.Ticker(ticker).info or {}
         keys = [
