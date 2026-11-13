@@ -1,10 +1,10 @@
 import re
 from urllib.parse import urlparse
 
+from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-from tradingagents.agents.analysts.turn import take_turn, WRAP_UP
-from langchain_core.messages import HumanMessage
+from tradingagents.agents.analysts.turn import WRAP_UP, take_turn
 from tradingagents.agents.context import get_instrument_context_from_state, get_language_instruction
 from tradingagents.agents.tools import (
     get_global_news,
@@ -41,6 +41,11 @@ def create_news_analyst(llm):
             + get_language_instruction()
         )
 
+        tools = tuple(
+            tool for tool in TOOLS
+            if not (state.get("macro_context") and tool.name == "get_macro_indicators")
+        )
+
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -59,15 +64,15 @@ def create_news_analyst(llm):
         )
 
         prompt = prompt.partial(system_message=system_message)
-        prompt = prompt.partial(tool_names=", ".join([tool.name for tool in TOOLS]))
+        prompt = prompt.partial(tool_names=", ".join([tool.name for tool in tools]))
         prompt = prompt.partial(current_date=current_date)
         prompt = prompt.partial(instrument_context=instrument_context)
 
-        result, report = take_turn(prompt, llm, TOOLS, state["messages"])
+        result, report = take_turn(prompt, llm, tools, state["messages"])
 
         if not report and not getattr(result, "tool_calls", None):
             result, report = take_turn(
-                prompt, llm, TOOLS, [*state["messages"], HumanMessage(WRAP_UP)]
+                prompt, llm, tools, [*state["messages"], HumanMessage(WRAP_UP)]
             )
             if not isinstance(report, str) or not report.strip():
                 raise ValueError("News Analyst returned an empty report after retry")

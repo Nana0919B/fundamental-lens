@@ -60,6 +60,8 @@ class TradingAgentsGraph:
         callbacks: list | None = None,
         research_snapshot: dict | None = None,
         on_report=None,
+        macro_context: dict | None = None,
+        seed_reports: dict | None = None,
     ):
         """Initialize the trading agents graph and components.
 
@@ -69,6 +71,13 @@ class TradingAgentsGraph:
             config: Configuration dictionary. If None, uses default config
             callbacks: Optional list of callback handlers (e.g., for tracking LLM/tool stats)
         """
+        self.macro_context = deepcopy(macro_context)
+        self.seed_reports = deepcopy(seed_reports or {})
+        allowed = {"fundamentals_report", "operating_report", "metrics_report"}
+        if not set(self.seed_reports).issubset(allowed) or any(
+            not isinstance(value, str) or not value.strip() for value in self.seed_reports.values()
+        ):
+            raise ValueError("Only nonempty frozen financial reports may be reused")
         self.research_snapshot = deepcopy(research_snapshot)
         self.debug = debug
         self.config = config or DEFAULT_CONFIG
@@ -116,7 +125,7 @@ class TradingAgentsGraph:
 
         # Set up the graph: keep the workflow for recompilation with a checkpointer.
         self.workflow = self.graph_setup.setup_graph(selected_analysts, memory_node=self._memory_step,
-                                                    snapshot_mode=research_snapshot is not None, on_report=on_report)
+                                                    snapshot_mode=research_snapshot is not None, on_report=on_report, seed_reports=self.seed_reports)
         self.graph = self.workflow.compile()
         self._checkpointer_ctx = None
         self._resuming = False
@@ -163,6 +172,10 @@ class TradingAgentsGraph:
         settings = {k: v for k, v in self.config.items() if k not in _NOT_IN_SIGNATURE}
         if getattr(self, "research_snapshot", None) is not None:
             settings['research_snapshot'] = self.research_snapshot
+        if getattr(self, 'macro_context', None) is not None:
+            settings['macro_context'] = self.macro_context
+        if getattr(self, 'seed_reports', None):
+            settings['seed_reports'] = self.seed_reports
         digest = hashlib.sha256(json.dumps(settings, sort_keys=True, default=str).encode()).hexdigest()[:12]
         return "|".join([
             "analysts=" + ",".join(self.selected_analysts),
@@ -314,10 +327,11 @@ class TradingAgentsGraph:
         """
         trade_date = _validate_trade_date(trade_date)
         snapshot = getattr(self, "research_snapshot", None)
-        if snapshot is not None:
-            if (snapshot['company']['symbol'] != company_name
-                    or snapshot['as_of_date'] != trade_date or is_historical(trade_date)):
-                raise ValueError("Current financial snapshot must match the ticker and today's run date")
+        if snapshot is not None and (
+            snapshot['company']['symbol'] != company_name
+            or snapshot['as_of_date'] != trade_date or is_historical(trade_date)
+        ):
+            raise ValueError("Current financial snapshot must match the ticker and today's run date")
         state = self.propagator.create_initial_state(
             company_name,
             trade_date,
@@ -328,6 +342,10 @@ class TradingAgentsGraph:
 
         if snapshot is not None:
             state['research_snapshot'] = deepcopy(snapshot)
+        if getattr(self, 'macro_context', None) is not None:
+            from tradingagents.agents.macro_context import validate_macro_context
+            validate_macro_context(self.macro_context, trade_date)
+            state['macro_context'] = deepcopy(self.macro_context)
         return state
 
     def _memory_step(self, state):
@@ -488,6 +506,7 @@ class TradingAgentsGraph:
             "final_rating": run_rating(final_state),
             "run_settings": self.run_settings(),
             "research_snapshot": final_state.get("research_snapshot"),
+            "macro_context": final_state.get("macro_context"),
             "operating_report": final_state.get("operating_report", ""),
             "metrics_report": final_state.get("metrics_report", ""),
         }

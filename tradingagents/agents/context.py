@@ -182,6 +182,9 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
 
     evidence = state.get("research_snapshot")
     shared = "\n" + snapshot_context(evidence) if evidence is not None else ""
+    if state.get('macro_context') is not None:
+        from tradingagents.agents.macro_context import macro_context_text
+        shared += macro_context_text(state['macro_context'])
     for key, title in (("operating_report", "Operating performance analysis"),
                        ("metrics_report", "Financial metrics analysis")):
         if state.get(key):

@@ -48,6 +48,8 @@ class AgentState(MessagesState):
     instrument_context: Annotated[str, "Deterministic ticker identity resolved at run start"]
     trade_date: Annotated[str, "The analysis date; data is served as of it"]
 
+    macro_context: Annotated[dict, "Frozen FRED observations consumed in this research run"]
+
     research_snapshot: Annotated[dict, "Frozen company and peer financial evidence shared with the UI"]
 
     operating_report: Annotated[str, "Independent operating performance analysis"]

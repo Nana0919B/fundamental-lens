@@ -43,9 +43,17 @@ def snapshot():
     }
 
 
-def make_graph(monkeypatch, tmp_path, snapshot, selected=None, allow_news=False):
-    from tradingagents.graph import trading_graph
+def make_graph(
+    monkeypatch,
+    tmp_path,
+    snapshot,
+    selected=None,
+    allow_news=False,
+    macro_context=None,
+    seed_reports=None,
+):
     from tradingagents.default_config import build_default_config
+    from tradingagents.graph import trading_graph
 
     seen = []
 
@@ -66,12 +74,10 @@ def make_graph(monkeypatch, tmp_path, snapshot, selected=None, allow_news=False)
                 pytest.fail("Snapshot mode must not bind financial tools")
             from langchain_core.runnables import RunnableLambda
 
-            assert {t.name for t in tools} == {
-                "get_news",
-                "get_global_news",
-                "get_macro_indicators",
-                "get_prediction_markets",
-            }
+            expected = {"get_news", "get_global_news", "get_prediction_markets"}
+            if macro_context is None:
+                expected.add("get_macro_indicators")
+            assert {t.name for t in tools} == expected
 
             def news(prompt):
                 seen.append(str(prompt))
@@ -102,7 +108,8 @@ def make_graph(monkeypatch, tmp_path, snapshot, selected=None, allow_news=False)
         max_risk_discuss_rounds=1,
     )
     return TradingAgentsGraph(
-        selected or ["fundamentals"], config=config, research_snapshot=snapshot
+        selected or ["fundamentals"], config=config, research_snapshot=snapshot,
+        macro_context=macro_context, seed_reports=seed_reports,
     ), seen
 
 
@@ -145,6 +152,7 @@ def test_missing_peer_values_and_units_remain_explicit(snapshot):
 def test_company_and_peer_fetch_each_provider_field_once(monkeypatch):
     import pandas as pd
     import yfinance
+
     from tradingagents.dataflows.web_data import company_data, peer_data
 
     calls = []
@@ -177,6 +185,7 @@ def test_company_and_peer_fetch_each_provider_field_once(monkeypatch):
 
 def test_specialists_feed_web_sections_and_downstream_research(monkeypatch, tmp_path, snapshot):
     import yfinance
+
     from tradingagents.reporting import write_report_tree
 
     monkeypatch.setattr(yfinance, "Ticker", lambda *a: pytest.fail("Duplicate vendor fetch"))
@@ -221,3 +230,48 @@ def test_existing_news_analyst_joins_the_web_research_graph(monkeypatch, tmp_pat
     bull = next(text for text in seen if "You are a Bull Analyst" in text)
     assert "Verified news analysis marker" in bull
     assert "Operating evidence-based conclusion" in bull
+
+
+def test_macro_evidence_reaches_original_news_and_all_decision_roles_without_financial_refetch(
+    monkeypatch, tmp_path, snapshot
+):
+    import yfinance
+
+    macro = {
+        "id": "macro-six-series",
+        "status": "completed",
+        "as_of_date": snapshot["as_of_date"],
+        "retrieved_at": snapshot["as_of_date"] + "T12:00:00+08:00",
+        "source_mode": "fred_public_latest",
+        "reports": [
+            "DGS10: 4.98 percent; observation date 2026-11-10; https://fred.stlouisfed.org/series/DGS10"
+        ],
+    }
+    seeds = {
+        "fundamentals_report": "Original fundamentals",
+        "operating_report": "Original operations",
+        "metrics_report": "Original financial metrics",
+    }
+    monkeypatch.setattr(yfinance, "Ticker", lambda *a: pytest.fail("Financial data was refetched"))
+    graph, seen = make_graph(
+        monkeypatch,
+        tmp_path,
+        snapshot,
+        selected=["fundamentals", "operating", "metrics", "news"],
+        allow_news=True,
+        macro_context=macro,
+        seed_reports=seeds,
+    )
+    macro["reports"][0] = "CHANGED BY CALLER"
+    state, rating = graph.propagate("AAPL", snapshot["as_of_date"])
+    assert rating == "Hold"
+    assert len(seen) == 9  # original news analyst + eight downstream decision roles
+    assert all(
+        "4.98" in prompt and "macro-six-series" in prompt and "2026-11-10" in prompt
+        for prompt in seen
+    )
+    assert all("CHANGED BY CALLER" not in prompt for prompt in seen)
+    assert all(state[key] == value for key, value in seeds.items())
+    assert state["macro_context"]["reports"][0].startswith("DGS10: 4.98")
+    path = next((tmp_path / "results").rglob("full_states_log_*.json"))
+    assert json.loads(path.read_text())["macro_context"] == state["macro_context"]

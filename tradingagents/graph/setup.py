@@ -21,8 +21,8 @@ from tradingagents.agents import (
     create_sentiment_analyst,
     create_trader,
 )
-from tradingagents.agents.analysts.turn import WRAP_UP
 from tradingagents.agents.analysts.financial_specialists import create_financial_specialist
+from tradingagents.agents.analysts.turn import WRAP_UP
 from tradingagents.agents.state import AgentState
 
 from .analyst_execution import build_analyst_execution_plan
@@ -119,7 +119,7 @@ class GraphSetup:
         self.max_tool_rounds = max_tool_rounds
 
     def setup_graph(
-        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None, snapshot_mode=False, on_report=None
+        self, selected_analysts=("market", "social", "news", "fundamentals"), memory_node=None, snapshot_mode=False, on_report=None, seed_reports=None
     ):
         """Set up and compile the agent workflow graph.
 
@@ -160,8 +160,16 @@ class GraphSetup:
         for spec in plan.specs:
             if snapshot_mode and spec.key == "fundamentals":
                 spec = replace(spec, tools=())
+            text = (seed_reports or {}).get(spec.report_key)
+            if text is not None:
+                def frozen_report(state, key=spec.report_key, value=text):
+                    return {key: value}
+                agent = frozen_report
+                spec = replace(spec, tools=())
+            else:
+                agent = analyst_factories[spec.key]()
             workflow.add_node(spec.agent_node,
-                              _analyst_graph(spec, analyst_factories[spec.key](), self.max_tool_rounds, on_report))
+                              _analyst_graph(spec, agent, self.max_tool_rounds, on_report))
 
         workflow.add_node("Bull Researcher", bull_researcher_node)
         workflow.add_node("Bear Researcher", bear_researcher_node)
