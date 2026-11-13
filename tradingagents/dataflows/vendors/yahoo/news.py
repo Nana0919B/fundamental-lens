@@ -1,6 +1,9 @@
 """yfinance-based news data fetching functions."""
 
 import contextlib
+import os
+import logging
+from pathlib import Path
 from datetime import UTC, datetime
 
 import yfinance as yf
@@ -11,6 +14,16 @@ from tradingagents.dataflows.date_window import coverage_gap, in_window
 from tradingagents.dataflows.errors import VendorUnavailableError
 from tradingagents.dataflows.symbols import normalize_symbol
 from tradingagents.dataflows.vendors.yahoo.common import yf_retry
+
+
+def _session_options():
+    """curl_cffi does not inherit requests' configured CA bundle automatically."""
+    bundle = os.getenv("REQUESTS_CA_BUNDLE") or os.getenv("SSL_CERT_FILE")
+    if bundle and Path(bundle).is_file():
+        from curl_cffi.requests import Session
+
+        return {"session": Session(impersonate="chrome", verify=bundle)}
+    return {}
 
 
 def _extract_article_data(article: dict) -> dict:
@@ -61,15 +74,18 @@ def _search_news(canonical: str, limit: int) -> tuple[list, bool]:
     relevance-picked sample, and some are tagged loosely; only those tagged with
     the symbol are about it.
     """
-    search = yf_retry(lambda: yf.Search(canonical, news_count=limit))
-    if search is None:  # Yahoo answered "not found": its search is down
+
+    def fetch():
+        search = yf.Search(canonical, news_count=limit, **_session_options())
+        return (search.news or [], search.quotes or []) if search is not None else None
+
+    result = yf_retry(fetch)
+    if result is None:
         return [], False
-    tagged = [
-        a for a in (search.news or [])
-        if canonical in (t.upper() for t in a.get("relatedTickers") or [])
-    ]
-    knows = any((q.get("symbol") or "").upper() == canonical for q in search.quotes or [])
-    return tagged, knows or bool(search.news)
+    news, quotes = result
+    tagged = [a for a in news if canonical in (t.upper() for t in a.get("relatedTickers") or [])]
+    knows = any((q.get("symbol") or "").upper() == canonical for q in quotes)
+    return tagged, knows or bool(news)
 
 
 def _format_articles(articles: list[dict]) -> str:
@@ -104,7 +120,18 @@ def get_news_yfinance(
     canonical = normalize_symbol(ticker)
     resolved = "" if canonical == ticker else f" (resolved to {canonical})"
     subject = f"news for {ticker}{resolved}"
-    feed = yf_retry(lambda: yf.Ticker(canonical).get_news(count=article_limit)) or []
+    try:
+        feed = (
+            yf_retry(
+                lambda: yf.Ticker(canonical, **_session_options()).get_news(count=article_limit)
+            )
+            or []
+        )
+    except VendorUnavailableError:
+        logging.getLogger(__name__).warning(
+            "Yahoo quote news unavailable; trying Yahoo search for %s", canonical
+        )
+        feed = []
     articles = [_extract_article_data(a) for a in feed]
     if not feed:
         found, answered = _search_news(canonical, article_limit)
@@ -124,12 +151,17 @@ def get_news_yfinance(
         return f"## {ticker}{resolved} News, from {start_date} to {end_date}:\n\n{_format_articles(in_range)}"
 
     if not feed:
-        return (f"<Yahoo Finance news unavailable for {start_date}..{end_date}: Yahoo search "
-                f"returns only a sample of recent articles about {canonical}, so this is not "
-                f"an absence of {subject}>")
+        return (
+            f"<Yahoo Finance news unavailable for {start_date}..{end_date}: Yahoo search "
+            f"returns only a sample of recent articles about {canonical}, so this is not "
+            f"an absence of {subject}>"
+        )
     gap = coverage_gap(
         (a["pub_date"] for a in articles),
-        start_date, end_date, "Yahoo Finance news", subject,
+        start_date,
+        end_date,
+        "Yahoo Finance news",
+        subject,
     )
     return gap or f"No news found for {ticker}{resolved} between {start_date} and {end_date}"
 
@@ -167,11 +199,16 @@ def get_global_news_yfinance(
     seen_titles = set()
 
     for query in search_queries:
-        found = yf_retry(lambda q=query: yf.Search(
-            query=q,
-            news_count=limit,
-            enable_fuzzy_query=True,
-        ).news)
+        found = yf_retry(
+            lambda q=query: (
+                yf.Search(
+                    query=q,
+                    news_count=limit,
+                    enable_fuzzy_query=True,
+                    **_session_options(),
+                ).news
+            )
+        )
 
         for article in found or []:
             # Window first: the limit counts what the run may read, so an

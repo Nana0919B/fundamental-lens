@@ -1,6 +1,11 @@
+import os
+import re
+from urllib.parse import urlparse
+
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-from tradingagents.agents.analysts.turn import take_turn
+from tradingagents.agents.analysts.turn import take_turn, WRAP_UP
+from langchain_core.messages import HumanMessage
 from tradingagents.agents.context import get_instrument_context_from_state, get_language_instruction
 from tradingagents.agents.tools import (
     get_global_news,
@@ -28,6 +33,14 @@ def create_news_analyst(llm):
         system_message = (
             f"You are a news researcher tasked with analyzing recent news and trends over the past week. Please write a comprehensive report of the current state of the world that is relevant for trading and macroeconomics. Use the available tools: get_news(start_date, end_date) for news about the {asset_label} under analysis, get_global_news(curr_date, look_back_days, limit) for broader macroeconomic news, get_macro_indicators(indicator, curr_date, look_back_days) to ground macro commentary in actual data from FRED (e.g. 'cpi', 'core_pce', 'unemployment', 'fed_funds_rate', '10y_treasury', 'yield_curve'), and get_prediction_markets(topic, limit) for live market-implied probabilities of forward-looking events (e.g. 'Fed rate cut', 'recession 2026', geopolitical or sector events). Provide specific, actionable insights with supporting evidence to help traders make informed decisions."
             + """ Make sure to append a Markdown table at the end of the report to organize key points in the report, organized and easy to read."""
+            + " Start with get_news for the target company before optional macro tools. "
+            + "Do not repeatedly request a source that returned unavailable. Cite each factual event with "
+            + "its publication date and source URL from the tool output. Do not invent URLs or events. "
+            + (
+                " FRED is not configured in this run; do not call get_macro_indicators. "
+                if not os.getenv("FRED_API_KEY")
+                else ""
+            )
             + get_language_instruction()
         )
 
@@ -55,6 +68,26 @@ def create_news_analyst(llm):
 
         result, report = take_turn(prompt, llm, TOOLS, state["messages"])
 
+        if not report and not getattr(result, "tool_calls", None):
+            result, report = take_turn(
+                prompt, llm, TOOLS, [*state["messages"], HumanMessage(WRAP_UP)]
+            )
+            if not isinstance(report, str) or not report.strip():
+                raise ValueError("News Analyst returned an empty report after retry")
+        if report:
+            urls = []
+            for message in state["messages"]:
+                if getattr(message, "type", "") != "tool":
+                    continue
+                for url in re.findall(r"Link:\s*(https?://[^\s<>]+)", str(message.content)):
+                    if url not in urls:
+                        urls.append(url)
+            if urls:
+                report += "\n\n## 新闻工具返回的原始来源\n" + "\n".join(
+                    f"- [{urlparse(url).hostname}]({url})" for url in urls[:30]
+                )
+            else:
+                report += "\n\n> 本次工具未返回可定位的新闻原文链接，请核实报告中的事件，勿将推断视为已确认事实。"
         return {
             "messages": [result],
             "news_report": report,

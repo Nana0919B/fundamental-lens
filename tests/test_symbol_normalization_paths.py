@@ -17,7 +17,7 @@ def test_identity_lookup_normalizes_symbol(monkeypatch):
     seen = {}
 
     class FakeTicker:
-        def __init__(self, symbol):
+        def __init__(self, symbol, **kwargs):
             seen["symbol"] = symbol
 
         @property
@@ -61,7 +61,7 @@ def test_news_lookup_normalizes_symbol(monkeypatch):
     seen = {}
 
     class FakeTicker:
-        def __init__(self, symbol):
+        def __init__(self, symbol, **kwargs):
             seen["symbol"] = symbol
 
         def get_news(self, count):

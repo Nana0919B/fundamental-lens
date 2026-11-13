@@ -216,7 +216,7 @@ def test_existing_news_analyst_joins_the_web_research_graph(monkeypatch, tmp_pat
         allow_news=True,
     )
     state, rating = graph.propagate("AAPL", snapshot["as_of_date"])
-    assert state["news_report"] == "Verified news analysis marker"
+    assert state["news_report"].startswith("Verified news analysis marker")
     assert len(seen) == 12
     bull = next(text for text in seen if "You are a Bull Analyst" in text)
     assert "Verified news analysis marker" in bull
