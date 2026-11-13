@@ -19,7 +19,8 @@ from markdown_it import MarkdownIt
 
 from tradingagents.default_config import build_default_config
 from tradingagents.report_brief import make_company_brief
-from tradingagents.reporting import write_report_tree
+from tradingagents.reporting import write_report_tree, _report_parts
+from tradingagents.report_html import render_report
 from tradingagents.web.presentation import present_report, readable_evidence
 from tradingagents.dataflows.research_analytics import enrich_snapshot
 from tradingagents.dataflows.research_store import ResearchStore
@@ -61,6 +62,14 @@ def update(job_id, **changes):
     with LOCK:
         JOBS[job_id].update(changes)
         persist(JOBS[job_id])
+
+
+def display_reports(job):
+    reports = dict(job.get("reports", {}))
+    snapshot = job.get("research_snapshot")
+    if snapshot and reports.get("operating_report") and reports.get("metrics_report"):
+        reports["company_brief"] = make_company_brief(snapshot, reports)
+    return {key: present_report(text, snapshot) for key, text in reports.items()}
 
 
 def run_job(job_id):
@@ -275,10 +284,14 @@ class Handler(BaseHTTPRequestHandler):
             file = STORE / "exports" / job_id / "complete_report.html"
             if not file.exists():
                 return self.send({"error": "该任务尚无完整导出文件"}, 404)
+            display = display_reports(JOBS[job_id])
+            state = {**display, "trade_date": JOBS[job_id]["date"]}
+            html = render_report(JOBS[job_id]["ticker"], state, None, _report_parts(state))
             return self.send(
-                present_report(file.read_text(), JOBS[job_id].get("research_snapshot")).encode(),
+                present_report(html, JOBS[job_id].get("research_snapshot")).encode(),
                 content_type="text/html; charset=utf-8",
             )
+
         if path.startswith("/api/jobs/"):
             with LOCK:
                 job = JOBS.get(path.rsplit("/", 1)[-1])
@@ -295,8 +308,7 @@ class Handler(BaseHTTPRequestHandler):
             result["versions"] = archive.history(ticker) if ticker else []
             result["display_evidence"] = readable_evidence(result.get("research_snapshot") or {})
             result["report_html"] = {
-                k: MARKDOWN.render(present_report(v, result.get("research_snapshot")))
-                for k, v in result.get("reports", {}).items()
+                k: MARKDOWN.render(v) for k, v in display_reports(result).items()
             }
             return self.send(result)
         files = {"/": "index.html", "/app.js": "app.js", "/style.css": "style.css"}

@@ -3,10 +3,41 @@
 import re
 
 
+HEADINGS = {
+    "核心结论",
+    "事实与证据",
+    "变化原因与待验证解释",
+    "风险提示",
+    "数据局限",
+    "后续核查问题",
+    "conclusion",
+    "executive summary",
+    "risks",
+    "follow-up questions",
+}
+
+
+def heading(line):
+    value = re.sub(r"^\s*#{1,6}\s*", "", line).strip().strip("*").strip()
+    value = re.sub(r"^[一二三四五六七八九十0-9]+[、.．)）]\s*", "", value)
+    return value.rstrip(":：").strip().casefold()
+
+
 def section(text, headings):
-    pattern = r"^##?\s+(?:" + "|".join(re.escape(h) for h in headings) + r")\s*\n(.*?)(?=^##?\s|\Z)"
-    match = re.search(pattern, text or "", re.M | re.S | re.I)
-    return match.group(1).strip() if match else "未找到独立章节，请查看下方完整分析报告及原始证据。"
+    lines = (text or "").splitlines()
+    desired = {value.casefold() for value in headings}
+    start = next((i for i, line in enumerate(lines) if heading(line) in desired), None)
+    if start is None:
+        return "未找到独立章节，请查看下方完整分析报告及原始证据。"
+    end = next(
+        (
+            i
+            for i in range(start + 1, len(lines))
+            if heading(lines[i]) in HEADINGS or re.match(r"^#{1,6}\s", lines[i])
+        ),
+        len(lines),
+    )
+    return "\n".join(lines[start + 1 : end]).strip()
 
 
 def make_company_brief(snapshot, reports):

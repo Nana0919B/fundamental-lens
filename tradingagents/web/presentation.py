@@ -152,6 +152,12 @@ def present_report(text, snapshot=None):
 
     text = re.sub(r"\[([^\]]*)\]\(#evidence-([\w.-]+)\)", citation, text or "")
     text = re.sub(
+        r"^(核心结论|事实与证据|变化原因与待验证解释|风险提示|数据局限|后续核查问题)[：:]?\s*$",
+        r"## \1",
+        text,
+        flags=re.M,
+    )
+    text = re.sub(
         r"(?:快照编号|快照|snapshot[_ ]?id)\s*[:：]\s*[^\s·；;\n]+\s*[·；;]?\s*",
         "",
         text,

@@ -148,3 +148,19 @@ def test_company_brief_reuses_specialist_conclusions_without_another_model():
     for text in ("经营增长受限", "现金转换待验证", "估值需结合盈利", "杠杆较高", "version-one"):
         assert text in brief
     assert "未找到独立章节" not in brief
+
+
+def test_company_brief_accepts_plaintext_and_numbered_model_headings():
+    from tradingagents.report_brief import make_company_brief
+
+    snapshot = {"id": "one", "company": company()}
+    reports = {
+        "operating_report": "核心结论\n经营结论\n事实与证据\n证据\n风险提示\n经营风险\n后续核查问题\n经营核查",
+        "metrics_report": "## 一、核心结论\n财务结论\n## 二、风险提示\n财务风险\n## 三、后续核查问题\n财务核查",
+    }
+    brief = make_company_brief(snapshot, reports)
+    assert "未找到独立章节" not in brief
+    assert all(
+        value in brief
+        for value in ("经营结论", "财务结论", "经营风险", "财务风险", "经营核查", "财务核查")
+    )
