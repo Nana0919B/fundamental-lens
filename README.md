@@ -109,6 +109,19 @@ The selected analysts work at the same time, each on its own tools, and the rese
   <img src="assets/risk.png" width="70%" style="display: inline-block; margin: 0 2%;">
 </p>
 
+## Local research web interface
+
+A loopback-only research workspace provides background analysis, saved reports,
+company profiles, financial statements, metrics, and peer comparisons.
+After installation and model configuration, run:
+
+```bash
+python -m tradingagents.web.server
+```
+
+Open http://127.0.0.1:8765. See [the local Web guide](LOCAL_WEB.md) for data
+coverage, task behavior, and configuration.
+
 ## Installation and CLI
 
 ### Installation
