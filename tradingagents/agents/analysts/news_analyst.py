@@ -1,4 +1,3 @@
-import os
 import re
 from urllib.parse import urlparse
 
@@ -36,11 +35,9 @@ def create_news_analyst(llm):
             + " Start with get_news for the target company before optional macro tools. "
             + "Do not repeatedly request a source that returned unavailable. Cite each factual event with "
             + "its publication date and source URL from the tool output. Do not invent URLs or events. "
-            + (
-                " FRED is not configured in this run; do not call get_macro_indicators. "
-                if not os.getenv("FRED_API_KEY")
-                else ""
-            )
+            + " Current runs can use the official FRED public CSV without an API key. "
+            + "Do not call the macro tool unavailable just because FRED_API_KEY is absent. "
+            + "The public CSV serves latest revisions, not historical point-in-time data; report that distinction. "
             + get_language_instruction()
         )
 

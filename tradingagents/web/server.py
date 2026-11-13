@@ -66,6 +66,25 @@ def update(job_id, **changes):
 
 def display_reports(job):
     reports = dict(job.get("reports", {}))
+    macro = job.get("macro_update")
+    if macro and macro.get("status") == "completed":
+        original = reports.get("news_report", "")
+        original = "\n".join(
+            line
+            for line in original.splitlines()
+            if not (
+                "FRED" in line
+                and ("未配置" in line or ("get_macro_indicators" in line and "不可用" in line))
+            )
+        )
+        reports["news_report"] = (
+            "## 宏观数据已补充\n"
+            + f"补充时间：{macro['retrieved_at']}。以下为 FRED 官方公开 CSV 最新修订值，"
+            "不是原报告时点的历史版本；原有新闻事件分析未重新生成。\n\n"
+            + "\n\n".join(macro["reports"])
+            + "\n\n---\n\n"
+            + original
+        )
     snapshot = job.get("research_snapshot")
     if snapshot and reports.get("operating_report") and reports.get("metrics_report"):
         reports["company_brief"] = make_company_brief(snapshot, reports)

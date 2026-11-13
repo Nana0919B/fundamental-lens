@@ -4,17 +4,22 @@ Fetches macroeconomic time series — policy rates, Treasury yields, inflation,
 labor, growth — from the St. Louis Fed's free API. Used by the news analyst to
 ground macro commentary in actual numbers rather than headlines alone.
 
-A free API key (https://fred.stlouisfed.org/docs/api/api_key.html) is read from
-``FRED_API_KEY``; if it is unset the vendor raises ``FredNotConfiguredError`` so
-the routing layer treats it as "unavailable" rather than a hard crash.
+A configured ``FRED_API_KEY`` enables vintage-pinned API requests. Current-date
+analysis can use FRED's official public CSV without a key; historical analysis
+still requires a key so latest revisions never leak into historical runs.
 """
+
+import csv
+import io
+import math
 import logging
 import os
 from datetime import datetime, timedelta
 
 import pytz
 
-from tradingagents.dataflows.errors import VendorNotConfiguredError
+from tradingagents.dataflows.errors import VendorNotConfiguredError, VendorUnavailableError
+from tradingagents.dataflows.date_window import get_current_date
 from tradingagents.dataflows.net import get_scrubbed
 
 logger = logging.getLogger(__name__)
@@ -211,7 +216,10 @@ def get_macro_data(
     except ValueError as e:
         return f"FRED: {e}"
 
-    meta = _request("series", {"series_id": series_id, **realtime}).get("seriess") or []
+    try:
+        meta = _request("series", {"series_id": series_id, **realtime}).get("seriess") or []
+    except FredNotConfiguredError:
+        return _public_current_series(series_id, as_of_date, start_date)
     if not meta:
         return (
             f"FRED series '{series_id}' not found. Pass a known alias "
@@ -236,9 +244,7 @@ def get_macro_data(
 
     # FRED encodes a missing observation as ".".
     points = [
-        (o["date"], o["value"])
-        for o in observations
-        if o.get("value") not in (".", None, "")
+        (o["date"], o["value"]) for o in observations if o.get("value") not in (".", None, "")
     ]
 
     header = (
@@ -278,9 +284,70 @@ def get_macro_data(
         note = f"\n_(showing the most recent {MAX_ROWS} of {len(points)} observations)_\n"
 
     table = (
-        "\n| Date | Value |\n| --- | --- |\n"
-        + "\n".join(f"| {d} | {v} |" for d, v in shown)
-        + "\n"
+        "\n| Date | Value |\n| --- | --- |\n" + "\n".join(f"| {d} | {v} |" for d, v in shown) + "\n"
     )
 
     return header + summary + note + table
+
+
+PUBLIC_SERIES = {
+    "FEDFUNDS": ("联邦基金有效利率（月均）", "%"),
+    "DGS10": ("10 年期美债收益率", "%"),
+    "T10Y2Y": ("10 年期减 2 年期美债利差", "百分点"),
+    "CPIAUCSL": ("美国 CPI（季调）", "指数，1982–1984=100"),
+    "PCEPILFE": ("美国核心 PCE 价格指数", "指数，2017=100"),
+    "UNRATE": ("美国失业率（季调）", "%"),
+}
+
+
+def _public_current_series(series_id, as_of_date, start_date):
+    """Official keyless CSV, current analysis ONLY; never an ALFRED vintage."""
+    if as_of_date != get_current_date():
+        raise FredNotConfiguredError(
+            "历史时点宏观分析仍需 FRED_API_KEY；公开 CSV 只提供最新修订值，不能用于回测。"
+        )
+    url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+    try:
+        response = get_scrubbed(
+            url,
+            params={"id": series_id, "cosd": start_date, "coed": as_of_date},
+            timeout=REQUEST_TIMEOUT,
+            secret="",
+        )
+        reader = csv.DictReader(io.StringIO(response.text))
+        columns = reader.fieldnames or []
+        date_key = next((name for name in ("observation_date", "DATE") if name in columns), None)
+        if not date_key or series_id not in columns:
+            raise ValueError("Unexpected CSV columns")
+        values = {}
+        for row in reader:
+            day = row.get(date_key, "")
+            value = row.get(series_id, "")
+            if value in ("", ".", "NaN", None):
+                continue
+            try:
+                datetime.strptime(day, "%Y-%m-%d")
+                numeric = float(value)
+            except (ValueError, TypeError):
+                continue
+            if math.isfinite(numeric) and start_date <= day <= as_of_date:
+                values[day] = value
+    except Exception as exc:
+        raise VendorUnavailableError("FRED 公开 CSV 暂不可用：" + type(exc).__name__) from exc
+    points = sorted(values.items())
+    title, units = PUBLIC_SERIES.get(series_id, (series_id, "FRED 原始序列单位，以官方页面为准"))
+    header = (
+        f"## FRED：{title}（{series_id}）\n"
+        f"- 来源：[FRED 官方系列页面](https://fred.stlouisfed.org/series/{series_id})\n"
+        f"- 数据通道：官方公开 CSV，无需 API Key；最新修订值，非历史时点版本。\n"
+        f"- 单位：{units}；查询期间：{start_date} 至 {as_of_date}。\n"
+    )
+    if not points:
+        return header + "\n该窗口暂无可用观察值；不据此推断经济事件不存在。"
+    latest = points[-1]
+    return (
+        header
+        + f"\n**最新读数：{latest[1]}（观察日期：{latest[0]}）**\n\n| 日期 | 原始值 |\n|---|---|\n"
+        + "\n".join(f"| {d} | {v} |" for d, v in points[-MAX_ROWS:])
+        + "\n"
+    )
