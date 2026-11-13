@@ -43,7 +43,7 @@ def snapshot():
     }
 
 
-def make_graph(monkeypatch, tmp_path, snapshot, selected=None):
+def make_graph(monkeypatch, tmp_path, snapshot, selected=None, allow_news=False):
     from tradingagents.graph import trading_graph
     from tradingagents.default_config import build_default_config
 
@@ -61,8 +61,23 @@ def make_graph(monkeypatch, tmp_path, snapshot, selected=None):
         def with_structured_output(self, *args, **kwargs):
             raise NotImplementedError
 
-        def bind_tools(self, *args, **kwargs):
-            pytest.fail("Snapshot mode must not bind financial tools")
+        def bind_tools(self, tools, **kwargs):
+            if not allow_news:
+                pytest.fail("Snapshot mode must not bind financial tools")
+            from langchain_core.runnables import RunnableLambda
+
+            assert {t.name for t in tools} == {
+                "get_news",
+                "get_global_news",
+                "get_macro_indicators",
+                "get_prediction_markets",
+            }
+
+            def news(prompt):
+                seen.append(str(prompt))
+                return AIMessage(content="Verified news analysis marker")
+
+            return RunnableLambda(news)
 
     monkeypatch.setattr(
         trading_graph, "create_tier_client", lambda *a, **k: SimpleNamespace(get_llm=lambda: LLM())
@@ -151,7 +166,9 @@ def test_company_and_peer_fetch_each_provider_field_once(monkeypatch):
     monkeypatch.setattr(yfinance, "Ticker", Ticker)
     company = company_data("AAPL")
     peer = peer_data("MSFT")
-    assert len(calls) == 10  # one constructor + info + six tables, peer constructor + info
+    assert (
+        len(calls) == 11
+    )  # one constructor + info + six tables + insiders, peer constructor + info
     assert calls.count(("AAPL", "info")) == 1
     assert company["profile"]["trailingPE"] is None
     assert peer["trailingPE"] is None
@@ -183,3 +200,24 @@ def test_specialists_feed_web_sections_and_downstream_research(monkeypatch, tmp_
     assert (tmp_path / "export/1_analysts/metrics.md").exists()
     path = next((tmp_path / "results").rglob("full_states_log_*.json"))
     assert json.loads(path.read_text())["metrics_report"] == state["metrics_report"]
+
+
+def test_existing_news_analyst_joins_the_web_research_graph(monkeypatch, tmp_path, snapshot):
+    import yfinance
+
+    monkeypatch.setattr(
+        yfinance, "Ticker", lambda *a: pytest.fail("Duplicate financial data fetch")
+    )
+    graph, seen = make_graph(
+        monkeypatch,
+        tmp_path,
+        snapshot,
+        selected=["fundamentals", "operating", "metrics", "news"],
+        allow_news=True,
+    )
+    state, rating = graph.propagate("AAPL", snapshot["as_of_date"])
+    assert state["news_report"] == "Verified news analysis marker"
+    assert len(seen) == 12
+    bull = next(text for text in seen if "You are a Bull Analyst" in text)
+    assert "Verified news analysis marker" in bull
+    assert "Operating evidence-based conclusion" in bull

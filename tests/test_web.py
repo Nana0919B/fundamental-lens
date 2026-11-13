@@ -47,7 +47,7 @@ def test_background_job_persists_reports_without_exposing_engine_config(monkeypa
 
     class Graph:
         def __init__(self, selected_analysts, config, research_snapshot):
-            assert selected_analysts == ["fundamentals", "operating", "metrics"]
+            assert selected_analysts == ["fundamentals", "operating", "metrics", "news"]
             assert config["checkpoint_enabled"] is False
             assert research_snapshot["company"]["symbol"] == "AAPL"
 

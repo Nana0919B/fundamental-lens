@@ -94,7 +94,7 @@ def run_job(job_id):
         update(
             job_id,
             peers_data=peers,
-            phase="基本面、经营与财务指标智能体并行研究；随后进行多空辩论与风险评估",
+            phase="基本面、经营、财务指标与新闻智能体并行研究；随后进行多空辩论与风险评估",
         )
         config = build_default_config()
         # Isolate mutable graph, memory and checkpoints from CLI/other runs.
@@ -105,7 +105,7 @@ def run_job(job_id):
             checkpoint_enabled=False,
         )
         graph = TradingAgentsGraph(
-            selected_analysts=["fundamentals", "operating", "metrics"],
+            selected_analysts=["fundamentals", "operating", "metrics", "news"],
             config=config,
             research_snapshot=snapshot,
         )
@@ -116,6 +116,7 @@ def run_job(job_id):
                 "fundamentals_report",
                 "operating_report",
                 "metrics_report",
+                "news_report",
                 "investment_plan",
                 "trader_investment_plan",
                 "final_trade_decision",
@@ -166,6 +167,7 @@ def load_history():
             "fundamentals_report": "1_analysts/fundamentals.md",
             "operating_report": "1_analysts/operating.md",
             "metrics_report": "1_analysts/metrics.md",
+            "news_report": "1_analysts/news.md",
             "investment_plan": "2_research/manager.md",
             "trader_investment_plan": "3_trading/trader.md",
             "final_trade_decision": "5_portfolio/decision.md",

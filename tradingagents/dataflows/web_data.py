@@ -95,8 +95,38 @@ def company_data(ticker):
             except Exception as exc:
                 tables[frequency][name] = frame_data(None)
                 errors.append(f"{frequency}/{name} 暂不可用：{type(exc).__name__}")
+    try:
+        transactions = item.insider_transactions
+        if transactions is None or transactions.empty:
+            insiders = {
+                "columns": [],
+                "rows": [],
+                "note": "数据源未提供内部人交易记录；不等同于确认没有交易。",
+            }
+        else:
+            recent = transactions.head(30)
+            insiders = {
+                "columns": [str(c) for c in recent.columns],
+                "rows": [
+                    [
+                        None
+                        if v is None or (isinstance(v, float) and not math.isfinite(v))
+                        else v.isoformat()
+                        if hasattr(v, "isoformat")
+                        else v
+                        if isinstance(v, (str, int, float, bool))
+                        else str(v)
+                        for v in row
+                    ]
+                    for row in recent.itertuples(index=False, name=None)
+                ],
+                "note": "供应商最近最多 30 条记录；不代表完整披露历史。",
+            }
+    except Exception as exc:
+        insiders = {"columns": [], "rows": [], "note": "内部人交易暂不可用：" + type(exc).__name__}
     return {
         "symbol": ticker,
+        "insider_transactions": insiders,
         "profile": profile,
         "statements": tables,
         "errors": errors,

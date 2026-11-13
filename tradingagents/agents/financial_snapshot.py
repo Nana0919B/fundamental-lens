@@ -13,7 +13,7 @@ RULES = (
     "debtToEquity is already a percentage. Monetary statement values are raw reporting-currency "
     "units except explicitly named per-share/ratio/count rows. Quote currency and financial "
     "reporting currency may differ. Quarterly cash flows may be cumulative. Insider transactions "
-    "are not included; report that limitation rather than fetching another dataset. "
+    "are included only when supplied in the insider_transactions block; if absent report the limitation. "
     "Calculated metrics carry versioned formulas and source-cell IDs. Use those results instead of "
     "inventing alternate formulas. Supplier snapshot ratios and calculated historical metrics may differ; "
     "label the basis. Document links alone do not mean their content has been read. Do not infer "
@@ -39,6 +39,7 @@ def snapshot_context(snapshot, *, full=False):
     }
     if full:
         evidence["statements"] = company.get("statements", {})
+        evidence["insider_transactions"] = company.get("insider_transactions", {})
         evidence["filing_documents"] = company.get("filings", {})
     else:
         # The full statements reach the fundamentals analyst; downstream roles

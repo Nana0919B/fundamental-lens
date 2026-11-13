@@ -36,6 +36,9 @@ def create_fundamentals_analyst(llm):
                         "system",
                         "Write a comprehensive company fundamentals report, including business, "
                         "financial quality, trends, valuation, explicit peer comparison and data limitations. "
+                        "Organize the report into five sections in this order: company fundamentals, balance sheet, "
+                        "cash flow, income statement, insider transactions. Analyze each supplied dataset; "
+                        "explicitly state if any is missing, never silently omit a section. "
                         "Finish with a summary table. You have no external tools. "
                         + get_language_instruction(),
                     ),
