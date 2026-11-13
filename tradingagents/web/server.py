@@ -3,31 +3,33 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import re
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 from zoneinfo import ZoneInfo
 
 from markdown_it import MarkdownIt
 
-from tradingagents.default_config import build_default_config
-from tradingagents.report_brief import make_company_brief
-from tradingagents.reporting import write_report_tree, _report_parts
-from tradingagents.report_html import render_report
-from tradingagents.web.presentation import present_report, readable_evidence
+from tradingagents.dataflows.files import replace_file
 from tradingagents.dataflows.research_analytics import enrich_snapshot
 from tradingagents.dataflows.research_store import ResearchStore
+from tradingagents.dataflows.symbols import resolve_equity_symbol
 from tradingagents.dataflows.vendors.sec_edgar import get_filing_documents
 from tradingagents.dataflows.web_data import company_data, peer_data
-from tradingagents.dataflows.files import replace_file
-from tradingagents.dataflows.symbols import resolve_equity_symbol
+from tradingagents.default_config import build_default_config
+from tradingagents.report_brief import make_company_brief
+from tradingagents.report_html import render_report
+from tradingagents.reporting import _report_parts, write_report_tree
+from tradingagents.web.presentation import present_report, readable_evidence
 
 ROOT = Path(__file__).parent / "static"
 STORE = Path(build_default_config()["results_dir"]) / "web"
@@ -66,7 +68,7 @@ def update(job_id, **changes):
 
 def display_reports(job):
     reports = dict(job.get("reports", {}))
-    macro = job.get("macro_update")
+    macro = job.get("macro_update") if not job.get("macro_consumed") else None
     if macro and macro.get("status") == "completed":
         original = reports.get("news_report", "")
         original = "\n".join(
@@ -147,11 +149,17 @@ def run_job(job_id):
                 JOBS[job_id].setdefault("reports", {})[key] = text
                 persist(JOBS[job_id])
 
+        graph_options = {}
+        if job.get("macro_context") is not None:
+            graph_options.update(
+                macro_context=job["macro_context"], seed_reports=job.get("seed_reports", {})
+            )
         graph = TradingAgentsGraph(
             selected_analysts=["fundamentals", "operating", "metrics", "news"],
             config=config,
             research_snapshot=snapshot,
             on_report=on_report,
+            **graph_options,
         )
         state, rating = graph.propagate(job["ticker"], job["date"])
         reports = {
@@ -178,8 +186,25 @@ def run_job(job_id):
             export_file.write_text(
                 present_report(export_file.read_text(), snapshot), encoding="utf-8"
             )
-        archive.archive_reports(snapshot, reports)
-        update(job_id, status="completed", phase="分析完成", reports=reports, rating=rating)
+        if job.get("macro_context") is not None:
+            archive.archive_report_version(
+                job_id,
+                snapshot,
+                job["macro_context"],
+                reports,
+                job["parent_job_id"],
+                job["created_at"],
+            )
+        else:
+            archive.archive_reports(snapshot, reports)
+        update(
+            job_id,
+            status="completed",
+            phase="分析完成",
+            reports=reports,
+            rating=rating,
+            macro_consumed=bool(job.get("macro_context")),
+        )
     except Exception as exc:
         log.exception("Research job %s failed", job_id)
         # Do not expose SDK errors containing headers, keys or internal URLs.
@@ -189,6 +214,52 @@ def run_job(job_id):
             phase="分析未完成，可查看已获取的数据",
             error=f"{type(exc).__name__}：请检查模型服务、网络及终端日志后重试。",
         )
+
+
+def create_macro_reanalysis(source_id):
+    from tradingagents.agents.macro_context import validate_macro_context
+
+    with LOCK:
+        source = JOBS.get(source_id)
+        if not source or source.get("status") != "completed":
+            raise ValueError("请选择已完成的研究")
+        snapshot = source.get("research_snapshot")
+        macro = source.get("macro_update") or source.get("macro_context")
+        if not snapshot or snapshot.get("as_of_date") != today():
+            raise ValueError("只支持复用今日财务资料；历史日期请新建研究")
+        validate_macro_context(macro, today())
+        digest = hashlib.sha256(
+            json.dumps(snapshot, ensure_ascii=False, sort_keys=True, allow_nan=False).encode()
+        ).hexdigest()
+        if digest != source.get("snapshot_digest"):
+            raise ValueError("财务归档校验失败，不能重用")
+        seeds = {
+            key: source.get("reports", {}).get(key, "")
+            for key in ("fundamentals_report", "operating_report", "metrics_report")
+        }
+        if not all(seeds.values()):
+            raise ValueError("缺少可复用的财务分析报告")
+        if sum(job["status"] in ("running", "queued") for job in JOBS.values()) >= 3:
+            raise ValueError("已有三个任务，请等待完成")
+        job = {
+            "id": uuid.uuid4().hex,
+            "ticker": source["ticker"],
+            "date": today(),
+            "peers": list(source.get("peers", [])),
+            "created_at": datetime.now().astimezone().isoformat(),
+            "status": "queued",
+            "phase": "等待使用 FRED 数据重新生成新闻与综合判断",
+            "parent_job_id": source_id,
+            "research_snapshot": deepcopy(snapshot),
+            "snapshot_digest": digest,
+            "macro_context": deepcopy(macro),
+            "seed_reports": seeds,
+            "macro_consumed": False,
+        }
+        JOBS[job["id"]] = job
+        persist(job)
+    POOL.submit(run_job, job["id"])
+    return job
 
 
 def load_history():
@@ -275,7 +346,16 @@ class Handler(BaseHTTPRequestHandler):
                     {
                         k: v
                         for k, v in job.items()
-                        if k not in ("data", "reports", "peers_data", "research_snapshot")
+                        if k
+                        not in (
+                            "data",
+                            "reports",
+                            "peers_data",
+                            "research_snapshot",
+                            "seed_reports",
+                            "macro_context",
+                            "macro_update",
+                        )
                     }
                     for job in JOBS.values()
                 ]
@@ -352,6 +432,12 @@ class Handler(BaseHTTPRequestHandler):
         }
         if not self.trusted() or (origin and origin not in allowed):
             return self.send({"error": "请求来源不允许"}, 403)
+        if self.path.startswith("/api/jobs/") and self.path.endswith("/reanalyze-macro"):
+            try:
+                job = create_macro_reanalysis(self.path.split("/")[-2])
+                return self.send({"id": job["id"], "status": "queued"}, 202)
+            except ValueError as exc:
+                return self.send({"error": str(exc)}, 400)
         if self.path.startswith("/api/jobs/") and self.path.endswith("/retry"):
             job_id = self.path.split("/")[-2]
             with LOCK:

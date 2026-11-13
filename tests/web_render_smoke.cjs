@@ -28,4 +28,12 @@ for(let i=0;i<7;i++){
  if(i===0){assert(html.indexOf('基本面研究')<html.indexOf('综合判断'));assert(html.indexOf('综合判断')<html.indexOf('公司研究简报'));for(const name of ['fundamentals','balance_sheet','cashflow','income_statement','insider_transactions'])assert(html.includes(name));}
  if(i===3)assert(html.indexOf('原始报告')>html.indexOf('财务报表'),'Original disclosures must be last');
 }
-console.log('All seven Web panels render with archived data, evidence, formulas and source links.');
+fixture.macro_context={reports:['FRED observation']};
+vm.runInContext('job=fixture;tab=5;draw()',context);
+assert(nodes.get('#content').innerHTML.includes('尚未参与原新闻结论与综合判断'));
+assert(nodes.get('#content').innerHTML.includes('id="reanalyze-macro"'));
+fixture.macro_consumed=true;
+vm.runInContext('draw()',context);
+assert(nodes.get('#content').innerHTML.includes('已将 FRED 数据传给原新闻分析师'));
+assert(!nodes.get('#content').innerHTML.includes('尚未参与原新闻结论与综合判断'));
+console.log('All seven Web panels render with archived data, evidence, formulas, source links and macro reanalysis status.');

@@ -3,8 +3,8 @@
 import hashlib
 import json
 import sqlite3
+from contextlib import closing, contextmanager
 from pathlib import Path
-from contextlib import contextmanager, closing
 
 
 class ResearchStore:
@@ -27,6 +27,10 @@ class ResearchStore:
                     PRIMARY KEY(snapshot_id, evidence_id));
                 CREATE TABLE IF NOT EXISTS reports (
                     snapshot_id TEXT PRIMARY KEY, ticker TEXT, digest TEXT, payload TEXT);
+                CREATE TABLE IF NOT EXISTS report_versions (
+                    id TEXT PRIMARY KEY, snapshot_id TEXT NOT NULL, parent_run_id TEXT,
+                    ticker TEXT NOT NULL, created_at TEXT NOT NULL, digest TEXT NOT NULL,
+                    macro_payload TEXT NOT NULL, report_payload TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS peer_pools (
                     ticker TEXT PRIMARY KEY, peers TEXT NOT NULL);
             """)
@@ -88,13 +92,40 @@ class ResearchStore:
                 (snapshot["id"], snapshot["company"]["symbol"], digest, raw),
             )
 
+    def archive_report_version(self, run_id, snapshot, macro, reports, parent_run_id, created_at):
+        raw = json.dumps(reports, ensure_ascii=False, sort_keys=True, allow_nan=False)
+        macro_raw = json.dumps(macro, ensure_ascii=False, sort_keys=True, allow_nan=False)
+        digest = hashlib.sha256((macro_raw + "\n" + raw).encode()).hexdigest()
+        with self.connect() as db:
+            if not db.execute("SELECT 1 FROM snapshots WHERE id=?", (snapshot["id"],)).fetchone():
+                raise ValueError("The financial snapshot must already be archived")
+            prior = db.execute(
+                "SELECT digest FROM report_versions WHERE id=?", (run_id,)
+            ).fetchone()
+            if prior and prior["digest"] != digest:
+                raise ValueError("A report version cannot be overwritten")
+            db.execute(
+                "INSERT OR IGNORE INTO report_versions VALUES (?,?,?,?,?,?,?,?)",
+                (
+                    run_id,
+                    snapshot["id"],
+                    parent_run_id,
+                    snapshot["company"]["symbol"],
+                    created_at,
+                    digest,
+                    macro_raw,
+                    raw,
+                ),
+            )
+        return digest
+
     def history(self, ticker):
         with self.connect() as db:
             return [
                 dict(r)
                 for r in db.execute(
-                    "SELECT s.id,s.as_of_date,s.retrieved_at,s.source,s.digest, r.snapshot_id IS NOT NULL AS has_report FROM snapshots s LEFT JOIN reports r ON r.snapshot_id=s.id WHERE s.ticker=? ORDER BY s.retrieved_at DESC LIMIT 50",
-                    (ticker,),
+                    "SELECT s.id,s.as_of_date,s.retrieved_at,s.source,s.digest, r.snapshot_id IS NOT NULL AS has_report FROM snapshots s LEFT JOIN reports r ON r.snapshot_id=s.id WHERE s.ticker=? UNION ALL SELECT v.id,s.as_of_date,v.created_at AS retrieved_at,s.source,v.digest,1 AS has_report FROM report_versions v JOIN snapshots s ON s.id=v.snapshot_id WHERE v.ticker=? ORDER BY retrieved_at DESC LIMIT 50",
+                    (ticker, ticker),
                 )
             ]
 
