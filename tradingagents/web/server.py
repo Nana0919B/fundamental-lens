@@ -147,6 +147,9 @@ def run_job(job_id):
             memory_log_path=str(STORE / "memory.md"),
             checkpoint_enabled=False,
             llm_timeout_seconds=120,
+            # SSE starts the response before a long report finishes, avoiding
+            # proxy disconnects while waiting for non-streaming headers.
+            anthropic_streaming=True,
         )
 
         def on_report(key, text):

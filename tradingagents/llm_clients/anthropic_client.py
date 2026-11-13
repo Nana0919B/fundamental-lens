@@ -1,14 +1,18 @@
+import logging
 import re
+import time
 from typing import Any
 
+from anthropic import APIStatusError
 from langchain_anthropic import ChatAnthropic
+from pydantic import RootModel
 
 from .base_client import BaseLLMClient, normalize_content
 from .validators import validate_model
 
 _PASSTHROUGH_KWARGS = (
     "timeout", "max_retries", "api_key", "max_tokens", "temperature",
-    "callbacks", "http_client", "http_async_client", "effort",
+    "callbacks", "http_client", "http_async_client", "effort", "streaming",
 )
 
 # Anthropic's extended-thinking ``effort`` parameter is accepted by Opus 4.5+,
@@ -23,6 +27,7 @@ _EFFORT_EXACT = {
 }
 _EFFORT_MODEL = re.compile(r"^claude-(opus|sonnet|fable)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?$")
 _EFFORT_MIN_VERSION = {"opus": (4, 5), "sonnet": (4, 6), "fable": (5, 0)}
+logger = logging.getLogger(__name__)
 
 
 def _supports_effort(model: str) -> bool:
@@ -48,7 +53,31 @@ class NormalizedChatAnthropic(ChatAnthropic):
     """
 
     def invoke(self, input, config=None, **kwargs):
-        return normalize_content(super().invoke(input, config, **kwargs))
+        # A gateway can accept SSE with HTTP 200, then signal an upstream
+        # timeout inside the stream. SDK HTTP retries do not cover that case.
+        retries = self.max_retries or 0
+        for attempt in range(retries + 1):
+            try:
+                return normalize_content(super().invoke(input, config, **kwargs))
+            except APIStatusError as exc:
+                body = exc.body if isinstance(exc.body, dict) else {}
+                error = body.get("error", {})
+                code = error.get("code") if isinstance(error, dict) else None
+                if code != "first_output_timeout" or attempt == retries:
+                    raise
+                logger.warning("Anthropic stream first_output_timeout; retry %d/%d", attempt + 1, retries)
+                time.sleep(min(2 ** attempt, 4))
+
+    def _make_message_chunk_from_anthropic_event(self, event, **kwargs):
+        # Some compatible gateways send beta metadata on stable SSE events.
+        # The SDK keeps this untyped extra as a dict, while LangChain expects
+        # model_dump(). Preserve the metadata without discarding the response.
+        metadata = getattr(event, "context_management", None)
+        if isinstance(metadata, dict):
+            event = event.model_copy(
+                update={"context_management": RootModel[dict[str, Any]](metadata)}
+            )
+        return super()._make_message_chunk_from_anthropic_event(event, **kwargs)
 
 
 class AnthropicClient(BaseLLMClient):
