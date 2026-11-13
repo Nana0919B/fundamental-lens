@@ -20,6 +20,7 @@ from markdown_it import MarkdownIt
 from tradingagents.default_config import build_default_config
 from tradingagents.report_brief import make_company_brief
 from tradingagents.reporting import write_report_tree
+from tradingagents.web.presentation import present_report, readable_evidence
 from tradingagents.dataflows.research_analytics import enrich_snapshot
 from tradingagents.dataflows.research_store import ResearchStore
 from tradingagents.dataflows.vendors.sec_edgar import get_filing_documents
@@ -124,11 +125,16 @@ def run_job(job_id):
         }
         reports["company_brief"] = make_company_brief(snapshot, reports)
         write_report_tree(
-            {**state, "company_brief": reports["company_brief"]},
+            {**state, **{key: present_report(value, snapshot) for key, value in reports.items()}},
             job["ticker"],
             STORE / "exports" / job_id,
             settings=graph.run_settings(),
         )
+        export_file = STORE / "exports" / job_id / "complete_report.html"
+        if export_file.exists():
+            export_file.write_text(
+                present_report(export_file.read_text(), snapshot), encoding="utf-8"
+            )
         archive.archive_reports(snapshot, reports)
         update(job_id, status="completed", phase="分析完成", reports=reports, rating=rating)
     except Exception as exc:
@@ -254,7 +260,10 @@ class Handler(BaseHTTPRequestHandler):
             file = STORE / "exports" / job_id / "complete_report.html"
             if not file.exists():
                 return self.send({"error": "该任务尚无完整导出文件"}, 404)
-            return self.send(file.read_bytes(), content_type="text/html; charset=utf-8")
+            return self.send(
+                present_report(file.read_text(), JOBS[job_id].get("research_snapshot")).encode(),
+                content_type="text/html; charset=utf-8",
+            )
         if path.startswith("/api/jobs/"):
             with LOCK:
                 job = JOBS.get(path.rsplit("/", 1)[-1])
@@ -269,8 +278,10 @@ class Handler(BaseHTTPRequestHandler):
             ).get("symbol")
             archive = ResearchStore(STORE / "research.sqlite3")
             result["versions"] = archive.history(ticker) if ticker else []
+            result["display_evidence"] = readable_evidence(result.get("research_snapshot") or {})
             result["report_html"] = {
-                k: MARKDOWN.render(v) for k, v in result.get("reports", {}).items()
+                k: MARKDOWN.render(present_report(v, result.get("research_snapshot")))
+                for k, v in result.get("reports", {}).items()
             }
             return self.send(result)
         files = {"/": "index.html", "/app.js": "app.js", "/style.css": "style.css"}
@@ -339,7 +350,7 @@ def enrich_import(job_id):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="TradingAgents local research UI")
+    parser = argparse.ArgumentParser(description="FundAnalyst local research UI")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
@@ -349,7 +360,7 @@ def main():
             update(job["id"], data_status="loading")
             POOL.submit(enrich_import, job["id"])
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
-    print(f"TradingAgents Web: http://127.0.0.1:{args.port}", flush=True)
+    print(f"FundAnalyst Web: http://127.0.0.1:{args.port}", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
