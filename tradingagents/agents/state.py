@@ -49,6 +49,7 @@ class AgentState(MessagesState):
     trade_date: Annotated[str, "The analysis date; data is served as of it"]
 
     macro_context: Annotated[dict, "Frozen FRED observations consumed in this research run"]
+    news_context: Annotated[dict, "Frozen optional TrendRadar evidence with coverage and provenance"]
 
     research_snapshot: Annotated[dict, "Frozen company and peer financial evidence shared with the UI"]
 

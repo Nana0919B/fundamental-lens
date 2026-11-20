@@ -12,6 +12,7 @@ from tradingagents.agents.tools import (
     get_news,
     get_prediction_markets,
 )
+from tradingagents.dataflows.trendradar_adapter import news_context_appendix, news_context_text
 
 # The tools this analyst is offered; its tool node is built from the same tuple.
 TOOLS = (
@@ -39,6 +40,7 @@ def create_news_analyst(llm):
             + "Do not call the macro tool unavailable just because FRED_API_KEY is absent. "
             + "The public CSV serves latest revisions, not historical point-in-time data; report that distinction. "
             + get_language_instruction()
+            + news_context_text(state.get("news_context"))
         )
 
         tools = tuple(
@@ -90,6 +92,7 @@ def create_news_analyst(llm):
                 )
             else:
                 report += "\n\n> 本次工具未返回可定位的新闻原文链接，请核实报告中的事件，勿将推断视为已确认事实。"
+            report += news_context_appendix(state.get("news_context"))
         return {
             "messages": [result],
             "news_report": report,

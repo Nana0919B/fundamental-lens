@@ -62,6 +62,7 @@ class TradingAgentsGraph:
         on_report=None,
         macro_context: dict | None = None,
         seed_reports: dict | None = None,
+        news_context: dict | None = None,
     ):
         """Initialize the trading agents graph and components.
 
@@ -72,6 +73,7 @@ class TradingAgentsGraph:
             callbacks: Optional list of callback handlers (e.g., for tracking LLM/tool stats)
         """
         self.macro_context = deepcopy(macro_context)
+        self.news_context = deepcopy(news_context)
         self.seed_reports = deepcopy(seed_reports or {})
         allowed = {"fundamentals_report", "operating_report", "metrics_report", "news_report"}
         if not set(self.seed_reports).issubset(allowed) or any(
@@ -184,6 +186,8 @@ class TradingAgentsGraph:
             settings['macro_context'] = self.macro_context
         if getattr(self, 'seed_reports', None):
             settings['seed_reports'] = self.seed_reports
+        if getattr(self, 'news_context', None) is not None:
+            settings['news_context'] = self.news_context
         digest = hashlib.sha256(json.dumps(settings, sort_keys=True, default=str).encode()).hexdigest()[:12]
         return "|".join([
             "analysts=" + ",".join(self.selected_analysts),
@@ -311,6 +315,7 @@ class TradingAgentsGraph:
             "output_language": cfg.get("output_language"),
             "data_vendors": dict(cfg.get("data_vendors") or {}),
             "tool_vendors": dict(cfg.get("tool_vendors") or {}),
+            "trendradar_enabled": cfg.get("trendradar_enabled", False),
         }
 
     def save_reports(self, final_state, ticker, save_path=None, html=True) -> Path:
@@ -365,6 +370,23 @@ class TradingAgentsGraph:
             from tradingagents.agents.macro_context import validate_macro_context
             validate_macro_context(self.macro_context, trade_date)
             state['macro_context'] = deepcopy(self.macro_context)
+        from tradingagents.dataflows.research_store import ResearchStore
+        from tradingagents.dataflows.trendradar_adapter import (
+            build_news_context,
+            validate_news_context,
+        )
+
+        news = getattr(self, "news_context", None)
+        if news is not None:
+            validate_news_context(news, company_name, trade_date)
+        elif (self.config.get("trendradar_enabled") and "news" in self.selected_analysts
+              and not getattr(self, "_resuming", False) and not self.seed_reports.get("news_report")):
+            identity = (snapshot["company"].get("profile", {}) if snapshot else
+                        resolve_instrument_identity(company_name) if not is_historical(trade_date) else {})
+            news = build_news_context(self.config, company_name, trade_date, identity)
+        if news is not None:
+            ResearchStore(Path(self.config["data_cache_dir"]) / "news.sqlite3").archive_news_context(news)
+            state["news_context"] = deepcopy(news)
         return state
 
     def _memory_step(self, state):
@@ -526,6 +548,7 @@ class TradingAgentsGraph:
             "run_settings": self.run_settings(),
             "research_snapshot": final_state.get("research_snapshot"),
             "macro_context": final_state.get("macro_context"),
+            "news_context": final_state.get("news_context"),
             "operating_report": final_state.get("operating_report", ""),
             "metrics_report": final_state.get("metrics_report", ""),
         }

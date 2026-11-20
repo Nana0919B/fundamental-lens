@@ -165,6 +165,41 @@ def test_an_interrupted_run_resumes_from_its_checkpoint(tmp_path, monkeypatch, o
     assert resumed_calls == len(full_run.calls) - (model.fail_at - 1)
 
 
+def test_news_enrichment_survives_graph_checkpoint_without_refetch(tmp_path, monkeypatch, offline):
+    import json
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from tradingagents.dataflows import trendradar_adapter
+    from tradingagents.dataflows.research_store import ResearchStore
+
+    context = trendradar_adapter.build_news_context(
+        {"trendradar_enabled": True, "trendradar_data_dir": str(tmp_path / "missing")},
+        "NVDA", TRADE_DATE, now=datetime(2026, 1, 9, 12, tzinfo=ZoneInfo("Asia/Shanghai")),
+    )
+    calls = []
+
+    def prepare(*a, **k):
+        calls.append(1)
+        return context
+
+    monkeypatch.setattr(trendradar_adapter, "build_news_context", prepare)
+    model = ScriptedModel(fail_at=12)
+    graph = _graph(tmp_path, monkeypatch, model, checkpoint_enabled=True, trendradar_enabled=True)
+    with pytest.raises(RuntimeError, match="provider unavailable"):
+        graph.propagate("NVDA", TRADE_DATE)
+    state, _ = graph.propagate("NVDA", TRADE_DATE)
+    assert calls == [1]
+    assert state["news_context"] == context
+    assert context["snapshot_id"] in state["news_report"]
+    saved = ResearchStore(tmp_path / "cache/news.sqlite3").load_news_context(context["snapshot_id"])
+    assert saved == context
+    log = json.loads(next(tmp_path.glob("results/NVDA/TradingAgentsStrategy_logs/*.json")).read_text())
+    assert log["news_context"] == context
+
+
+
+
 @pytest.mark.unit
 def test_a_graph_reused_across_runs_keeps_no_run_state(tmp_path, monkeypatch, offline):
     """A backtest reuses one graph over its whole grid; holding every run's full

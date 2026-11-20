@@ -43,6 +43,10 @@ def _header(ticker: str, final_state: dict, settings: dict | None) -> str:
             lines.append("- Data vendors: " + ", ".join(f"{k} {v}" for k, v in vendors.items()))
     if final_state.get("memory_note"):
         lines.append(f"- Memory log: {final_state['memory_note']}")
+    if final_state.get("news_context"):
+        news = final_state["news_context"]
+        lines.append(f"- TrendRadar news snapshot: {news['snapshot_id']}; as of {news['as_of']}; "
+                     f"coverage {news['coverage']['status']}")
     return "\n".join(lines) + "\n\n"
 
 

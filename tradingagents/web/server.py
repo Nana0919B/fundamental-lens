@@ -159,6 +159,20 @@ def run_job(job_id):
                 persist(JOBS[job_id])
 
         graph_options = {}
+        from tradingagents.dataflows.trendradar_adapter import (
+            build_news_context,
+            validate_news_context,
+        )
+
+        news = job.get("news_context")
+        if news is not None:
+            validate_news_context(news, job["ticker"], job["date"])
+        elif config.get("trendradar_enabled") and not job.get("seed_reports", {}).get("news_report"):
+            news = build_news_context(config, job["ticker"], job["date"], snapshot["company"].get("profile", {}))
+        if news is not None:
+            archive.archive_news_context(news)
+            update(job_id, news_context=news)
+            graph_options["news_context"] = news
         if job.get("macro_context") is not None:
             graph_options["macro_context"] = job["macro_context"]
         if job.get("seed_reports"):
@@ -300,6 +314,8 @@ def create_macro_reanalysis(source_id):
             "seed_reports": seeds,
             "macro_consumed": False,
         }
+        if source.get("news_context") is not None:
+            job["news_context"] = deepcopy(source["news_context"])
         JOBS[job["id"]] = job
         persist(job)
     POOL.submit(run_job, job["id"])
@@ -396,6 +412,7 @@ class Handler(BaseHTTPRequestHandler):
                             "reports",
                             "peers_data",
                             "research_snapshot",
+                            "news_context",
                             "seed_reports",
                             "macro_context",
                             "macro_update",

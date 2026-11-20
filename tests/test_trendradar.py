@@ -168,6 +168,27 @@ def test_archive_is_immutable_and_replay_does_not_query_live_data(radar, tmp_pat
     assert store.load_news_context(key) == context
 
 
+def test_analyst_receives_evidence_and_retains_existing_tools_and_sources(radar, monkeypatch):
+    from tradingagents.agents.analysts import news_analyst
+
+    context = freeze(radar[0])
+    seen = []
+
+    def turn(prompt, llm, tools, messages):
+        seen.append((prompt.format_messages(messages=messages), tools))
+        return AIMessage(content="Evidence-based report"), "Evidence-based report"
+
+    monkeypatch.setattr(news_analyst, "take_turn", turn)
+    result = news_analyst.create_news_analyst(None)({
+        "company_of_interest": "NVDA", "trade_date": DAY,
+        "messages": [], "news_context": context,
+    })
+    assert "英伟达发布推理芯片" in seen[0][0][0].content
+    assert "NOT publication time" in seen[0][0][0].content
+    assert {tool.name for tool in seen[0][1]} >= {"get_news", "get_global_news"}
+    assert "https://example.com/chip" in result["news_report"]
+    assert context["snapshot_id"] in result["news_report"]
+    assert "发布时间：未知" in result["news_report"]
 
 
 def test_no_executable_source_link_is_rendered(radar):
@@ -175,3 +196,39 @@ def test_no_executable_source_link_is_rendered(radar):
     context["items"][0]["url"] = "javascript:alert(1)"
     assert "javascript:" not in news_context_appendix(context)
     assert news_context_text(None) == news_context_appendix(None) == ""
+
+
+def test_web_freezes_before_analysis_and_reuses_after_failure(radar, tmp_path, monkeypatch):
+    from tradingagents.default_config import DEFAULT_CONFIG
+    from tradingagents.graph import trading_graph
+    from tradingagents.web import server
+
+    context = freeze(radar[0])
+    cfg = {**copy.deepcopy(DEFAULT_CONFIG), **radar[0]}
+    monkeypatch.setattr(server, "build_default_config", lambda: cfg)
+    monkeypatch.setattr(server, "STORE", tmp_path / "web")
+    monkeypatch.setattr(server, "JOBS", {"one": {
+        "id": "one", "ticker": "NVDA", "date": DAY, "status": "failed",
+        "research_snapshot": {"id": "one", "as_of_date": DAY,
+                              "company": {"symbol": "NVDA", "profile": {}}},
+    }})
+    import tradingagents.dataflows.trendradar_adapter as adapter
+
+    monkeypatch.setattr(adapter, "build_news_context", lambda *a, **k: context)
+    seen = []
+
+    class Graph:
+        def __init__(self, **kwargs):
+            seen.append(copy.deepcopy(kwargs["news_context"]))
+
+        def propagate(self, *a):
+            assert server.JOBS["one"]["news_context"] == context
+            raise RuntimeError("later analyst failed")
+
+    monkeypatch.setattr(trading_graph, "TradingAgentsGraph", Graph)
+    server.run_job("one")
+    assert server.JOBS["one"]["status"] == "failed"
+    monkeypatch.setattr(adapter, "build_news_context", lambda *a, **k: pytest.fail("refetched news"))
+    server.run_job("one")
+    assert seen == [context, context]
+    assert ResearchStore(server.STORE / "research.sqlite3").load_news_context(context["snapshot_id"]) == context
