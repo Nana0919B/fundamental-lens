@@ -405,19 +405,18 @@ class Handler(BaseHTTPRequestHandler):
             with LOCK:
                 jobs = [
                     {
-                        k: v
-                        for k, v in job.items()
-                        if k
-                        not in (
-                            "data",
-                            "reports",
-                            "peers_data",
-                            "research_snapshot",
-                            "news_context",
-                            "seed_reports",
-                            "macro_context",
-                            "macro_update",
-                        )
+                        **{
+                            k: v
+                            for k, v in job.items()
+                            if k not in (
+                                "data", "reports", "peers_data", "research_snapshot",
+                                "news_context", "seed_reports", "macro_context", "macro_update",
+                            )
+                        },
+                        "company_name": (
+                            (job.get("research_snapshot") or {}).get("company", {}).get("profile", {})
+                            or (job.get("data") or {}).get("profile", {})
+                        ).get("longName", job.get("ticker", "")),
                     }
                     for job in JOBS.values()
                 ]
