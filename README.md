@@ -4,7 +4,7 @@
 
 # TradingAgents: Multi-Agents LLM Financial Trading Framework
 
-> **FundAnalyst 本地研究工作台**：参见 [本地启动说明](LOCAL_WEB.md)。首次启动会自动载入随仓库提供的 MSFT、0700.HK、INTC 历史研究数据，查看已有报告无需模型密钥。
+> **FundAnalyst 本地研究工作台**：参见 [本地启动说明](LOCAL_WEB.md)。首次启动会自动载入随仓库提供的 MSFT、0700.HK、INTC、AAPL 历史研究数据，查看已有报告无需模型密钥。
 
 <div align="center" style="line-height: 1;">
   <a href="https://arxiv.org/abs/2412.20138" target="_blank"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2412.20138-B31B1B?logo=arxiv"/></a>

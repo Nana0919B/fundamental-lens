@@ -6,6 +6,3316 @@
   "created_at": "2026-11-13T23:21:09.185615+08:00",
   "status": "completed",
   "phase": "分析完成",
+  "data": {
+    "symbol": "0700.HK",
+    "market": {
+      "code": "hk",
+      "label": "港股",
+      "exchange": "香港交易所",
+      "coverage_note": "财报、内部人交易及新闻的覆盖程度取决于 Yahoo；缺失数据不代表不存在。SEC 原始报告索引不适用于此市场。"
+    },
+    "insider_transactions": {
+      "columns": [
+        "Shares",
+        "Value",
+        "URL",
+        "Text",
+        "Insider",
+        "Position",
+        "Transaction",
+        "Start Date",
+        "Ownership"
+      ],
+      "rows": [
+        [
+          5000,
+          270936.0,
+          "",
+          "Sale at price 54.19 per share.",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-10-16T00:00:00",
+          "D"
+        ],
+        [
+          1682,
+          null,
+          "",
+          "",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-08-18T00:00:00",
+          "D"
+        ],
+        [
+          13301,
+          null,
+          "",
+          "",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-15T00:00:00",
+          "D"
+        ],
+        [
+          11823,
+          null,
+          "",
+          "",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6651,
+          null,
+          "",
+          "",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6651,
+          null,
+          "",
+          "",
+          "Li (Dong Sheng Thomas)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6651,
+          null,
+          "",
+          "",
+          "Ke (Yang)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-15T00:00:00",
+          "D"
+        ],
+        [
+          5000,
+          321204.0,
+          "",
+          "Sale at price 64.24 per share.",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-04-10T00:00:00",
+          "D"
+        ],
+        [
+          4725,
+          null,
+          "",
+          "",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-24T00:00:00",
+          "D"
+        ],
+        [
+          4200,
+          null,
+          "",
+          "",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-24T00:00:00",
+          "D"
+        ],
+        [
+          2364,
+          null,
+          "",
+          "",
+          "Ke (Yang)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-24T00:00:00",
+          "D"
+        ],
+        [
+          2364,
+          null,
+          "",
+          "",
+          "Li (Dong Sheng Thomas)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-24T00:00:00",
+          "D"
+        ],
+        [
+          2186,
+          null,
+          "",
+          "",
+          "Li (Dong Sheng Thomas)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-15T00:00:00",
+          "D"
+        ],
+        [
+          2186,
+          null,
+          "",
+          "",
+          "Ke (Yang)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-15T00:00:00",
+          "D"
+        ],
+        [
+          4373,
+          null,
+          "",
+          "",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-15T00:00:00",
+          "D"
+        ],
+        [
+          3887,
+          null,
+          "",
+          "",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-15T00:00:00",
+          "D"
+        ],
+        [
+          2186,
+          null,
+          "",
+          "",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2026-03-15T00:00:00",
+          "D"
+        ],
+        [
+          3358,
+          273375.0,
+          "",
+          "Sale at price 81.41 per share.",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-10-13T00:00:00",
+          "D"
+        ],
+        [
+          1680,
+          null,
+          "",
+          "",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-08-18T00:00:00",
+          "D"
+        ],
+        [
+          12000,
+          781815.0,
+          "",
+          "Sale at price 65.15 per share.",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-05-16T00:00:00",
+          "D"
+        ],
+        [
+          25000,
+          1660602.0,
+          "",
+          "Sale at price 66.42 per share.",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-05-15T00:00:00",
+          "D"
+        ],
+        [
+          13301,
+          null,
+          "",
+          "",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-15T00:00:00",
+          "D"
+        ],
+        [
+          11823,
+          null,
+          "",
+          "",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6650,
+          null,
+          "",
+          "",
+          "Zhang (Xiulan)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6650,
+          null,
+          "",
+          "",
+          "Ke (Yang)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-15T00:00:00",
+          "D"
+        ],
+        [
+          6650,
+          null,
+          "",
+          "",
+          "Li (Dong Sheng Thomas)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-15T00:00:00",
+          "D"
+        ],
+        [
+          10000,
+          566461.0,
+          "",
+          "Sale at price 56.65 per share.",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-04-11T00:00:00",
+          "D"
+        ],
+        [
+          3786,
+          null,
+          "",
+          "",
+          "Stone (Ian Charles)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-03-30T00:00:00",
+          "D"
+        ],
+        [
+          3384,
+          null,
+          "",
+          "",
+          "Yang (Siu Shun)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-03-30T00:00:00",
+          "D"
+        ],
+        [
+          1894,
+          null,
+          "",
+          "",
+          "Li (Dong Sheng Thomas)",
+          "Independent Non-Executive Director",
+          "",
+          "2025-03-30T00:00:00",
+          "D"
+        ]
+      ],
+      "note": "供应商最近最多 30 条记录；不代表完整披露历史。"
+    },
+    "profile": {
+      "companyOfficers": [
+        {
+          "maxAge": 1,
+          "name": "Mr. Huateng  Ma",
+          "age": 53,
+          "title": "Co-Founder, Chairman & CEO",
+          "yearBorn": 1972,
+          "fiscalYear": 2025,
+          "totalPay": 57024272,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Chi Ping  Lau",
+          "age": 52,
+          "title": "President",
+          "yearBorn": 1973,
+          "fiscalYear": 2025,
+          "totalPay": 19495822,
+          "exercisedValue": 0,
+          "unexercisedValue": 1122740352
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Liqing  Zeng",
+          "age": 55,
+          "title": "Co-Founder & Advisor Emeritus",
+          "yearBorn": 1970,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Chenye  Xu",
+          "age": 54,
+          "title": "Co-Founder & Chief Information Officer",
+          "yearBorn": 1971,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Zhidong  Zhang",
+          "age": 53,
+          "title": "Co-Founder & Advisor Emeritus",
+          "yearBorn": 1972,
+          "fiscalYear": 2025,
+          "totalPay": 18959525,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Yidan  Chen",
+          "age": 54,
+          "title": "Co-Founder & Advisor Emeritus",
+          "yearBorn": 1971,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Weibiao  Zhan",
+          "age": 52,
+          "title": "Managing Director",
+          "yearBorn": 1973,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Shek Hon  Lo CPA",
+          "age": 56,
+          "title": "CFO & Senior VP",
+          "yearBorn": 1969,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Yuxin  Ren",
+          "age": 49,
+          "title": "COO and President of Platform & Content Group & Interactive Entertainment Group",
+          "yearBorn": 1976,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Shan  Lu",
+          "age": 50,
+          "title": "Senior EVP and President of Technology & Engineering Group",
+          "yearBorn": 1975,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        }
+      ],
+      "heldPercentInsiders": 0.31726998,
+      "heldPercentInstitutions": 0.25069,
+      "mostRecentQuarter": 1782777600.0,
+      "address1": "Tencent Binhai Towers",
+      "zip": "518054",
+      "phone": "86 755 8601 3388",
+      "exchange": "HKG",
+      "longName": "Tencent Holdings Limited",
+      "sector": "Communication Services",
+      "industry": "Internet Content & Information",
+      "country": "China",
+      "city": "Shenzhen",
+      "website": "https://www.tencent.com",
+      "longBusinessSummary": "Tencent Holdings Limited, an investment holding company, provides value-added services, marketing services, fintech, and business services in Mainland China and internationally. The company's consumers business includes communications and social services, such as instant messaging and social networks; digital content, including online games, videos, live streaming, news, music, and literature; fintech services, which include mobile payment, wealth management, consumer loans, and securities trading; and various tools comprising network security management, browsing, navigation, application management, email, etc. Its enterprise business comprises marketing solutions, which offer digital tools, including user insight, creative management, placement strategy, and digital assets management; and cloud services, such as cloud computing, big data analytics, artificial intelligence, Internet of Things, and security and other technologies for financial services, education, healthcare, retail, industry, transport, energy, and radio and television industries. The company also invests in, produces, and distributes films and television programs; offers copyrights licensing and merchandise sales and other services; provides internet advertisement services; and offers software development, and information technology and system integration services, as well as develops and operates mobile games. The company was formerly known as Tencent (BVI) Limited and changed its name to Tencent Holdings Limited in February 2004. Tencent Holdings Limited was founded in 1998 and is headquartered in Shenzhen, the People's Republic of China.",
+      "fullTimeEmployees": 115927.0,
+      "currency": "HKD",
+      "financialCurrency": "CNY",
+      "marketCap": 3481181356032.0,
+      "currentPrice": 386.6,
+      "trailingPE": 13.607884,
+      "forwardPE": 10.917541,
+      "priceToBook": 2.607634,
+      "trailingEps": 28.41,
+      "returnOnEquity": 0.19906001,
+      "returnOnAssets": 0.07867,
+      "grossMargins": 0.56699,
+      "operatingMargins": 0.33306,
+      "profitMargins": 0.29868,
+      "revenueGrowth": 0.11,
+      "earningsGrowth": 0.018,
+      "totalRevenue": 788483014656.0,
+      "netIncomeToCommon": 235508006912.0,
+      "freeCashflow": 118467747840.0,
+      "totalCash": 458904010752.0,
+      "totalDebt": 471828004864.0,
+      "currentRatio": 1.287,
+      "debtToEquity": 38.595,
+      "sharesOutstanding": 9004607601.0,
+      "dividendYield": 1.33
+    },
+    "statements": {
+      "annual": {
+        "income": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31",
+            "2021-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Tax Effect Of Unusual Items",
+              "values": [
+                1789596124.783137,
+                1055518628.486241,
+                -1883419677.171407,
+                12297459693.185871,
+                null
+              ]
+            },
+            {
+              "name": "Tax Rate For Calcs",
+              "values": [
+                0.171139,
+                0.186422,
+                0.268255,
+                0.102347,
+                null
+              ]
+            },
+            {
+              "name": "Normalized EBITDA",
+              "values": [
+                344154000000.0,
+                303114000000.0,
+                239143000000.0,
+                144007000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Unusual Items",
+              "values": [
+                12579000000.0,
+                7031000000.0,
+                -6926000000.0,
+                137419000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Unusual Items Excluding Goodwill",
+              "values": [
+                10457000000.0,
+                5662000000.0,
+                -7021000000.0,
+                120154000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operation Net Minority Interest",
+              "values": [
+                224842000000.0,
+                194073000000.0,
+                115216000000.0,
+                188243000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Reconciled Depreciation",
+              "values": [
+                66028000000.0,
+                56213000000.0,
+                59008000000.0,
+                61216000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Reconciled Cost Of Revenue",
+              "values": [
+                329173000000.0,
+                311011000000.0,
+                315906000000.0,
+                315806000000.0,
+                null
+              ]
+            },
+            {
+              "name": "EBITDA",
+              "values": [
+                356733000000.0,
+                310145000000.0,
+                232217000000.0,
+                281426000000.0,
+                null
+              ]
+            },
+            {
+              "name": "EBIT",
+              "values": [
+                290705000000.0,
+                253932000000.0,
+                173209000000.0,
+                220210000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Interest Income",
+              "values": [
+                3453000000.0,
+                3557000000.0,
+                1923000000.0,
+                -1393000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Expense",
+              "values": [
+                13456000000.0,
+                12447000000.0,
+                11885000000.0,
+                9985000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Income",
+              "values": [
+                16909000000.0,
+                16004000000.0,
+                13808000000.0,
+                8592000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Normalized Income",
+              "values": [
+                218296596124.78314,
+                190835518628.48624,
+                120448580322.8286,
+                97651459693.18587,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing And Discontinued Operation",
+              "values": [
+                224842000000.0,
+                194073000000.0,
+                115216000000.0,
+                188243000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Expenses",
+              "values": [
+                502999000000.0,
+                451471000000.0,
+                443357000000.0,
+                440612000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Operating Income As Reported",
+              "values": [
+                241562000000.0,
+                208099000000.0,
+                160074000000.0,
+                110827000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Diluted Average Shares",
+              "values": [
+                9244000000.0,
+                9408000000.0,
+                9610000000.0,
+                9695000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Basic Average Shares",
+              "values": [
+                9085000000.0,
+                9269000000.0,
+                9455000000.0,
+                9528000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Diluted EPS",
+              "values": [
+                24.153,
+                20.486,
+                11.887,
+                19.341,
+                null
+              ]
+            },
+            {
+              "name": "Basic EPS",
+              "values": [
+                24.749,
+                20.938,
+                12.186,
+                19.757,
+                null
+              ]
+            },
+            {
+              "name": "Diluted NI Availto Com Stockholders",
+              "values": [
+                223270000000.0,
+                192730000000.0,
+                114230000000.0,
+                187503000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Average Dilution Earnings",
+              "values": [
+                -1572000000.0,
+                -1343000000.0,
+                -986000000.0,
+                -740000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Common Stockholders",
+              "values": [
+                224842000000.0,
+                194073000000.0,
+                115216000000.0,
+                188243000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Otherunder Preferred Stock Dividend",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income",
+              "values": [
+                224842000000.0,
+                194073000000.0,
+                115216000000.0,
+                188243000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Minority Interests",
+              "values": [
+                -4959000000.0,
+                -2394000000.0,
+                -2832000000.0,
+                -466000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Including Noncontrolling Interests",
+              "values": [
+                229801000000.0,
+                196467000000.0,
+                118048000000.0,
+                188709000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Continuous Operations",
+              "values": [
+                229801000000.0,
+                196467000000.0,
+                118048000000.0,
+                188709000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tax Provision",
+              "values": [
+                47448000000.0,
+                45018000000.0,
+                43276000000.0,
+                21516000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Pretax Income",
+              "values": [
+                277249000000.0,
+                241485000000.0,
+                161324000000.0,
+                210225000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Operating Income Expenses",
+              "values": [
+                -7205000000.0,
+                -687000000.0,
+                -2589000000.0,
+                -3113000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Special Income Charges",
+              "values": [
+                7722000000.0,
+                3021000000.0,
+                -4902000000.0,
+                127904000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Special Charges",
+              "values": [
+                -4942000000.0,
+                -12810000000.0,
+                -1288000000.0,
+                -172707000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Write Off",
+              "values": [
+                -4902000000.0,
+                8420000000.0,
+                6095000000.0,
+                27538000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Restructuring And Mergern Acquisition",
+              "values": [
+                null,
+                1369000000.0,
+                95000000.0,
+                17265000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Non Operating Interest Income Expense",
+              "values": [
+                3453000000.0,
+                3557000000.0,
+                1923000000.0,
+                -1393000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Expense Non Operating",
+              "values": [
+                13456000000.0,
+                12447000000.0,
+                11885000000.0,
+                9985000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Income Non Operating",
+              "values": [
+                16909000000.0,
+                16004000000.0,
+                13808000000.0,
+                8592000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Income",
+              "values": [
+                248767000000.0,
+                208786000000.0,
+                165658000000.0,
+                113940000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Expense",
+              "values": [
+                173826000000.0,
+                140460000000.0,
+                127451000000.0,
+                124806000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Operating Expenses",
+              "values": [
+                null,
+                null,
+                null,
+                5124000000.0,
+                2050000000.0
+              ]
+            },
+            {
+              "name": "Selling General And Administration",
+              "values": [
+                177854000000.0,
+                149149000000.0,
+                137736000000.0,
+                135925000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Selling And Marketing Expense",
+              "values": [
+                41727000000.0,
+                36388000000.0,
+                34211000000.0,
+                29229000000.0,
+                null
+              ]
+            },
+            {
+              "name": "General And Administrative Expense",
+              "values": [
+                136127000000.0,
+                112761000000.0,
+                103525000000.0,
+                106696000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gross Profit",
+              "values": [
+                422593000000.0,
+                349246000000.0,
+                293109000000.0,
+                238746000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cost Of Revenue",
+              "values": [
+                329173000000.0,
+                311011000000.0,
+                315906000000.0,
+                315806000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Revenue",
+              "values": [
+                751766000000.0,
+                660257000000.0,
+                609015000000.0,
+                554552000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Revenue",
+              "values": [
+                751766000000.0,
+                660257000000.0,
+                609015000000.0,
+                554552000000.0,
+                null
+              ]
+            }
+          ]
+        },
+        "balance": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31",
+            "2021-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Treasury Shares Number",
+              "values": [
+                87414614.0,
+                82739793.0,
+                91783469.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Ordinary Shares Number",
+              "values": [
+                9032821385.0,
+                9142175160.0,
+                9391209351.0,
+                9568738935.0,
+                null
+              ]
+            },
+            {
+              "name": "Share Issued",
+              "values": [
+                9120235999.0,
+                9224914953.0,
+                9482992820.0,
+                9568738935.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Debt",
+              "values": [
+                246692000000.0,
+                206096000000.0,
+                176298000000.0,
+                177624000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tangible Book Value",
+              "values": [
+                916423000000.0,
+                741875000000.0,
+                599813000000.0,
+                524283000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Invested Capital",
+              "values": [
+                1541885000000.0,
+                1312163000000.0,
+                1157209000000.0,
+                1055754000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Working Capital",
+              "values": [
+                182709000000.0,
+                99271000000.0,
+                166289000000.0,
+                131785000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Tangible Assets",
+              "values": [
+                916423000000.0,
+                741875000000.0,
+                599813000000.0,
+                524283000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Capital Lease Obligations",
+              "values": [
+                18666000000.0,
+                19497000000.0,
+                22622000000.0,
+                24778000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock Equity",
+              "values": [
+                1154152000000.0,
+                973548000000.0,
+                808591000000.0,
+                721391000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Capitalization",
+              "values": [
+                1488725000000.0,
+                1250655000000.0,
+                1101511000000.0,
+                1033728000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Equity Gross Minority Interest",
+              "values": [
+                1241065000000.0,
+                1053896000000.0,
+                873681000000.0,
+                782860000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Minority Interest",
+              "values": [
+                86913000000.0,
+                80348000000.0,
+                65090000000.0,
+                61469000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Stockholders Equity",
+              "values": [
+                1154152000000.0,
+                973548000000.0,
+                808591000000.0,
+                721391000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Equity Interest",
+              "values": [
+                -7124000000.0,
+                -5093000000.0,
+                -5350000000.0,
+                -4226000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Treasury Stock",
+              "values": [
+                3450000000.0,
+                3597000000.0,
+                4740000000.0,
+                1868000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Retained Earnings",
+              "values": [
+                1010436000000.0,
+                892030000000.0,
+                813911000000.0,
+                705981000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Additional Paid In Capital",
+              "values": [
+                63796000000.0,
+                43079000000.0,
+                37989000000.0,
+                62418000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Capital Stock",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Liabilities Net Minority Interest",
+              "values": [
+                797921000000.0,
+                727099000000.0,
+                703565000000.0,
+                795271000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Liabilities Net Minority Interest",
+              "values": [
+                385170000000.0,
+                330190000000.0,
+                351408000000.0,
+                361067000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tradeand Other Payables Non Current",
+              "values": [
+                10544000000.0,
+                10201000000.0,
+                12169000000.0,
+                9067000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Non Current Deferred Revenue",
+              "values": [
+                2210000000.0,
+                6236000000.0,
+                3435000000.0,
+                3503000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Non Current Deferred Taxes Liabilities",
+              "values": [
+                21684000000.0,
+                18546000000.0,
+                17635000000.0,
+                12162000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt And Capital Lease Obligation",
+              "values": [
+                347853000000.0,
+                291004000000.0,
+                309388000000.0,
+                330761000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Capital Lease Obligation",
+              "values": [
+                13280000000.0,
+                13897000000.0,
+                16468000000.0,
+                18424000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt",
+              "values": [
+                334573000000.0,
+                277107000000.0,
+                292920000000.0,
+                312337000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Liabilities",
+              "values": [
+                412751000000.0,
+                396909000000.0,
+                352157000000.0,
+                434204000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Debt And Capital Lease Obligation",
+              "values": [
+                58546000000.0,
+                67108000000.0,
+                61852000000.0,
+                28380000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Capital Lease Obligation",
+              "values": [
+                5386000000.0,
+                5600000000.0,
+                6154000000.0,
+                6354000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Debt",
+              "values": [
+                53160000000.0,
+                61508000000.0,
+                55698000000.0,
+                22026000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Pensionand Other Post Retirement Benefit Plans Current",
+              "values": [
+                40579000000.0,
+                33340000000.0,
+                30747000000.0,
+                27664000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Payables",
+              "values": [
+                182976000000.0,
+                175560000000.0,
+                125724000000.0,
+                261683000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Payable",
+              "values": [
+                39568000000.0,
+                36224000000.0,
+                2740000000.0,
+                3151000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Dividends Payable",
+              "values": [
+                null,
+                null,
+                0.0,
+                147965000000.0,
+                102451000000.0
+              ]
+            },
+            {
+              "name": "Total Tax Payable",
+              "values": [
+                22281000000.0,
+                20624000000.0,
+                22036000000.0,
+                18186000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Accounts Payable",
+              "values": [
+                121127000000.0,
+                118712000000.0,
+                100948000000.0,
+                92381000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Assets",
+              "values": [
+                2038986000000.0,
+                1780995000000.0,
+                1577246000000.0,
+                1578131000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Assets",
+              "values": [
+                1443526000000.0,
+                1284815000000.0,
+                1058800000000.0,
+                1012142000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Current Assets",
+              "values": [
+                6994000000.0,
+                6833000000.0,
+                7547000000.0,
+                8099000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Non Current Prepaid Assets",
+              "values": [
+                113000000.0,
+                9000000.0,
+                3201000000.0,
+                6597000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Non Current Deferred Taxes Assets",
+              "values": [
+                28618000000.0,
+                28325000000.0,
+                29017000000.0,
+                29882000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Financial Assets",
+              "values": [
+                null,
+                null,
+                null,
+                6987000000.0,
+                1261000000.0
+              ]
+            },
+            {
+              "name": "Investmentin Financial Assets",
+              "values": [
+                635426000000.0,
+                586036000000.0,
+                456924000000.0,
+                426655000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Available For Sale Securities",
+              "values": [
+                428269000000.0,
+                381037000000.0,
+                245779000000.0,
+                220570000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Financial Assets Designatedas Fair Value Through Profitor Loss Total",
+              "values": [
+                207157000000.0,
+                204999000000.0,
+                211145000000.0,
+                206085000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Equity Investment",
+              "values": [
+                348712000000.0,
+                297415000000.0,
+                261665000000.0,
+                252715000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Investmentsin Joint Venturesat Cost",
+              "values": [
+                6303000000.0,
+                7072000000.0,
+                7969000000.0,
+                6672000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Investmentsin Associatesat Cost",
+              "values": [
+                342409000000.0,
+                290343000000.0,
+                253696000000.0,
+                246043000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Investment Properties",
+              "values": [
+                950000000.0,
+                801000000.0,
+                570000000.0,
+                559000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Goodwill And Other Intangible Assets",
+              "values": [
+                237729000000.0,
+                231673000000.0,
+                208778000000.0,
+                197108000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Intangible Assets",
+              "values": [
+                83940000000.0,
+                89547000000.0,
+                82558000000.0,
+                80377000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Goodwill",
+              "values": [
+                153789000000.0,
+                142126000000.0,
+                126220000000.0,
+                116731000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net PPE",
+              "values": [
+                181116000000.0,
+                130349000000.0,
+                87431000000.0,
+                85731000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Accumulated Depreciation",
+              "values": [
+                -125535000000.0,
+                -104583000000.0,
+                -87407000000.0,
+                -77753000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gross PPE",
+              "values": [
+                306651000000.0,
+                234932000000.0,
+                174838000000.0,
+                163484000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Construction In Progress",
+              "values": [
+                13844000000.0,
+                32485000000.0,
+                13735000000.0,
+                9229000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Properties",
+              "values": [
+                17367000000.0,
+                17679000000.0,
+                20464000000.0,
+                22524000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Machinery Furniture Equipment",
+              "values": [
+                234570000000.0,
+                152055000000.0,
+                114116000000.0,
+                106508000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Buildings And Improvements",
+              "values": [
+                40870000000.0,
+                32713000000.0,
+                26523000000.0,
+                25223000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Properties",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Assets",
+              "values": [
+                595460000000.0,
+                496180000000.0,
+                518446000000.0,
+                565989000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Assets",
+              "values": [
+                35600000000.0,
+                34009000000.0,
+                25205000000.0,
+                173099000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Hedging Assets Current",
+              "values": [
+                null,
+                null,
+                null,
+                1278000000.0,
+                1749000000.0
+              ]
+            },
+            {
+              "name": "Restricted Cash",
+              "values": [
+                6977000000.0,
+                3334000000.0,
+                3818000000.0,
+                2783000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Prepaid Assets",
+              "values": [
+                28729000000.0,
+                31265000000.0,
+                27824000000.0,
+                24393000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                530000000.0,
+                440000000.0,
+                456000000.0,
+                2333000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Receivables",
+              "values": [
+                45150000000.0,
+                34039000000.0,
+                32071000000.0,
+                24376000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Taxes Receivable",
+              "values": [
+                null,
+                2228000000.0,
+                1596000000.0,
+                1524000000.0,
+                1151000000.0
+              ]
+            },
+            {
+              "name": "Accounts Receivable",
+              "values": [
+                49930000000.0,
+                48203000000.0,
+                46606000000.0,
+                45467000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Allowance For Doubtful Accounts Receivable",
+              "values": [
+                -5039000000.0,
+                -6684000000.0,
+                -7749000000.0,
+                -6536000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gross Accounts Receivable",
+              "values": [
+                54969000000.0,
+                54887000000.0,
+                54355000000.0,
+                52003000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Cash Equivalents And Short Term Investments",
+              "values": [
+                426753000000.0,
+                343159000000.0,
+                379155000000.0,
+                290756000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Short Term Investments",
+              "values": [
+                285712000000.0,
+                210640000000.0,
+                206835000000.0,
+                134017000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash And Cash Equivalents",
+              "values": [
+                141041000000.0,
+                132519000000.0,
+                172320000000.0,
+                156739000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Equivalents",
+              "values": [
+                55310000000.0,
+                43336000000.0,
+                45079000000.0,
+                51972000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Financial",
+              "values": [
+                85731000000.0,
+                89183000000.0,
+                127241000000.0,
+                104767000000.0,
+                null
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Free Cash Flow",
+              "values": [
+                190171000000.0,
+                162473000000.0,
+                174555000000.0,
+                95241000000.0
+              ]
+            },
+            {
+              "name": "Repurchase Of Capital Stock",
+              "values": [
+                -73312000000.0,
+                -102331000000.0,
+                -43767000000.0,
+                -29307000000.0
+              ]
+            },
+            {
+              "name": "Repayment Of Debt",
+              "values": [
+                -178502000000.0,
+                -128904000000.0,
+                -54146000000.0,
+                -23829000000.0
+              ]
+            },
+            {
+              "name": "Issuance Of Debt",
+              "values": [
+                231208000000.0,
+                114584000000.0,
+                63450000000.0,
+                30236000000.0
+              ]
+            },
+            {
+              "name": "Issuance Of Capital Stock",
+              "values": [
+                -2148000000.0,
+                -1488000000.0,
+                -3308000000.0,
+                -1887000000.0
+              ]
+            },
+            {
+              "name": "Capital Expenditure",
+              "values": [
+                -112881000000.0,
+                -96048000000.0,
+                -47407000000.0,
+                -50850000000.0
+              ]
+            },
+            {
+              "name": "End Cash Position",
+              "values": [
+                141041000000.0,
+                132519000000.0,
+                172320000000.0,
+                156739000000.0
+              ]
+            },
+            {
+              "name": "Beginning Cash Position",
+              "values": [
+                132519000000.0,
+                172320000000.0,
+                156739000000.0,
+                167966000000.0
+              ]
+            },
+            {
+              "name": "Effect Of Exchange Rate Changes",
+              "values": [
+                -1643000000.0,
+                359000000.0,
+                1353000000.0,
+                7506000000.0
+              ]
+            },
+            {
+              "name": "Changes In Cash",
+              "values": [
+                10165000000.0,
+                -40160000000.0,
+                14228000000.0,
+                -18733000000.0
+              ]
+            },
+            {
+              "name": "Financing Cash Flow",
+              "values": [
+                -87155000000.0,
+                -176494000000.0,
+                -82573000000.0,
+                -59953000000.0
+              ]
+            },
+            {
+              "name": "Net Other Financing Charges",
+              "values": [
+                -4531000000.0,
+                -8325000000.0,
+                -4884000000.0,
+                -4738000000.0
+              ]
+            },
+            {
+              "name": "Interest Paid Cff",
+              "values": [
+                -13180000000.0,
+                -12417000000.0,
+                -11478000000.0,
+                -9342000000.0
+              ]
+            },
+            {
+              "name": "Cash Dividends Paid",
+              "values": [
+                -37535000000.0,
+                -28859000000.0,
+                -20983000000.0,
+                -12952000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Dividend Paid",
+              "values": [
+                -37535000000.0,
+                -28859000000.0,
+                -20983000000.0,
+                -12952000000.0
+              ]
+            },
+            {
+              "name": "Net Common Stock Issuance",
+              "values": [
+                -75460000000.0,
+                -103819000000.0,
+                -47075000000.0,
+                -31194000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Payments",
+              "values": [
+                -73312000000.0,
+                -102331000000.0,
+                -43767000000.0,
+                -29307000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Issuance",
+              "values": [
+                -2148000000.0,
+                -1488000000.0,
+                -3308000000.0,
+                -1887000000.0
+              ]
+            },
+            {
+              "name": "Net Issuance Payments Of Debt",
+              "values": [
+                52706000000.0,
+                -14320000000.0,
+                9304000000.0,
+                6407000000.0
+              ]
+            },
+            {
+              "name": "Net Short Term Debt Issuance",
+              "values": [
+                -7828000000.0,
+                22514000000.0,
+                19920000000.0,
+                -7677000000.0
+              ]
+            },
+            {
+              "name": "Short Term Debt Payments",
+              "values": [
+                -121385000000.0,
+                -40049000000.0,
+                -9889000000.0,
+                -15378000000.0
+              ]
+            },
+            {
+              "name": "Short Term Debt Issuance",
+              "values": [
+                113557000000.0,
+                62563000000.0,
+                29809000000.0,
+                7701000000.0
+              ]
+            },
+            {
+              "name": "Net Long Term Debt Issuance",
+              "values": [
+                60534000000.0,
+                -36834000000.0,
+                -10616000000.0,
+                14084000000.0
+              ]
+            },
+            {
+              "name": "Long Term Debt Payments",
+              "values": [
+                -57117000000.0,
+                -88855000000.0,
+                -44257000000.0,
+                -8451000000.0
+              ]
+            },
+            {
+              "name": "Long Term Debt Issuance",
+              "values": [
+                117651000000.0,
+                52021000000.0,
+                33641000000.0,
+                22535000000.0
+              ]
+            },
+            {
+              "name": "Investing Cash Flow",
+              "values": [
+                -205732000000.0,
+                -122187000000.0,
+                -125161000000.0,
+                -104871000000.0
+              ]
+            },
+            {
+              "name": "Interest Received Cfi",
+              "values": [
+                14534000000.0,
+                14913000000.0,
+                10349000000.0,
+                8506000000.0
+              ]
+            },
+            {
+              "name": "Dividends Received Cfi",
+              "values": [
+                6500000000.0,
+                3521000000.0,
+                2011000000.0,
+                2192000000.0
+              ]
+            },
+            {
+              "name": "Net Investment Purchase And Sale",
+              "values": [
+                -79596000000.0,
+                -39690000000.0,
+                -82126000000.0,
+                -61412000000.0
+              ]
+            },
+            {
+              "name": "Sale Of Investment",
+              "values": [
+                410516000000.0,
+                345222000000.0,
+                220764000000.0,
+                120610000000.0
+              ]
+            },
+            {
+              "name": "Purchase Of Investment",
+              "values": [
+                -490112000000.0,
+                -384912000000.0,
+                -302890000000.0,
+                -182022000000.0
+              ]
+            },
+            {
+              "name": "Net Business Purchase And Sale",
+              "values": [
+                -34717000000.0,
+                -4941000000.0,
+                -8900000000.0,
+                -1235000000.0
+              ]
+            },
+            {
+              "name": "Sale Of Business",
+              "values": [
+                1568000000.0,
+                4895000000.0,
+                4383000000.0,
+                22654000000.0
+              ]
+            },
+            {
+              "name": "Purchase Of Business",
+              "values": [
+                -36285000000.0,
+                -9836000000.0,
+                -13283000000.0,
+                -23889000000.0
+              ]
+            },
+            {
+              "name": "Net Intangibles Purchase And Sale",
+              "values": [
+                -25393000000.0,
+                -33121000000.0,
+                -26399000000.0,
+                -27645000000.0
+              ]
+            },
+            {
+              "name": "Sale Of Intangibles",
+              "values": [
+                6000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of Intangibles",
+              "values": [
+                -25399000000.0,
+                -33121000000.0,
+                -26399000000.0,
+                -27645000000.0
+              ]
+            },
+            {
+              "name": "Net PPE Purchase And Sale",
+              "values": [
+                -87330000000.0,
+                -62724000000.0,
+                -20751000000.0,
+                -22829000000.0
+              ]
+            },
+            {
+              "name": "Sale Of PPE",
+              "values": [
+                152000000.0,
+                203000000.0,
+                257000000.0,
+                376000000.0
+              ]
+            },
+            {
+              "name": "Purchase Of PPE",
+              "values": [
+                -87482000000.0,
+                -62927000000.0,
+                -21008000000.0,
+                -23205000000.0
+              ]
+            },
+            {
+              "name": "Operating Cash Flow",
+              "values": [
+                303052000000.0,
+                258521000000.0,
+                221962000000.0,
+                146091000000.0
+              ]
+            },
+            {
+              "name": "Taxes Refund Paid",
+              "values": [
+                -44699000000.0,
+                -46184000000.0,
+                -34729000000.0,
+                -27669000000.0
+              ]
+            },
+            {
+              "name": "Change In Working Capital",
+              "values": [
+                16484000000.0,
+                21881000000.0,
+                19233000000.0,
+                -18472000000.0
+              ]
+            },
+            {
+              "name": "Change In Other Current Assets",
+              "values": [
+                6143000000.0,
+                16533000000.0,
+                3821000000.0,
+                -6637000000.0
+              ]
+            },
+            {
+              "name": "Change In Payable",
+              "values": [
+                -5335000000.0,
+                3744000000.0,
+                9071000000.0,
+                -9130000000.0
+              ]
+            },
+            {
+              "name": "Change In Prepaid Assets",
+              "values": [
+                17007000000.0,
+                2632000000.0,
+                5469000000.0,
+                -5840000000.0
+              ]
+            },
+            {
+              "name": "Change In Inventory",
+              "values": [
+                -89000000.0,
+                20000000.0,
+                1882000000.0,
+                -1201000000.0
+              ]
+            },
+            {
+              "name": "Change In Receivables",
+              "values": [
+                -1242000000.0,
+                -1048000000.0,
+                -1010000000.0,
+                4336000000.0
+              ]
+            },
+            {
+              "name": "Other Non Cash Items",
+              "values": [
+                -3453000000.0,
+                -3557000000.0,
+                -1923000000.0,
+                1393000000.0
+              ]
+            },
+            {
+              "name": "Stock Based Compensation",
+              "values": [
+                25660000000.0,
+                20702000000.0,
+                21073000000.0,
+                24949000000.0
+              ]
+            },
+            {
+              "name": "Deferred Tax",
+              "values": [
+                47448000000.0,
+                45018000000.0,
+                43276000000.0,
+                21516000000.0
+              ]
+            },
+            {
+              "name": "Depreciation And Amortization",
+              "values": [
+                66028000000.0,
+                56213000000.0,
+                59008000000.0,
+                61216000000.0
+              ]
+            },
+            {
+              "name": "Amortization Cash Flow",
+              "values": [
+                33229000000.0,
+                28881000000.0,
+                32703000000.0,
+                32772000000.0
+              ]
+            },
+            {
+              "name": "Depreciation",
+              "values": [
+                32799000000.0,
+                27332000000.0,
+                26305000000.0,
+                28444000000.0
+              ]
+            },
+            {
+              "name": "Gain Loss On Investment Securities",
+              "values": [
+                -4532000000.0,
+                -3356000000.0,
+                1573000000.0,
+                6802000000.0
+              ]
+            },
+            {
+              "name": "Net Foreign Currency Exchange Gain Loss",
+              "values": [
+                1674000000.0,
+                -466000000.0,
+                383000000.0,
+                -633000000.0
+              ]
+            },
+            {
+              "name": "Gain Loss On Sale Of PPE",
+              "values": [
+                -211000000.0,
+                -194000000.0,
+                -126000000.0,
+                -108000000.0
+              ]
+            },
+            {
+              "name": "Gain Loss On Sale Of Business",
+              "values": [
+                -4942000000.0,
+                -12810000000.0,
+                -4283000000.0,
+                -172707000000.0
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operations",
+              "values": [
+                229801000000.0,
+                196467000000.0,
+                118048000000.0,
+                188709000000.0
+              ]
+            }
+          ]
+        }
+      },
+      "quarterly": {
+        "income": {
+          "periods": [
+            "2026-06-30",
+            "2026-03-31",
+            "2025-12-31",
+            "2025-09-30",
+            "2025-06-30"
+          ],
+          "rows": [
+            {
+              "name": "Tax Effect Of Unusual Items",
+              "values": [
+                1885273654.75678,
+                null,
+                null,
+                null,
+                413651695.229616
+              ]
+            },
+            {
+              "name": "Tax Rate For Calcs",
+              "values": [
+                0.168073,
+                null,
+                null,
+                null,
+                0.168425
+              ]
+            },
+            {
+              "name": "Normalized EBITDA",
+              "values": [
+                61685000000.0,
+                null,
+                null,
+                null,
+                68170000000.0
+              ]
+            },
+            {
+              "name": "Total Unusual Items",
+              "values": [
+                11217000000.0,
+                null,
+                null,
+                null,
+                2766000000.0
+              ]
+            },
+            {
+              "name": "Total Unusual Items Excluding Goodwill",
+              "values": [
+                11217000000.0,
+                null,
+                null,
+                null,
+                2456000000.0
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operation Net Minority Interest",
+              "values": [
+                56022000000.0,
+                null,
+                null,
+                null,
+                55628000000.0
+              ]
+            },
+            {
+              "name": "Reconciled Cost Of Revenue",
+              "values": [
+                86352000000.0,
+                null,
+                null,
+                null,
+                79491000000.0
+              ]
+            },
+            {
+              "name": "EBITDA",
+              "values": [
+                72902000000.0,
+                null,
+                null,
+                null,
+                70936000000.0
+              ]
+            },
+            {
+              "name": "EBIT",
+              "values": [
+                72902000000.0,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Interest Income",
+              "values": [
+                990000000.0,
+                null,
+                null,
+                null,
+                580000000.0
+              ]
+            },
+            {
+              "name": "Interest Expense",
+              "values": [
+                3212000000.0,
+                null,
+                null,
+                null,
+                3541000000.0
+              ]
+            },
+            {
+              "name": "Interest Income",
+              "values": [
+                4202000000.0,
+                null,
+                null,
+                null,
+                4121000000.0
+              ]
+            },
+            {
+              "name": "Normalized Income",
+              "values": [
+                46690273654.75678,
+                null,
+                null,
+                null,
+                53895651695.229614
+              ]
+            },
+            {
+              "name": "Net Income From Continuing And Discontinued Operation",
+              "values": [
+                56022000000.0,
+                null,
+                null,
+                null,
+                55628000000.0
+              ]
+            },
+            {
+              "name": "Total Expenses",
+              "values": [
+                136549000000.0,
+                null,
+                null,
+                null,
+                119562000000.0
+              ]
+            },
+            {
+              "name": "Total Operating Income As Reported",
+              "values": [
+                67276000000.0,
+                null,
+                null,
+                null,
+                60104000000.0
+              ]
+            },
+            {
+              "name": "Diluted Average Shares",
+              "values": [
+                9153000000.0,
+                9173000000.0,
+                9282982792.0,
+                9232000000.0,
+                9247000000.0
+              ]
+            },
+            {
+              "name": "Basic Average Shares",
+              "values": [
+                9025000000.0,
+                9033000000.0,
+                9056427794.0,
+                9081000000.0,
+                9097000000.0
+              ]
+            },
+            {
+              "name": "Diluted EPS",
+              "values": [
+                6.104,
+                6.302,
+                6.276,
+                6.779,
+                5.996
+              ]
+            },
+            {
+              "name": "Basic EPS",
+              "values": [
+                6.207,
+                6.431,
+                6.433,
+                6.952,
+                6.115
+              ]
+            },
+            {
+              "name": "Diluted NI Availto Com Stockholders",
+              "values": [
+                55872000000.0,
+                null,
+                null,
+                null,
+                55448000000.0
+              ]
+            },
+            {
+              "name": "Average Dilution Earnings",
+              "values": [
+                -150000000.0,
+                null,
+                null,
+                null,
+                -180000000.0
+              ]
+            },
+            {
+              "name": "Net Income Common Stockholders",
+              "values": [
+                56022000000.0,
+                null,
+                null,
+                null,
+                55628000000.0
+              ]
+            },
+            {
+              "name": "Otherunder Preferred Stock Dividend",
+              "values": [
+                0.0,
+                null,
+                null,
+                null,
+                0.0
+              ]
+            },
+            {
+              "name": "Net Income",
+              "values": [
+                56022000000.0,
+                null,
+                null,
+                null,
+                55628000000.0
+              ]
+            },
+            {
+              "name": "Minority Interests",
+              "values": [
+                -1955000000.0,
+                null,
+                null,
+                null,
+                -416000000.0
+              ]
+            },
+            {
+              "name": "Net Income Including Noncontrolling Interests",
+              "values": [
+                57977000000.0,
+                null,
+                null,
+                null,
+                56044000000.0
+              ]
+            },
+            {
+              "name": "Net Income Continuous Operations",
+              "values": [
+                57977000000.0,
+                null,
+                null,
+                null,
+                56044000000.0
+              ]
+            },
+            {
+              "name": "Tax Provision",
+              "values": [
+                11713000000.0,
+                null,
+                null,
+                null,
+                11351000000.0
+              ]
+            },
+            {
+              "name": "Pretax Income",
+              "values": [
+                69690000000.0,
+                null,
+                null,
+                null,
+                67395000000.0
+              ]
+            },
+            {
+              "name": "Other Non Operating Income Expenses",
+              "values": [
+                -960000000.0,
+                null,
+                null,
+                null,
+                -4838000000.0
+              ]
+            },
+            {
+              "name": "Special Income Charges",
+              "values": [
+                2909000000.0,
+                null,
+                null,
+                null,
+                692000000.0
+              ]
+            },
+            {
+              "name": "Other Special Charges",
+              "values": [
+                -657000000.0,
+                null,
+                null,
+                null,
+                -94000000.0
+              ]
+            },
+            {
+              "name": "Write Off",
+              "values": [
+                -2252000000.0,
+                null,
+                null,
+                null,
+                -908000000.0
+              ]
+            },
+            {
+              "name": "Net Non Operating Interest Income Expense",
+              "values": [
+                990000000.0,
+                null,
+                null,
+                null,
+                580000000.0
+              ]
+            },
+            {
+              "name": "Interest Expense Non Operating",
+              "values": [
+                3212000000.0,
+                null,
+                null,
+                null,
+                3541000000.0
+              ]
+            },
+            {
+              "name": "Interest Income Non Operating",
+              "values": [
+                4202000000.0,
+                null,
+                null,
+                null,
+                4121000000.0
+              ]
+            },
+            {
+              "name": "Operating Income",
+              "values": [
+                68236000000.0,
+                null,
+                null,
+                null,
+                64942000000.0
+              ]
+            },
+            {
+              "name": "Operating Expense",
+              "values": [
+                50197000000.0,
+                null,
+                null,
+                null,
+                40071000000.0
+              ]
+            },
+            {
+              "name": "Selling General And Administration",
+              "values": [
+                50677000000.0,
+                null,
+                null,
+                null,
+                41331000000.0
+              ]
+            },
+            {
+              "name": "Selling And Marketing Expense",
+              "values": [
+                11869000000.0,
+                null,
+                null,
+                null,
+                9410000000.0
+              ]
+            },
+            {
+              "name": "General And Administrative Expense",
+              "values": [
+                38808000000.0,
+                null,
+                null,
+                null,
+                31921000000.0
+              ]
+            },
+            {
+              "name": "Gross Profit",
+              "values": [
+                118433000000.0,
+                null,
+                null,
+                null,
+                105013000000.0
+              ]
+            },
+            {
+              "name": "Cost Of Revenue",
+              "values": [
+                86352000000.0,
+                null,
+                null,
+                null,
+                79491000000.0
+              ]
+            },
+            {
+              "name": "Total Revenue",
+              "values": [
+                204785000000.0,
+                null,
+                null,
+                null,
+                184504000000.0
+              ]
+            },
+            {
+              "name": "Operating Revenue",
+              "values": [
+                204785000000.0,
+                null,
+                null,
+                null,
+                184504000000.0
+              ]
+            }
+          ]
+        },
+        "balance": {
+          "periods": [
+            "2026-06-30",
+            "2025-06-30"
+          ],
+          "rows": [
+            {
+              "name": "Treasury Shares Number",
+              "values": [
+                90220228.0,
+                85166409.0
+              ]
+            },
+            {
+              "name": "Ordinary Shares Number",
+              "values": [
+                9002014613.0,
+                9080347213.0
+              ]
+            },
+            {
+              "name": "Share Issued",
+              "values": [
+                9092234841.0,
+                9165513622.0
+              ]
+            },
+            {
+              "name": "Net Debt",
+              "values": [
+                246033000000.0,
+                211758000000.0
+              ]
+            },
+            {
+              "name": "Total Debt",
+              "values": [
+                471828000000.0,
+                412486000000.0
+              ]
+            },
+            {
+              "name": "Tangible Book Value",
+              "values": [
+                907828000000.0,
+                876114000000.0
+              ]
+            },
+            {
+              "name": "Invested Capital",
+              "values": [
+                1588816000000.0,
+                1508454000000.0
+              ]
+            },
+            {
+              "name": "Working Capital",
+              "values": [
+                147943000000.0,
+                110386000000.0
+              ]
+            },
+            {
+              "name": "Net Tangible Assets",
+              "values": [
+                907828000000.0,
+                876114000000.0
+              ]
+            },
+            {
+              "name": "Capital Lease Obligations",
+              "values": [
+                18865000000.0,
+                18671000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Equity",
+              "values": [
+                1135853000000.0,
+                1114639000000.0
+              ]
+            },
+            {
+              "name": "Total Capitalization",
+              "values": [
+                1502524000000.0,
+                1436943000000.0
+              ]
+            },
+            {
+              "name": "Total Equity Gross Minority Interest",
+              "values": [
+                1222513000000.0,
+                1202849000000.0
+              ]
+            },
+            {
+              "name": "Minority Interest",
+              "values": [
+                86660000000.0,
+                88210000000.0
+              ]
+            },
+            {
+              "name": "Stockholders Equity",
+              "values": [
+                1135853000000.0,
+                1114639000000.0
+              ]
+            },
+            {
+              "name": "Other Equity Interest",
+              "values": [
+                -8315000000.0,
+                -4491000000.0
+              ]
+            },
+            {
+              "name": "Treasury Stock",
+              "values": [
+                2180000000.0,
+                2288000000.0
+              ]
+            },
+            {
+              "name": "Retained Earnings",
+              "values": [
+                1066763000000.0,
+                920192000000.0
+              ]
+            },
+            {
+              "name": "Additional Paid In Capital",
+              "values": [
+                73692000000.0,
+                52346000000.0
+              ]
+            },
+            {
+              "name": "Capital Stock",
+              "values": [
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Common Stock",
+              "values": [
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Total Liabilities Net Minority Interest",
+              "values": [
+                936881000000.0,
+                810461000000.0
+              ]
+            },
+            {
+              "name": "Total Non Current Liabilities Net Minority Interest",
+              "values": [
+                421400000000.0,
+                375350000000.0
+              ]
+            },
+            {
+              "name": "Tradeand Other Payables Non Current",
+              "values": [
+                12252000000.0,
+                12801000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Revenue",
+              "values": [
+                2127000000.0,
+                4402000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Taxes Liabilities",
+              "values": [
+                22581000000.0,
+                16888000000.0
+              ]
+            },
+            {
+              "name": "Long Term Debt And Capital Lease Obligation",
+              "values": [
+                380037000000.0,
+                335632000000.0
+              ]
+            },
+            {
+              "name": "Long Term Capital Lease Obligation",
+              "values": [
+                13366000000.0,
+                13328000000.0
+              ]
+            },
+            {
+              "name": "Long Term Debt",
+              "values": [
+                366671000000.0,
+                322304000000.0
+              ]
+            },
+            {
+              "name": "Current Liabilities",
+              "values": [
+                515481000000.0,
+                435111000000.0
+              ]
+            },
+            {
+              "name": "Current Debt And Capital Lease Obligation",
+              "values": [
+                91791000000.0,
+                76854000000.0
+              ]
+            },
+            {
+              "name": "Current Capital Lease Obligation",
+              "values": [
+                5499000000.0,
+                5343000000.0
+              ]
+            },
+            {
+              "name": "Current Debt",
+              "values": [
+                86292000000.0,
+                71511000000.0
+              ]
+            },
+            {
+              "name": "Pensionand Other Post Retirement Benefit Plans Current",
+              "values": [
+                31544000000.0,
+                24730000000.0
+              ]
+            },
+            {
+              "name": "Payables",
+              "values": [
+                237348000000.0,
+                158342000000.0
+              ]
+            },
+            {
+              "name": "Other Payable",
+              "values": [
+                40567000000.0,
+                4153000000.0
+              ]
+            },
+            {
+              "name": "Total Tax Payable",
+              "values": [
+                21202000000.0,
+                23688000000.0
+              ]
+            },
+            {
+              "name": "Accounts Payable",
+              "values": [
+                175579000000.0,
+                130501000000.0
+              ]
+            },
+            {
+              "name": "Total Assets",
+              "values": [
+                2159394000000.0,
+                2013310000000.0
+              ]
+            },
+            {
+              "name": "Total Non Current Assets",
+              "values": [
+                1495970000000.0,
+                1467813000000.0
+              ]
+            },
+            {
+              "name": "Other Non Current Assets",
+              "values": [
+                6131000000.0,
+                6479000000.0
+              ]
+            },
+            {
+              "name": "Non Current Prepaid Assets",
+              "values": [
+                760000000.0,
+                11213000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Taxes Assets",
+              "values": [
+                31553000000.0,
+                30004000000.0
+              ]
+            },
+            {
+              "name": "Investmentin Financial Assets",
+              "values": [
+                590596000000.0,
+                702856000000.0
+              ]
+            },
+            {
+              "name": "Available For Sale Securities",
+              "values": [
+                370714000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Financial Assets Designatedas Fair Value Through Profitor Loss Total",
+              "values": [
+                219882000000.0,
+                207263000000.0
+              ]
+            },
+            {
+              "name": "Long Term Equity Investment",
+              "values": [
+                329906000000.0,
+                314404000000.0
+              ]
+            },
+            {
+              "name": "Investmentsin Joint Venturesat Cost",
+              "values": [
+                6232000000.0,
+                6831000000.0
+              ]
+            },
+            {
+              "name": "Investmentsin Associatesat Cost",
+              "values": [
+                323674000000.0,
+                307573000000.0
+              ]
+            },
+            {
+              "name": "Investment Properties",
+              "values": [
+                965000000.0,
+                895000000.0
+              ]
+            },
+            {
+              "name": "Goodwill And Other Intangible Assets",
+              "values": [
+                228025000000.0,
+                238525000000.0
+              ]
+            },
+            {
+              "name": "Other Intangible Assets",
+              "values": [
+                228025000000.0,
+                238525000000.0
+              ]
+            },
+            {
+              "name": "Net PPE",
+              "values": [
+                304838000000.0,
+                159593000000.0
+              ]
+            },
+            {
+              "name": "Gross PPE",
+              "values": [
+                304838000000.0,
+                159593000000.0
+              ]
+            },
+            {
+              "name": "Construction In Progress",
+              "values": [
+                88205000000.0,
+                24076000000.0
+              ]
+            },
+            {
+              "name": "Other Properties",
+              "values": [
+                216633000000.0,
+                135517000000.0
+              ]
+            },
+            {
+              "name": "Current Assets",
+              "values": [
+                663424000000.0,
+                545497000000.0
+              ]
+            },
+            {
+              "name": "Other Current Assets",
+              "values": [
+                56694000000.0,
+                45757000000.0
+              ]
+            },
+            {
+              "name": "Restricted Cash",
+              "values": [
+                7729000000.0,
+                3893000000.0
+              ]
+            },
+            {
+              "name": "Prepaid Assets",
+              "values": [
+                36658000000.0,
+                26893000000.0
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                685000000.0,
+                435000000.0
+              ]
+            },
+            {
+              "name": "Other Receivables",
+              "values": [
+                41980000000.0,
+                34912000000.0
+              ]
+            },
+            {
+              "name": "Accounts Receivable",
+              "values": [
+                55606000000.0,
+                51315000000.0
+              ]
+            },
+            {
+              "name": "Allowance For Doubtful Accounts Receivable",
+              "values": [
+                -5275000000.0,
+                -5016000000.0
+              ]
+            },
+            {
+              "name": "Gross Accounts Receivable",
+              "values": [
+                60881000000.0,
+                56331000000.0
+              ]
+            },
+            {
+              "name": "Cash Cash Equivalents And Short Term Investments",
+              "values": [
+                461955000000.0,
+                380444000000.0
+              ]
+            },
+            {
+              "name": "Other Short Term Investments",
+              "values": [
+                255025000000.0,
+                198387000000.0
+              ]
+            },
+            {
+              "name": "Cash And Cash Equivalents",
+              "values": [
+                206930000000.0,
+                182057000000.0
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "periods": [],
+          "rows": []
+        }
+      }
+    },
+    "errors": [
+      "quarterly/cashflow 数据源未提供报表"
+    ],
+    "source": "Yahoo Finance / yfinance",
+    "retrieved_at": "2026-11-13T23:21:15.891159+08:00",
+    "period_note": "财务表为供应商返回口径；季度现金流可能是累计值，请核对原始披露。",
+    "filings": {
+      "source": "交易所披露",
+      "documents": [],
+      "note": "港股和沪深 A 股不适用 SEC 财报索引；当前展示 Yahoo 财务数据，交易所原始公告接口尚未接入。"
+    }
+  },
   "research_snapshot": {
     "id": "f56c6debb8b9477c9e2a7e237a517a96",
     "schema_version": 2,
@@ -12675,6 +15985,7 @@
     "previous_id": null,
     "changes": []
   },
+  "peers_data": [],
   "reports": {
     "fundamentals_report": "# 0700.HK 腾讯控股有限公司（Tencent Holdings Limited）公司基本面综合报告\n\n**数据快照 ID**：f56c6debb8b9477c9e2a7e237a517a96\n**数据来源**：Yahoo Finance / yfinance（供应商返回口径）\n**快照日期**：2026-11-13｜**抓取时间**：2026-11-13T23:21:15（+08:00）\n**报价货币**：HKD｜**财务报表货币**：CNY（两者不同，全文不跨币种合并金额）\n**报表期间**：年度 2022–2025（2025-12-31 为最新完整年度）；季度 2025-06-30 至 2026-06-30\n\n---\n\n## 一、公司基本面（Company Fundamentals）\n\n### 1.1 业务与身份\n\n| 项目 | 内容 | 证据 ID |\n|---|---|---|\n| 公司全称 | Tencent Holdings Limited | profile.longName |\n| 交易所 / 代码 | HKG / 0700.HK | profile.exchange |\n| 行业分类 | Communication Services / Internet Content & Information | profile.sector, profile.industry |\n| 注册与总部 | 中国深圳（腾讯滨海大厦） | profile.city, profile.address1 |\n| 员工人数 | 115,927 人 | profile.fullTimeEmployees |\n| 成立 / 更名 | 1998 年成立；2004 年 2 月由 Tencent (BVI) Limited 更名为现名 | profile.longBusinessSummary |\n\n**业务描述（事实，来自供应商简介）**：公司为投资控股公司，在中国内地及国际提供增值服务、营销服务、金融科技及企业服务。消费者业务包括通信与社交（即时通讯、社交网络）、数字内容（网络游戏、视频、直播、新闻、音乐、文学）、金融科技（移动支付、财富管理、消费信贷、证券交易）及各类工具；企业业务包括营销解决方案与云服务（云计算、大数据、人工智能、物联网与安全）。此外还涉及影视投资制作发行、版权授权与商品销售、互联网广告、软件开发与系统集成，以及移动游戏开发运营（profile.longBusinessSummary）。\n\n> **说明**：上述为供应商业务简介文本。快照**未提供分部收入、产品线或地区收入拆分数据**；不得从公司简介、官网链接或合并报表总额反推分部数值。\n\n**管理层（事实，profile.companyOfficers）**：\n\n- 马化腾（Huateng Ma），53 岁，联合创始人、董事长兼 CEO，2025 财年总薪酬 57,024,272（CNY）\n- 刘炽平（Chi Ping Lau），52 岁，总裁，总薪酬 19,495,822（CNY），未行权权益价值 1,122,740,352\n- 许晨晔，CIO；任宇昕，COO 兼平台与内容事业群、互动娱乐事业群总裁；卢山，高级执行副总裁；罗硕瀚，CFO 兼高级副总裁\n- 曾李青、张志东、陈一丹为联合创始人，现职衔为\"顾问（荣休）\"\n\n### 1.2 股权结构\n\n| 指标 | 数值 | 证据 ID |\n|---|---|---|\n| 内部人持股比例 | 31.73% | profile.heldPercentInsiders |\n| 机构持股比例 | 25.07% | profile.heldPercentInstitutions |\n\n**推断（非事实）**：内部人持股逾三成，与创始人团队及早期股东长期持有相符，治理上有利于战略连续性；但快照未拆分创始人、董事与员工持股各自份额，无法进一步细化。\n\n### 1.3 盈利能力与质量趋势（计算指标 v1.0）\n\n| 年度 | 毛利率 | 经营利润率 | 净利率 | ROE（平均净资产） | ROA（平均总资产） | 流动比率 | 资产负债率 | 自由现金流（CNY） |\n|---|---|---|---|---|---|---|---|---|\n| 2022-12-31 | 43.05% | 20.55% | 33.95% | n/a | n/a | 1.304x | 50.39% | 95,241,000,000 |\n| 2023-12-31 | 48.13% | 27.20% | 18.92% | 15.06% | 7.30% | 1.472x | 44.61% | 174,555,000,000 |\n| 2024-12-31 | 52.90% | 31.62% | 29.39% | 21.78% | 11.56% | 1.250x | 40.83% | 162,473,000,000 |\n| 2025-12-31 | 56.21% | 33.09% | 29.91% | 21.13% | 11.77% | 1.443x | 39.13% | 190,171,000,000 |\n\n公式版本 1.0；证据锚点见 annual.income.47 / .45 / .39 / .25、annual.balance.38 / .13 / .28 / .62、annual.cashflow.40 / .5。2022 年 ROE/ROA 因缺 2021 年**资产负债表**（annual.balance.*.4 为 null）无法计算平均余额，报告为 n/a，**不等于 0**。\n\n**观察（推断）**：\n\n1. **毛利率四年连升**（43.1% → 56.2%，累计 +13.1 个百分点），同期货源成本（Cost Of Revenue）由 315,806 百万降至 329,173 百万，而收入由 554,552 百万增至 751,766 百万（annual.income.46、.47）。收入增长快于成本，指向高毛利业务占比提升或成本效率改善——但**具体由哪项业务驱动，快照无分部数据，不可断言**。\n2. **净利率 2022 年异常偏高（33.95%）**，高于 2023 年（18.92%）且当年净利润同比 -38.8%（growth.net_income 2023）。这说明 2022 年净利含大额非经营性收益（如投资收益/公允价值变动、一次性处置），净利率不可仅从经营视角解读。2024–2025 年净利率约 29–30%，相对稳定。\n3. **ROE 2024 年 21.78% 略高于 2025 年 21.13%**，主因净资产从 973,548 百万增至 1,154,152 百万（+18.6%）快于净利润（+15.9%），属分母扩张型摊薄，而非盈利能力恶化；同期经营利润率实际由 31.62% 升至 33.09%。\n4. **资产负债率持续下降**（50.4% → 39.1%），权益增长是主因。\n\n### 1.4 增长（计算指标，YoY）\n\n| 指标 | 2023 | 2024 | 2025 |\n|---|---|---|---|\n| 收入增速 | +9.82% | +8.41% | +13.86% |\n| 净利润增速 | -38.79% | +68.44% | +15.85% |\n\n证据：annual.income.47 各期、annual.income.25 各期。**2024 年 +68.4% 的净利增速建立在 2023 年 -38.8% 的低基数上**，两年复合并非 68% 的持续高增长；以 2022 年 188,243 百万为基，2024 年 194,073 百万仅高 3.1%。这是典型的基数效应，须与\"盈利质量改善\"区分开。\n\n### 1.5 估值（供应商当前口径，HKD）\n\n| 指标 | 数值 | 证据 ID |\n|---|---|---|\n| 现价 | 386.60 HKD | profile.currentPrice |\n| 市值 | 3,481,181,356,032 HKD | profile.marketCap |\n| 流通股数 | 9,004,607,601 股 | profile.sharesOutstanding |\n| 追踪 PE | 13.61x | profile.trailingPE |\n| 前瞻 PE | 10.92x | profile.forwardPE |\n| 市净率 | 2.61x | profile.priceToBook |\n| 追踪 EPS | 28.41 HKD | profile.trailingEps |\n| 股息率 | 1.33% | profile.dividendYield |\n| ROE（供应商） | 19.91% | profile.returnOnEquity |\n| 毛利率（供应商） | 56.70% | profile.grossMargins |\n| 经营利润率（供应商） | 33.31% | profile.operatingMargins |\n| 净利率（供应商） | 29.87% | profile.profitMargins |\n| 收入增速（供应商） | 11.0% | profile.revenueGrowth |\n| 盈利增速（供应商） | 1.8% | profile.earningsGrowth |\n| 总现金 / 总债务 | 458,904,010,752 / 471,828,004,864 HKD | profile.totalCash / profile.totalDebt |\n| 流动比率 / 负债权益比 | 1.287x / 38.595%（已是百分数） | profile.currentRatio / profile.debtToEquity |\n| 自由现金流（供应商） | 118,467,747,840 HKD | profile.freeCashflow |\n\n**关键口径差异（事实 vs 事实）**：\n\n- 供应商总营收 788,483,014,656（profile.totalRevenue，财务币种 CNY，TTM）与最新年报收入 751,766 百万（annual.income.47.0，2025 年 12 月止）不同，属**不同期间**（TTM vs 年度），非矛盾。\n- 供应商净利率 29.87% 与计算值 29.91%（2025 年）接近；毛利率 56.70% vs 计算值 56.21%，差异约 0.5 个百分点，源于供应商 TTM 口径与年报口径不同，**两者均需标注口径，不可混用**。\n- 供应商 ROE 19.91%（多为期末净资产口径）低于计算口径 21.13%（平均净资产），平均余额口径通常更高，方向合理。\n- 供应商**盈利增速仅 1.8%**，而计算口径 2025 年净利同比 +15.85%——前者为最新 TTM 对上一 TTM，后者为年度对年度，**不能互相替代**；TTM 盈利增速接近持平值得关注，但快照的 TTM 利润表汇总值为 null（ttm.values 全部为 null），无法进一步拆解原因。\n- 追踪 PE 13.6x 对应前瞻 PE 10.9x，隐含市场预期未来十二个月 EPS 增长约 25%（13.61/10.92−1，属**推导算术**，非快照直接给出）。股息率 1.33% 偏低，与公司长期以回购/再投资为主的资本回报方式一致（此为由股息率作出的**推断**）。\n\n---\n\n## 二、资产负债表（Balance Sheet）\n\n### 2.1 年度资产负债表（CNY 百万，事实）\n\n| 项目 | 2025-12-31 | 2024-12-31 | 2023-12-31 | 2022-12-31 | 证据 ID |\n|---|---|---|---|---|---|\n| 总资产 | 2,038,986 | 1,780,995 | 1,577,246 | 1,578,131 | annual.balance.38 |\n| 流动资产 | 595,460 | 496,180 | 518,446 | 565,989 | annual.balance.62 |\n| 现金及现金等价物 | 141,041 | 132,519 | 172,320 | 156,739 | annual.balance.75 |\n| 现金+短期投资 | 426,753 | 343,159 | 379,155 | 290,756 | annual.balance.73 |\n| 应收账款 | 49,930 | 48,203 | 46,606 | 45,467 | annual.balance.70 |\n| 存货 | 530 | 440 | 456 | 2,333 | annual.balance.67 |\n| 流动负债 | 412,751 | 396,909 | 352,157 | 434,204 | annual.balance.28 |\n| 总负债（不含少数股东） | 797,921 | 727,099 | 703,565 | 795,271 | annual.balance.20 |\n| 股东权益 | 1,154,152 | 973,548 | 808,591 | 721,391 | annual.balance.13 |\n\n> 2021-12-31 列（*.*.4）全部为 null，**数据缺失**，未作填补。\n\n### 2.2 最新季度资产负债表（与 2025 年同日对比）\n\n| 项目 | 2026-06-30 | 2025-06-30 | 变化 | 证据 ID |\n|---|---|---|---|---|\n| 总资产 | 2,159,394 | 2,013,310 | +7.3% | quarterly.balance.38 |\n| 流动资产 | 663,424 | 545,497 | +21.6% | qu",
     "operating_report": "快照：f56c6debb8b9477c9e2a7e237a517a96 · 来源：Yahoo Finance / yfinance · 获取时间：2026-11-13T23:21:15.891159+08:00\n\n# 腾讯控股（0700.HK）经营与盈利质量分析\n\n**数据基础**：快照 ID 为 `f56c6debb8b9477c9e2a7e237a517a96`，来源为 Yahoo Finance 和 yfinance，快照日期为 2026-11-13。报价货币为 HKD，财报货币为 CNY。年度报表期间为 2022-12-31 至 2025-12-31，季度报表覆盖期间截至 2026-06-30。用户未选择任何同业公司（`peers: []`），因此本报告不包含任何同业比较。供应商当前比率与 `calculated_metrics` 历史指标的计算基础不同，下文中分别标注。\n\n**Rating**: Not rated — 本快照不支持投资结论。\n\nFINAL TRANSACTION PROPOSAL: **HOLD**\n\n---\n\n## 核心结论\n\n1. **增长质量改善，表现为「利润增速快于收入、毛利率系统性抬升」**，但这一改善的驱动来源（产品结构、成本结构还是会计口径）在快照中无披露。\n2. **收入增速自 2023 财年已连续两个财年放缓**（9.82% → 8.41% → 13.86%），2025 财年反弹，但快照未说明反弹来自哪条业务线。\n3. **净利率与经营利润率同步走高，而 2022 财年净利率异常高（33.95%）并非经营改善所致**，因为当年经营利润率仅 20.55%；净利率与经营利润率相差 13.4 个百分点，且快照未提供非经营性损益明细。\n4. **自由现金流在 2025 财年回升，但资本开支强度接近翻倍**，这与 AI/基础设施投入方向一致；这是推断，快照未披露资本开支用途。\n5. **资产负债表杠杆在下降，短期流动性改善**，但季度口径显示 2026 上半年负债扩张快于权益。\n6. **快照存在重要数据缺口**：季度现金流缺失、TTM 汇总为空、无分部/地区/价格销量披露、无同业样本、无交易所原始公告。\n\n---\n\n## 事实与证据\n\n**收入与盈利轨迹（CNY，年度，同一期间匹配 YoY）**\n\n| 财年 | 收入 | 毛利 | 经营利润 | 净利润 | 毛利率 | 经营利润率 | 净利率 |\n|---|---|---|---|---|---|---|---|\n| 2022 | 5545.52亿（`annual.income.47.3`） | 2387.46亿 | 1139.40亿 | 1882.43亿 | 43.05% | 20.55% | 33.95% |\n| 2023 | 6090.15亿（`annual.income.47.2`） | 2931.09亿 | 1656.58亿 | 1152.16亿 | 48.13% | 27.20% | 18.92% |\n| 2024 | 6602.57亿（`annual.income.47.1`） | 3492.46亿 | 2087.86亿 | 1940.73亿 | 52.90% | 31.62% | 29.39% |\n| 2025 | 7517.66亿（`annual.income.47.0`） | 4225.93亿 | 2487.67亿 | 2248.42亿 | 56.21% | 33.09% | 29.91% |\n\n- 收入 YoY：2023 年 +9.82%、2024 年 +8.41%、2025 年 +13.86%（`growth`，basis YoY，frequency annual，证据引用 `annual.income.47.x`）。\n- 净利润 YoY：2023 年 **-38.79%**、2024 年 +68.44%、2025 年 +15.85%。2024 年的高增幅直接来自 2023 年的低基数。\n- 毛利增速连续三年高于收入增速：2025 年毛利同比 +21.00%，收入同比 +13.86%，毛利增速比收入增速高约 7.1 个百分点。\n- 成本端：`Cost Of Revenue` 从 2022 年 3158.06 亿降至 2025 年 3291.73 亿（`annual.income.46.0`），四年仅增 4.2%，而同期收入增长 35.6%。这是毛利率上行的直接会计来源。\n- 费用端：`Operating Expense` 2025 年为 1738.26 亿（`annual.income.40.0`），同比 +23.75%，**快于收入增速**；`Selling General And Administration` 2025 年 1778.54 亿，同比 +19.25%。费用扩张未侵蚀利润率，因毛利扩张更快。\n- 利息费用温和上升：2025 年 134.56 亿（`annual.income.11.0`），2022 年 99.85 亿。\n\n**现金转换（CNY，年度）**\n\n- 经营现金流：2022 年 1460.91 亿 → 2023 年 2219.62 亿 → 2024 年 2585.21 亿 → 2025 年 3030.52 亿（`annual.cashflow.40.0`）。\n- 资本开支（流出为负）：2022 年 -508.50 亿 → 2023 年 -474.07 亿 → 2024 年 -960.48 亿 → 2025 年 -1128.81 亿（`annual.cashflow.5.0`）。\n- 自由现金流（公式 `OCF + capex`，version 1.0）：2022 年 952.41 亿、2023 年 1745.55 亿、2024 年 1624.73 亿、2025 年 1901.71 亿。\n- 经营现金流/净利润（保守比较，便于口径核对）：2025 年 3030.52 / 2248.42 ≈ 1.35；2022 年 1460.91 / 1882.43 ≈ 0.78。\n\n**资产负债表与流动性**\n\n- 年度：`debt_ratio`（负债/资产）由 2022 年 50.39% 降至 2025 年 39.13%；`current_ratio` 2025 年 1.4427，2022 年 1.3035（期间有波动：2023 年 1.4722、2024 年 1.2501）。**这不是趋势，只是四个时点**。\n- 季度（2026-06-30 对比 2025-06-30）：总资产 2.1594 万亿 vs 2.0133 万亿；总负债 9368.81 亿 vs 8104.61 亿；权益 1.1359 万亿 vs 1.1146 万亿（`quarterly.balance.21.0`、`.14.0`）。负债同比 +15.6%，权益同比 +1.9%。\n- 总债务 4718.28 亿（`quarterly.balance.4.0`），现金及短期投资 4619.55 亿（`quarterly.balance.65.0`），短投口径接近抵平，但两者期限结构不同，不能视为净现金。\n\n**近期单季（季度，非累计口径已确认的利润表项目）**\n\n- 2026Q2 收入 2047.85 亿 vs 2025Q2 收入 1845.04 亿（`quarterly.income.44.0` 和 `.44.4`），同比约 +11.0%——与供应商 `revenueGrowth` 0.11 一致。\n- 2026Q2 毛利 1184.33 亿、经营利润 682.36 亿、净利润 560.22 亿；对应利润率 57.83% / 33.32% / 27.36%，均略优于 2025Q2 的 56.92% / 35.20% / 30.15%。**经营利润率与净利率同比是下降的**，与年度趋势方向相反。\n- 2026Q2 经营费用 501.97 亿 vs 2025Q2 400.71 亿，同比 +25.3%，快于收入。营业成本 863.52 亿 vs 794.91 亿，同比 +8.6%。\n\n**估值与股东结构（供应商当前口径，市场快照）**\n\n- `trailingPE` 13.61、`forwardPE` 10.92、`priceToBook` 2.61、`currentPrice` 386.6 HKD、`marketCap` 3.48 万亿 HKD。\n- `returnOnEquity` 0.1991、`returnOnAssets` 0.0787、`profitMargins` 0.2987、`grossMargins` 0.5670、`operatingMargins` 0.3331（供应商口径）。\n- `calculated_metrics` 口径：2025 年 `roe` 21.13%、`roa` 11.77%，与供应商 19.91%/7.87% 不同——**两者基础不同**，供应商未披露其平均余额计算方式。\n- `heldPercentInsiders` 31.73%、`heldPercentInstitutions` 25.07%、`dividendYield` 1.33%、员工 115,927 人。\n\n**内部人交易（`insider_transactions` 已提供）**\n\n- 全部 29 条记录的职位均为「Independent Non-Executive Director」，无高管或大股东交易。\n- 明确标注 Sale 的仅 6 笔：Yang (Siu Shun) 5 笔（2026-10-16 5,000 股 @54.19 HKD；2026-04-10 5,000 股 @64.24；2025-05-16 12,000 股 @65.15；2025-04-11 10,000 股 @56.65），Zhang (Xiulan) 1 笔（2025-10-13 3,358 股 @81.41），Stone (Ian Charles) 1 笔（2025-05-15 25,000 股 @66.42）。其余多为 4 月/3 月的常规授予类记录（Text 为空）。\n- 注意：该表说明「最近最多 30 条，不代表完整披露历史」。\n\n---\n\n## 变化原因与待验证解释\n\n**解释一：毛利率四年提升 13.2 个百分点，直接来自营业成本几乎冻结。**\n- 证据分类：**已观察到的财务关系**。`Cost Of Revenue` 从 3158.06 亿（2022）到 3291.73 亿（2025），增量仅 133.67 亿，而收入增量 1972.14 亿。毛利率提升是算术结果：算术关系明确，但「为什么成本不动」未披露。\n- 待验证假设：成本结构向低边际成本收入（如分成制内容、广告、部分金融科技）倾斜。**快照无分部收入与成本拆分，此为推测，无证据支持**。\n\n**解释二：2023 年净利润同比 -38.79% 不是经营恶化。**\n- 证据分类：**已观察到的财务关系**。同年经营利润反而从 1139.40 亿升至 1656.58 亿（+45.4%），说明净利润下滑来自经营利润以下的科目（投资公允价值变动、减值、其他收益等）。快照未提供这些明细行。\n- 证据不足：无法判断具体科目与金额。\n\n**解释三：2025 财年收入增速反弹至 13.86%。**\n- 证据分类：**证据不足**。快照未披露分部、产品、地区、价格/销量、用户数据。不能归因于游戏、广告、金融科技或云业务的任何一项。\n- 需要：分部收入表、递延收入余额、季度环比节奏。\n\n**解释四：资本开支跃升（960 亿 → 1129 亿）与自由现金流仍上升并存。**\n- 证据分类：**已观察到的财务关系**——经营现金流增量 445.31 亿超过资本开支增量 168.33 亿，故 FCF 净增 276.98 亿。\n- 待验证假设：资本开支用于服务器/AI 基础设施。快照无资本开支用途披露，无法确认；也无法判断该投入的折旧节奏对未来利润率的压力。\n\n**解释五：2026Q2 单季利润率同比下滑。**\n- 证据分类：**已观察到的财务关系**。经营费用同比 +25.3% 而收入 +11.0%，是经营利润率从 35.20% 降至 33.32% 的直接原因。年度数据（费用增速 23.75%）与季度数据方向一致。\n- 证据不足：是否属于 AI 人才/研发的阶段性投入、季节性，还是",
@@ -12684,6 +15995,13 @@
     "trader_investment_plan": "**Action**: Buy\n\n**Reasoning**: 研究计划的 Overweight 建立在快照中最结实的证据上：2022→2025 年毛利率 43.05%→56.21%、经营利润率 20.55%→33.09%，经营现金流 1,460.91 亿→3,030.52 亿 CNY，计算口径自由现金流 2025 年 1,901.71 亿（公式 OCF+capex，v1.0），资产负债率由 50.39% 降至 39.13%，且资本开支翻倍（474.07→1,128.81 亿）的同时 FCF 仍创新高。空方唯一被双方共同承认的新增信息是边际盈利走弱——2026Q2 收入同比约 +11.0% 而经营利润率由 35.20% 降至 33.32%、供应商 earningsGrowth 仅 +1.8%——这压缩上行空间但两个季度不足以推翻四年方向，故采纳 Overweight 而非满仓 Buy。现价 386.6 HKD 对应 trailingPE 13.61、priceToBook 2.61，即便 EPS 零增长，约 21% 的 2025 年计算 ROE 与近 1,900 亿 CNY 自由现金流仍提供支撑；forwardPE 10.92 隐含的约 24.6% EPS 加速不被快照验证，因此不以其推演目标价。据此分批建至标准配置的约 60%，保留加仓空间。\n\n**Entry Price**: 386.6\n\n**Stop Loss**: 328.6\n\n**Position Sizing**: 初始建立至标准配置的约 60%，满足计划中任意两项加仓触发（毛利率/经营利润率回撤小于 1.5 个百分点、经营费用增速回落至收入增速附近、FCF 维持 1,800 亿 CNY 以上、出现可核验分部披露）后再补至 100%；若连续两季增量经营利润率低于 10% 或资产负债率回升至 45% 以上且 OCF 同比下滑，则降至标准配置 30% 以下。\n\nFINAL TRANSACTION PROPOSAL: **BUY**",
     "final_trade_decision": "**Rating**: Overweight\n\n**Executive Summary**: 对 0700.HK 给出 Overweight，但首笔只建至标准配置的三分之一，不采纳交易员的六成。现价 386.6 HKD 距 11 月 18 日三季报仅三个交易日，且中立派指出该价位已在\"380 港元下方具吸引力\"的门槛之上，因此把剩余额度留到财报后的可核验信息。止损沿用 328.6 HKD（约 -15%），正因止损固定，首笔仓位必须压到三分之一，否则一次正常波动就会让组合承担近 9 个百分点的回撤。财报后若满足加仓四条中的任意两条，补至标准配置，组合层面再考虑以恒生科技类工具对冲地缘与算力管制 Beta。\n\n**Investment Thesis**: **为什么是 Overweight 而不是 Hold。** 三位分析师的事实层面其实已经收敛：激进派承认最新一季利润率在下行，保守派一个改善数字都没有否认。真正的分歧是\"用哪条钟决定仓位\"。在这一点上，多方掌握的证据更硬：年度序列四年同向——毛利率 43.05%→48.13%→52.90%→56.21%，经营利润率 20.55%→27.20%→31.62%→33.09%（snapshot f56c6debb8b9477c9e2a7e237a517a96，annual.income.45.x/47.x），营业成本四年只增 4.2%（315,806→329,173 百万 CNY）而收入增 35.6%，经营现金流 146,091→303,052 百万 CNY，2025 年计算口径 FCF 190,171 百万（公式 OCF+capex，v1.0）。空方只有两个季度观测。中性派对此的裁决是\"两边都算错了、方向不动规模砍半\"，我接受这个称重结果，所以不采纳两位原报告的 HOLD。\n\n**空方在哪里赢了，赢了多少。** 保守派的费用率/毛利率拆分是全辩论最锋利的一条，且可复核：2026Q2 单季毛利率只扩 0.91 个百分点（56.92%→57.83%），费用率却扩 2.79 个百分点（21.72%→24.51%），一进一出经营利润率掉 1.88 个百分点至 33.32%；增量收入 202.81 亿对应增量经营利润约 32.91 亿，边际经营利润率约 16%。加上供应商 earningsGrowth 仅 +1.8%，这证明\"当下盈利增速与 forwardPE 10.92 隐含的约 24.6% EPS 加速之间存在缺口\"。但它只证明上行空间被压缩，不证明反转——16% 的边际利润率仍高于交易员自设的 10% 降仓线。\n\n**空方在哪里输掉了。** 第一，它把\"营业成本四年只增 4.2% 无法解释\"读成\"未验证所以不能建仓\"，这是把研究缺口当成基本面证据；中性派已指出 2024 年成本 311,011 百万反而低于 2022 年，改善集中在 2024 年一次跳升，但这同样不构成恶化证据，双方在归因上都是空的，回到平手时四个上升的年度数字仍站在多方。第二，负债率这一击被中性派正确降级：2026-06-30 负债率约 43.4%（9368.81/21594 亿 CNY）确实较去年同期 40.3% 回升，但总债务 471,828 百万对现金及短期投资 461,955 百万（quarterly.balance.4.0/65.0）+ 年经营现金流 303,052 百万，接近净现金；把 45% 单列成扳机会让中期报表噪声打掉仓位。\n\n**最需要标红的一条，来自中性派。** 计算口径 FCF 190,171 百万 CNY（2025 全年）与 profile.freeCashflow 118,468 百万（币种与期间快照未注明）相差 37.7%，而 profile.totalRevenue 788,483 百万同样偏离 2025 年 751,766 百万。若两者同为 CNY，最简解释是期间差异——TTM 现金流同比可能下滑近四成，与 Q2 费用率上冲、资本开支爬坡是同一件事的三个侧面。这是推断，不是事实，但方向对多方最不利，也是我把首笔从六成压到三分之一的核心理由。\n\n**限制。** peers 为空、aligned_comparison 仅 0700.HK 一行、distributions sample_size=1 且 percentile=null，本结论不含任何同业比较或行业排名。供应商比率（ROE 19.91%、grossMargins 56.70%）与 calculated_metrics（2025 ROE 21.13%、毛利率 56.21%）基础不同，不可混用。quarterly.cashflow 缺失、ttm.values 全为 null。股息率仅 1.33%、无回购数据，\"21% ROE 支撑股价\"在资本未实际返还前只是账面。报价 HKD 与财报 CNY 未做汇率转换。\n\n**什么会改变结论。** 转向更积极：财报后毛利率≥55%、经营利润率≥32%（年度口径回撤小于 1.5 个百分点），或经营费用增速回落至收入增速附近，或 FCF 维持 1,800 亿 CNY 以上，或出现可核验分部披露证实收入结构向高毛利倾斜——任一两条即补至满配。转向 Underweight：增量经营利润率连续两季低于 10%；TTM 自由现金流同比继续下滑且无分部披露解释；负债率破 45% 且净债务同时转正。任一项成立即降至标准配置 30% 以下。\n\n**Price Target**: not provided\n\n**Time Horizon**: 6-12 个月（以下一财年披露与分部数据落地为界）",
     "company_brief": "# 公司研究简报\n\n## 公司与研究范围\n\nTencent Holdings Limited（0700.HK） · Internet Content & Information。本次结论基于共享快照，不包含未获取的分部、地区及行业经营指标。\n\n## 经营判断\n\n1. **增长质量改善，表现为「利润增速快于收入、毛利率系统性抬升」**，但这一改善的驱动来源（产品结构、成本结构还是会计口径）在快照中无披露。\n2. **收入增速自 2023 财年已连续两个财年放缓**（9.82% → 8.41% → 13.86%），2025 财年反弹，但快照未说明反弹来自哪条业务线。\n3. **净利率与经营利润率同步走高，而 2022 财年净利率异常高（33.95%）并非经营改善所致**，因为当年经营利润率仅 20.55%；净利率与经营利润率相差 13.4 个百分点，且快照未提供非经营性损益明细。\n4. **自由现金流在 2025 财年回升，但资本开支强度接近翻倍**，这与 AI/基础设施投入方向一致；这是推断，快照未披露资本开支用途。\n5. **资产负债表杠杆在下降，短期流动性改善**，但季度口径显示 2026 上半年负债扩张快于权益。\n6. **快照存在重要数据缺口**：季度现金流缺失、TTM 汇总为空、无分部/地区/价格销量披露、无同业样本、无交易所原始公告。\n\n---\n\n## 财务质量与估值\n\n以年度口径（2025-12-31）衡量，公司呈现“收入温和增长、利润率结构性抬升、现金流覆盖利润”的组合：毛利率 56.2%（计算口径，annual.income.45.0 / 47.0）较 2023 年 48.1% 提升约 8 个百分点，经营利润率 33.1% vs 27.2%。利润增速（+15.9%，growth.net_income 2025）快于收入增速（+13.9%），体现经营杠杆而非单纯规模扩张。但估值倍数（trailingPE 13.6、forwardPE 10.9、priceToBook 2.61）与上述改善并存，且供应商比率（ROE 19.9%）与计算口径（2025 年 21.1%）存在口径差异，需分别标注。**结论强度受限于：无同业样本、无季度现金流、无 TTM 完整汇总、无分部数据。**\n\n## 主要风险\n\n### 经营风险\n\n未找到独立章节，请查看下方完整分析报告及原始证据。\n\n### 财务风险\n\n1. **口径与基期风险**：供应商比率（returnOnEquity 19.906%、grossMargins 56.699%、operatingMargins 33.306%、profitMargins 29.868%、revenueGrowth 0.11，profile）与计算口径（2025 年 ROE 21.13%、毛利率 56.21%、净利率 29.91%）不一致，二者期间与平均余额处理不同，混用会放大或缩小结论。\n2. **净利率与经营利润率的缺口**：2025 年净利率 29.91% 低于经营利润率 33.09%，与 2022 年方向相反，说明非经营项目与税负对净利的贡献在不同年份符号相反，估值锚定 EPS 时应关注其波动性。\n3. **估值-增长匹配未经检验**：forwardPE 10.92 较 trailingPE 13.61 低约 20%，隐含市场对前瞻 EPS 的假设；快照未提供前瞻 EPS、分析师预测或增长一致预期，无法验证该隐含增速。revenueGrowth 供应商为 11.0%（11%，口径未说明为季度或年度），与计算年度 13.86%（growth.revenue.2025）不同，且 `earningsGrowth` 仅 1.8%，与年度净利增速 15.85% 明显背离，二者口径不可互换。\n4. **数据完整性风险**：`errors` 明示 “quarterly/cashflow 数据源未提供报表”，quarterly 现金流为空，故无法核对季度现金流是否累计、无法构造 TTM 自由现金流；`calculated_metrics.ttm` 全部为 null。`filing_documents` 为空，交易所原始公告未接入，所有数字均为供应商修订值，非历史时点可得值。\n\n## 待验证事项\n\n未找到独立章节，请查看下方完整分析报告及原始证据。\n\n1. 2024–2025 年毛利率提升 8.3 个百分点中，多少来自收入结构变化、多少来自单一业务成本效率改善？请提供分部收入与分部毛利，以验证“业务组合变化”假设。\n2. 2022 年净利率（33.95%）高于经营利润率（20.55%）的具体构成是什么？请提供税前利润、投资收益/联营损益与所得税明细。\n3. 资本开支从 47,407 百万增至 112,881 百万（CNY，2023→2025）的投向分布为何？是否可归为经常性投入？这直接决定 2026 年自由现金流（2025 年 190,171 百万）的可持续性。\n4. 供应商 forwardPE 10.917541 所隐含的前瞻 EPS 水平与增速假设是什么？供应商 revenueGrowth 11.0% 与 earningsGrowth 1.8% 的对照期与口径分别为何？\n\n**Rating**: Not Assessed — peer set empty and TTM/quarterly cash flow unavailable; proportional conclusion is limited to margin and cash-generation evidence.\nFINAL TRANSACTION PROPOSAL: **HOLD**\n\n## 证据与版本\n\n快照编号：f56c6debb8b9477c9e2a7e237a517a96；来源：Yahoo Finance / yfinance；采集时间：2026-11-13T23:21:15.891159+08:00；公式版本：1.0。简报复用已有智能体结论，不增加模型调用。引用定位不等同于因果判断已验证。"
+  },
+  "error": null,
+  "seed_reports": {
+    "fundamentals_report": "# 0700.HK 腾讯控股有限公司（Tencent Holdings Limited）公司基本面综合报告\n\n**数据快照 ID**：f56c6debb8b9477c9e2a7e237a517a96\n**数据来源**：Yahoo Finance / yfinance（供应商返回口径）\n**快照日期**：2026-11-13｜**抓取时间**：2026-11-13T23:21:15（+08:00）\n**报价货币**：HKD｜**财务报表货币**：CNY（两者不同，全文不跨币种合并金额）\n**报表期间**：年度 2022–2025（2025-12-31 为最新完整年度）；季度 2025-06-30 至 2026-06-30\n\n---\n\n## 一、公司基本面（Company Fundamentals）\n\n### 1.1 业务与身份\n\n| 项目 | 内容 | 证据 ID |\n|---|---|---|\n| 公司全称 | Tencent Holdings Limited | profile.longName |\n| 交易所 / 代码 | HKG / 0700.HK | profile.exchange |\n| 行业分类 | Communication Services / Internet Content & Information | profile.sector, profile.industry |\n| 注册与总部 | 中国深圳（腾讯滨海大厦） | profile.city, profile.address1 |\n| 员工人数 | 115,927 人 | profile.fullTimeEmployees |\n| 成立 / 更名 | 1998 年成立；2004 年 2 月由 Tencent (BVI) Limited 更名为现名 | profile.longBusinessSummary |\n\n**业务描述（事实，来自供应商简介）**：公司为投资控股公司，在中国内地及国际提供增值服务、营销服务、金融科技及企业服务。消费者业务包括通信与社交（即时通讯、社交网络）、数字内容（网络游戏、视频、直播、新闻、音乐、文学）、金融科技（移动支付、财富管理、消费信贷、证券交易）及各类工具；企业业务包括营销解决方案与云服务（云计算、大数据、人工智能、物联网与安全）。此外还涉及影视投资制作发行、版权授权与商品销售、互联网广告、软件开发与系统集成，以及移动游戏开发运营（profile.longBusinessSummary）。\n\n> **说明**：上述为供应商业务简介文本。快照**未提供分部收入、产品线或地区收入拆分数据**；不得从公司简介、官网链接或合并报表总额反推分部数值。\n\n**管理层（事实，profile.companyOfficers）**：\n\n- 马化腾（Huateng Ma），53 岁，联合创始人、董事长兼 CEO，2025 财年总薪酬 57,024,272（CNY）\n- 刘炽平（Chi Ping Lau），52 岁，总裁，总薪酬 19,495,822（CNY），未行权权益价值 1,122,740,352\n- 许晨晔，CIO；任宇昕，COO 兼平台与内容事业群、互动娱乐事业群总裁；卢山，高级执行副总裁；罗硕瀚，CFO 兼高级副总裁\n- 曾李青、张志东、陈一丹为联合创始人，现职衔为\"顾问（荣休）\"\n\n### 1.2 股权结构\n\n| 指标 | 数值 | 证据 ID |\n|---|---|---|\n| 内部人持股比例 | 31.73% | profile.heldPercentInsiders |\n| 机构持股比例 | 25.07% | profile.heldPercentInstitutions |\n\n**推断（非事实）**：内部人持股逾三成，与创始人团队及早期股东长期持有相符，治理上有利于战略连续性；但快照未拆分创始人、董事与员工持股各自份额，无法进一步细化。\n\n### 1.3 盈利能力与质量趋势（计算指标 v1.0）\n\n| 年度 | 毛利率 | 经营利润率 | 净利率 | ROE（平均净资产） | ROA（平均总资产） | 流动比率 | 资产负债率 | 自由现金流（CNY） |\n|---|---|---|---|---|---|---|---|---|\n| 2022-12-31 | 43.05% | 20.55% | 33.95% | n/a | n/a | 1.304x | 50.39% | 95,241,000,000 |\n| 2023-12-31 | 48.13% | 27.20% | 18.92% | 15.06% | 7.30% | 1.472x | 44.61% | 174,555,000,000 |\n| 2024-12-31 | 52.90% | 31.62% | 29.39% | 21.78% | 11.56% | 1.250x | 40.83% | 162,473,000,000 |\n| 2025-12-31 | 56.21% | 33.09% | 29.91% | 21.13% | 11.77% | 1.443x | 39.13% | 190,171,000,000 |\n\n公式版本 1.0；证据锚点见 annual.income.47 / .45 / .39 / .25、annual.balance.38 / .13 / .28 / .62、annual.cashflow.40 / .5。2022 年 ROE/ROA 因缺 2021 年**资产负债表**（annual.balance.*.4 为 null）无法计算平均余额，报告为 n/a，**不等于 0**。\n\n**观察（推断）**：\n\n1. **毛利率四年连升**（43.1% → 56.2%，累计 +13.1 个百分点），同期货源成本（Cost Of Revenue）由 315,806 百万降至 329,173 百万，而收入由 554,552 百万增至 751,766 百万（annual.income.46、.47）。收入增长快于成本，指向高毛利业务占比提升或成本效率改善——但**具体由哪项业务驱动，快照无分部数据，不可断言**。\n2. **净利率 2022 年异常偏高（33.95%）**，高于 2023 年（18.92%）且当年净利润同比 -38.8%（growth.net_income 2023）。这说明 2022 年净利含大额非经营性收益（如投资收益/公允价值变动、一次性处置），净利率不可仅从经营视角解读。2024–2025 年净利率约 29–30%，相对稳定。\n3. **ROE 2024 年 21.78% 略高于 2025 年 21.13%**，主因净资产从 973,548 百万增至 1,154,152 百万（+18.6%）快于净利润（+15.9%），属分母扩张型摊薄，而非盈利能力恶化；同期经营利润率实际由 31.62% 升至 33.09%。\n4. **资产负债率持续下降**（50.4% → 39.1%），权益增长是主因。\n\n### 1.4 增长（计算指标，YoY）\n\n| 指标 | 2023 | 2024 | 2025 |\n|---|---|---|---|\n| 收入增速 | +9.82% | +8.41% | +13.86% |\n| 净利润增速 | -38.79% | +68.44% | +15.85% |\n\n证据：annual.income.47 各期、annual.income.25 各期。**2024 年 +68.4% 的净利增速建立在 2023 年 -38.8% 的低基数上**，两年复合并非 68% 的持续高增长；以 2022 年 188,243 百万为基，2024 年 194,073 百万仅高 3.1%。这是典型的基数效应，须与\"盈利质量改善\"区分开。\n\n### 1.5 估值（供应商当前口径，HKD）\n\n| 指标 | 数值 | 证据 ID |\n|---|---|---|\n| 现价 | 386.60 HKD | profile.currentPrice |\n| 市值 | 3,481,181,356,032 HKD | profile.marketCap |\n| 流通股数 | 9,004,607,601 股 | profile.sharesOutstanding |\n| 追踪 PE | 13.61x | profile.trailingPE |\n| 前瞻 PE | 10.92x | profile.forwardPE |\n| 市净率 | 2.61x | profile.priceToBook |\n| 追踪 EPS | 28.41 HKD | profile.trailingEps |\n| 股息率 | 1.33% | profile.dividendYield |\n| ROE（供应商） | 19.91% | profile.returnOnEquity |\n| 毛利率（供应商） | 56.70% | profile.grossMargins |\n| 经营利润率（供应商） | 33.31% | profile.operatingMargins |\n| 净利率（供应商） | 29.87% | profile.profitMargins |\n| 收入增速（供应商） | 11.0% | profile.revenueGrowth |\n| 盈利增速（供应商） | 1.8% | profile.earningsGrowth |\n| 总现金 / 总债务 | 458,904,010,752 / 471,828,004,864 HKD | profile.totalCash / profile.totalDebt |\n| 流动比率 / 负债权益比 | 1.287x / 38.595%（已是百分数） | profile.currentRatio / profile.debtToEquity |\n| 自由现金流（供应商） | 118,467,747,840 HKD | profile.freeCashflow |\n\n**关键口径差异（事实 vs 事实）**：\n\n- 供应商总营收 788,483,014,656（profile.totalRevenue，财务币种 CNY，TTM）与最新年报收入 751,766 百万（annual.income.47.0，2025 年 12 月止）不同，属**不同期间**（TTM vs 年度），非矛盾。\n- 供应商净利率 29.87% 与计算值 29.91%（2025 年）接近；毛利率 56.70% vs 计算值 56.21%，差异约 0.5 个百分点，源于供应商 TTM 口径与年报口径不同，**两者均需标注口径，不可混用**。\n- 供应商 ROE 19.91%（多为期末净资产口径）低于计算口径 21.13%（平均净资产），平均余额口径通常更高，方向合理。\n- 供应商**盈利增速仅 1.8%**，而计算口径 2025 年净利同比 +15.85%——前者为最新 TTM 对上一 TTM，后者为年度对年度，**不能互相替代**；TTM 盈利增速接近持平值得关注，但快照的 TTM 利润表汇总值为 null（ttm.values 全部为 null），无法进一步拆解原因。\n- 追踪 PE 13.6x 对应前瞻 PE 10.9x，隐含市场预期未来十二个月 EPS 增长约 25%（13.61/10.92−1，属**推导算术**，非快照直接给出）。股息率 1.33% 偏低，与公司长期以回购/再投资为主的资本回报方式一致（此为由股息率作出的**推断**）。\n\n---\n\n## 二、资产负债表（Balance Sheet）\n\n### 2.1 年度资产负债表（CNY 百万，事实）\n\n| 项目 | 2025-12-31 | 2024-12-31 | 2023-12-31 | 2022-12-31 | 证据 ID |\n|---|---|---|---|---|---|\n| 总资产 | 2,038,986 | 1,780,995 | 1,577,246 | 1,578,131 | annual.balance.38 |\n| 流动资产 | 595,460 | 496,180 | 518,446 | 565,989 | annual.balance.62 |\n| 现金及现金等价物 | 141,041 | 132,519 | 172,320 | 156,739 | annual.balance.75 |\n| 现金+短期投资 | 426,753 | 343,159 | 379,155 | 290,756 | annual.balance.73 |\n| 应收账款 | 49,930 | 48,203 | 46,606 | 45,467 | annual.balance.70 |\n| 存货 | 530 | 440 | 456 | 2,333 | annual.balance.67 |\n| 流动负债 | 412,751 | 396,909 | 352,157 | 434,204 | annual.balance.28 |\n| 总负债（不含少数股东） | 797,921 | 727,099 | 703,565 | 795,271 | annual.balance.20 |\n| 股东权益 | 1,154,152 | 973,548 | 808,591 | 721,391 | annual.balance.13 |\n\n> 2021-12-31 列（*.*.4）全部为 null，**数据缺失**，未作填补。\n\n### 2.2 最新季度资产负债表（与 2025 年同日对比）\n\n| 项目 | 2026-06-30 | 2025-06-30 | 变化 | 证据 ID |\n|---|---|---|---|---|\n| 总资产 | 2,159,394 | 2,013,310 | +7.3% | quarterly.balance.38 |\n| 流动资产 | 663,424 | 545,497 | +21.6% | qu",
+    "operating_report": "快照：f56c6debb8b9477c9e2a7e237a517a96 · 来源：Yahoo Finance / yfinance · 获取时间：2026-11-13T23:21:15.891159+08:00\n\n# 腾讯控股（0700.HK）经营与盈利质量分析\n\n**数据基础**：快照 ID 为 `f56c6debb8b9477c9e2a7e237a517a96`，来源为 Yahoo Finance 和 yfinance，快照日期为 2026-11-13。报价货币为 HKD，财报货币为 CNY。年度报表期间为 2022-12-31 至 2025-12-31，季度报表覆盖期间截至 2026-06-30。用户未选择任何同业公司（`peers: []`），因此本报告不包含任何同业比较。供应商当前比率与 `calculated_metrics` 历史指标的计算基础不同，下文中分别标注。\n\n**Rating**: Not rated — 本快照不支持投资结论。\n\nFINAL TRANSACTION PROPOSAL: **HOLD**\n\n---\n\n## 核心结论\n\n1. **增长质量改善，表现为「利润增速快于收入、毛利率系统性抬升」**，但这一改善的驱动来源（产品结构、成本结构还是会计口径）在快照中无披露。\n2. **收入增速自 2023 财年已连续两个财年放缓**（9.82% → 8.41% → 13.86%），2025 财年反弹，但快照未说明反弹来自哪条业务线。\n3. **净利率与经营利润率同步走高，而 2022 财年净利率异常高（33.95%）并非经营改善所致**，因为当年经营利润率仅 20.55%；净利率与经营利润率相差 13.4 个百分点，且快照未提供非经营性损益明细。\n4. **自由现金流在 2025 财年回升，但资本开支强度接近翻倍**，这与 AI/基础设施投入方向一致；这是推断，快照未披露资本开支用途。\n5. **资产负债表杠杆在下降，短期流动性改善**，但季度口径显示 2026 上半年负债扩张快于权益。\n6. **快照存在重要数据缺口**：季度现金流缺失、TTM 汇总为空、无分部/地区/价格销量披露、无同业样本、无交易所原始公告。\n\n---\n\n## 事实与证据\n\n**收入与盈利轨迹（CNY，年度，同一期间匹配 YoY）**\n\n| 财年 | 收入 | 毛利 | 经营利润 | 净利润 | 毛利率 | 经营利润率 | 净利率 |\n|---|---|---|---|---|---|---|---|\n| 2022 | 5545.52亿（`annual.income.47.3`） | 2387.46亿 | 1139.40亿 | 1882.43亿 | 43.05% | 20.55% | 33.95% |\n| 2023 | 6090.15亿（`annual.income.47.2`） | 2931.09亿 | 1656.58亿 | 1152.16亿 | 48.13% | 27.20% | 18.92% |\n| 2024 | 6602.57亿（`annual.income.47.1`） | 3492.46亿 | 2087.86亿 | 1940.73亿 | 52.90% | 31.62% | 29.39% |\n| 2025 | 7517.66亿（`annual.income.47.0`） | 4225.93亿 | 2487.67亿 | 2248.42亿 | 56.21% | 33.09% | 29.91% |\n\n- 收入 YoY：2023 年 +9.82%、2024 年 +8.41%、2025 年 +13.86%（`growth`，basis YoY，frequency annual，证据引用 `annual.income.47.x`）。\n- 净利润 YoY：2023 年 **-38.79%**、2024 年 +68.44%、2025 年 +15.85%。2024 年的高增幅直接来自 2023 年的低基数。\n- 毛利增速连续三年高于收入增速：2025 年毛利同比 +21.00%，收入同比 +13.86%，毛利增速比收入增速高约 7.1 个百分点。\n- 成本端：`Cost Of Revenue` 从 2022 年 3158.06 亿降至 2025 年 3291.73 亿（`annual.income.46.0`），四年仅增 4.2%，而同期收入增长 35.6%。这是毛利率上行的直接会计来源。\n- 费用端：`Operating Expense` 2025 年为 1738.26 亿（`annual.income.40.0`），同比 +23.75%，**快于收入增速**；`Selling General And Administration` 2025 年 1778.54 亿，同比 +19.25%。费用扩张未侵蚀利润率，因毛利扩张更快。\n- 利息费用温和上升：2025 年 134.56 亿（`annual.income.11.0`），2022 年 99.85 亿。\n\n**现金转换（CNY，年度）**\n\n- 经营现金流：2022 年 1460.91 亿 → 2023 年 2219.62 亿 → 2024 年 2585.21 亿 → 2025 年 3030.52 亿（`annual.cashflow.40.0`）。\n- 资本开支（流出为负）：2022 年 -508.50 亿 → 2023 年 -474.07 亿 → 2024 年 -960.48 亿 → 2025 年 -1128.81 亿（`annual.cashflow.5.0`）。\n- 自由现金流（公式 `OCF + capex`，version 1.0）：2022 年 952.41 亿、2023 年 1745.55 亿、2024 年 1624.73 亿、2025 年 1901.71 亿。\n- 经营现金流/净利润（保守比较，便于口径核对）：2025 年 3030.52 / 2248.42 ≈ 1.35；2022 年 1460.91 / 1882.43 ≈ 0.78。\n\n**资产负债表与流动性**\n\n- 年度：`debt_ratio`（负债/资产）由 2022 年 50.39% 降至 2025 年 39.13%；`current_ratio` 2025 年 1.4427，2022 年 1.3035（期间有波动：2023 年 1.4722、2024 年 1.2501）。**这不是趋势，只是四个时点**。\n- 季度（2026-06-30 对比 2025-06-30）：总资产 2.1594 万亿 vs 2.0133 万亿；总负债 9368.81 亿 vs 8104.61 亿；权益 1.1359 万亿 vs 1.1146 万亿（`quarterly.balance.21.0`、`.14.0`）。负债同比 +15.6%，权益同比 +1.9%。\n- 总债务 4718.28 亿（`quarterly.balance.4.0`），现金及短期投资 4619.55 亿（`quarterly.balance.65.0`），短投口径接近抵平，但两者期限结构不同，不能视为净现金。\n\n**近期单季（季度，非累计口径已确认的利润表项目）**\n\n- 2026Q2 收入 2047.85 亿 vs 2025Q2 收入 1845.04 亿（`quarterly.income.44.0` 和 `.44.4`），同比约 +11.0%——与供应商 `revenueGrowth` 0.11 一致。\n- 2026Q2 毛利 1184.33 亿、经营利润 682.36 亿、净利润 560.22 亿；对应利润率 57.83% / 33.32% / 27.36%，均略优于 2025Q2 的 56.92% / 35.20% / 30.15%。**经营利润率与净利率同比是下降的**，与年度趋势方向相反。\n- 2026Q2 经营费用 501.97 亿 vs 2025Q2 400.71 亿，同比 +25.3%，快于收入。营业成本 863.52 亿 vs 794.91 亿，同比 +8.6%。\n\n**估值与股东结构（供应商当前口径，市场快照）**\n\n- `trailingPE` 13.61、`forwardPE` 10.92、`priceToBook` 2.61、`currentPrice` 386.6 HKD、`marketCap` 3.48 万亿 HKD。\n- `returnOnEquity` 0.1991、`returnOnAssets` 0.0787、`profitMargins` 0.2987、`grossMargins` 0.5670、`operatingMargins` 0.3331（供应商口径）。\n- `calculated_metrics` 口径：2025 年 `roe` 21.13%、`roa` 11.77%，与供应商 19.91%/7.87% 不同——**两者基础不同**，供应商未披露其平均余额计算方式。\n- `heldPercentInsiders` 31.73%、`heldPercentInstitutions` 25.07%、`dividendYield` 1.33%、员工 115,927 人。\n\n**内部人交易（`insider_transactions` 已提供）**\n\n- 全部 29 条记录的职位均为「Independent Non-Executive Director」，无高管或大股东交易。\n- 明确标注 Sale 的仅 6 笔：Yang (Siu Shun) 5 笔（2026-10-16 5,000 股 @54.19 HKD；2026-04-10 5,000 股 @64.24；2025-05-16 12,000 股 @65.15；2025-04-11 10,000 股 @56.65），Zhang (Xiulan) 1 笔（2025-10-13 3,358 股 @81.41），Stone (Ian Charles) 1 笔（2025-05-15 25,000 股 @66.42）。其余多为 4 月/3 月的常规授予类记录（Text 为空）。\n- 注意：该表说明「最近最多 30 条，不代表完整披露历史」。\n\n---\n\n## 变化原因与待验证解释\n\n**解释一：毛利率四年提升 13.2 个百分点，直接来自营业成本几乎冻结。**\n- 证据分类：**已观察到的财务关系**。`Cost Of Revenue` 从 3158.06 亿（2022）到 3291.73 亿（2025），增量仅 133.67 亿，而收入增量 1972.14 亿。毛利率提升是算术结果：算术关系明确，但「为什么成本不动」未披露。\n- 待验证假设：成本结构向低边际成本收入（如分成制内容、广告、部分金融科技）倾斜。**快照无分部收入与成本拆分，此为推测，无证据支持**。\n\n**解释二：2023 年净利润同比 -38.79% 不是经营恶化。**\n- 证据分类：**已观察到的财务关系**。同年经营利润反而从 1139.40 亿升至 1656.58 亿（+45.4%），说明净利润下滑来自经营利润以下的科目（投资公允价值变动、减值、其他收益等）。快照未提供这些明细行。\n- 证据不足：无法判断具体科目与金额。\n\n**解释三：2025 财年收入增速反弹至 13.86%。**\n- 证据分类：**证据不足**。快照未披露分部、产品、地区、价格/销量、用户数据。不能归因于游戏、广告、金融科技或云业务的任何一项。\n- 需要：分部收入表、递延收入余额、季度环比节奏。\n\n**解释四：资本开支跃升（960 亿 → 1129 亿）与自由现金流仍上升并存。**\n- 证据分类：**已观察到的财务关系**——经营现金流增量 445.31 亿超过资本开支增量 168.33 亿，故 FCF 净增 276.98 亿。\n- 待验证假设：资本开支用于服务器/AI 基础设施。快照无资本开支用途披露，无法确认；也无法判断该投入的折旧节奏对未来利润率的压力。\n\n**解释五：2026Q2 单季利润率同比下滑。**\n- 证据分类：**已观察到的财务关系**。经营费用同比 +25.3% 而收入 +11.0%，是经营利润率从 35.20% 降至 33.32% 的直接原因。年度数据（费用增速 23.75%）与季度数据方向一致。\n- 证据不足：是否属于 AI 人才/研发的阶段性投入、季节性，还是",
+    "metrics_report": "快照：f56c6debb8b9477c9e2a7e237a517a96 · 来源：Yahoo Finance / yfinance · 获取时间：2026-11-13T23:21:15.891159+08:00\n\n# 腾讯控股（0700.HK）财务快照分析\n\n快照 ID `f56c6debb8b9477c9e2a7e237a517a96`，来源 Yahoo Finance / yfinance，抓取时间 2026-11-13。报价货币 HKD，财务报表货币 CNY；两者不可混算。股本 9,004,607,601 股（profile.sharesOutstanding）。对 peer 为对比对象，但 `peers` 为空，`aligned_comparison` 仅含本公司一行，故无同业比较可用。\n\n## 核心结论\n\n以年度口径（2025-12-31）衡量，公司呈现“收入温和增长、利润率结构性抬升、现金流覆盖利润”的组合：毛利率 56.2%（计算口径，annual.income.45.0 / 47.0）较 2023 年 48.1% 提升约 8 个百分点，经营利润率 33.1% vs 27.2%。利润增速（+15.9%，growth.net_income 2025）快于收入增速（+13.9%），体现经营杠杆而非单纯规模扩张。但估值倍数（trailingPE 13.6、forwardPE 10.9、priceToBook 2.61）与上述改善并存，且供应商比率（ROE 19.9%）与计算口径（2025 年 21.1%）存在口径差异，需分别标注。**结论强度受限于：无同业样本、无季度现金流、无 TTM 完整汇总、无分部数据。**\n\n## 事实与证据\n\n1. **利润率抬升（年度，CNY，2023→2025）**：毛利率 48.13%（2023，annual.income.45.2/47.2）→ 52.90%（2024）→ 56.21%（2025）；经营利润率 27.20% → 31.62% → 33.09%。同期总营收 554,552→609,015→660,257→751,766 百万（annual.income.47.3→.0）。\n2. **成本端绝对额下降后回升**：营业成本 315,806→315,906→311,011→329,173 百万（annual.income.46.x）。2024 年成本基本持平而收入增长 8.4%，是毛利率跳升的算术来源。\n3. **利润与现金流**：净利润 188,243→115,216→194,073→224,842 百万（annual.income.25.x）；经营现金流 146,091→221,962→258,521→303,052 百万（annual.cashflow.40.x）；资本开支 -50,850→-47,407→-96,048→-112,881 百万（annual.cashflow.5.x）；计算自由现金流 95,241→174,555→162,473→190,171 百万（calculated_metrics.history，公式 `OCF + capex`，版本 1.0）。\n4. **杠杆与流动性**：资产负债率 50.39%（2022）→ 44.61% → 40.83% → 39.13%（2025，calculated debt_ratio）；流动比率 1.3035 → 1.4722 → 1.2501 → 1.4427。季度末（2026-06-30）总债务 471,828 百万、权益 1,135,853 百万（quarterly.balance.4.0 / 14.0），总资产 2,159,394 百万。\n5. **季度边际**：2026-06-30 单季营收 204,785 百万、毛利 118,433 百万、经营利润 68,236 百万、净利 56,022 百万（quarterly.income.44.0/42.0/37.0/24.0），对应单季毛利率 57.8%、经营利润率 33.3%、净利率 27.4%（据同一行项目算得，非供应商比率）。对比 2025-06-30 单季营收 184,504 百万，收入同比约 +11.0%（两个月度点直接相除，非供应商 growth 字段）。\n6. **估值与股东结构**：currentPrice 386.6 HKD、marketCap 3,481,181,356,032 HKD、trailingEps 28.41、forwardPE 10.917541、priceToBook 2.607634、dividendYield 1.33（profile）。内部人持股 31.73%，机构持股 25.07%，员工 115,927 人。内部人交易块存在，均为独立非执行董事小额交易，最大一笔为 2025-05-15 Stone 卖出 25,000 股、1,660,602 单位货币；多数行 Value 为空，且无标注币种，不宜解读为信号。\n\n## 变化原因与待验证解释\n\n- **毛利率与经营利润率同步上行** — 已观察到的财务关系：收入增长而营业成本在 2024 年基本持平、2025 年仅增 5.8%，成本增速持续低于收入增速，数学上即构成毛利扩张；经营费用增速（2024 +10.2%，2025 +23.8%）在 2025 年反而快于收入，故经营利润率改善主要来自毛利端而非费用节制。**待验证假设**：收入结构向高毛利业务倾斜、或低毛利业务成本效率改善。快照未披露任何分部收入或成本拆分，`fullBusinessSummary` 仅为业务描述，不构成数据，故无法定论。\n- **2023 年净利下滑 38.8%（growth.net_income 2023，基期 2022）与 2022 年净利率 33.9% 高于经营利润率 20.5%** — 证据不足：净利率高于经营利润率通常意味着非经营收益（投资收益、联营/合营损益、公允价值变动）占比可观，但快照未提供税前利润、投资收益或所得税明细，无法验证。**待验证假设**：2022 年高净利含大额非经营性收益，2023 年为该基数回落。2022 年 ROE/ROA 为 null（calculated_metrics.history），符合“分母缺失或非正不计算”的口径说明，不应视作零。\n- **杠杆下降与 ROE 的相对稳定** — 已观察到的财务关系：资产负债率由 50.4% 降至 39.1%，但 2025 年计算 ROE 21.1% 略低于 2024 年 21.8%，即 ROE 维持并非依赖加杠杆；权益 721,391→1,154,152 百万（annual.balance.13.x）扩张快于负债。**待验证假设**：留存利润与投资重估共同推动权益增长，快照缺少权益变动表，无法拆分。\n- **资本开支近乎翻倍（2023 年 47,407 → 2024 年 96,048 → 2025 年 112,881 百万）而自由现金流仍创高** — 已观察到的财务关系：经营现金流增速覆盖了资本开支增幅。**证据不足**：快照未披露资本开支投向（算力、数据中心或其他），不应推断为 AI 基础设施投入。\n\n## 风险提示\n\n1. **口径与基期风险**：供应商比率（returnOnEquity 19.906%、grossMargins 56.699%、operatingMargins 33.306%、profitMargins 29.868%、revenueGrowth 0.11，profile）与计算口径（2025 年 ROE 21.13%、毛利率 56.21%、净利率 29.91%）不一致，二者期间与平均余额处理不同，混用会放大或缩小结论。\n2. **净利率与经营利润率的缺口**：2025 年净利率 29.91% 低于经营利润率 33.09%，与 2022 年方向相反，说明非经营项目与税负对净利的贡献在不同年份符号相反，估值锚定 EPS 时应关注其波动性。\n3. **估值-增长匹配未经检验**：forwardPE 10.92 较 trailingPE 13.61 低约 20%，隐含市场对前瞻 EPS 的假设；快照未提供前瞻 EPS、分析师预测或增长一致预期，无法验证该隐含增速。revenueGrowth 供应商为 11.0%（11%，口径未说明为季度或年度），与计算年度 13.86%（growth.revenue.2025）不同，且 `earningsGrowth` 仅 1.8%，与年度净利增速 15.85% 明显背离，二者口径不可互换。\n4. **数据完整性风险**：`errors` 明示 “quarterly/cashflow 数据源未提供报表”，quarterly 现金流为空，故无法核对季度现金流是否累计、无法构造 TTM 自由现金流；`calculated_metrics.ttm` 全部为 null。`filing_documents` 为空，交易所原始公告未接入，所有数字均为供应商修订值，非历史时点可得值。\n\n## 数据局限\n\n- **无同业**：`peers` 为空数组，`aligned_comparison.rows` 仅 0700.HK，`distributions` 各指标 sample_size = 1、percentile = null。因此不能给出任何行业排名、分位或相对估值结论；`same_industry: true`、`period_aligned: true` 只说明本行自身可比条件满足，不构成比较。\n- **年度 vs 季度**：annual 覆盖 2022–2025（2021 列全为 null），quarterly 利润表仅 2026-06-30 与 2025-06-30 两个完整观测，其余季度多数为 null；不得由单一季度外推全年，也不得由当前流动比率（1.287，profile）推断多年流动性趋势——该值与年度 1.4427（2025）分属不同计算来源。\n- **跨货币**：marketCap、currentPrice、trailingEps、dividendYield 为 HKD 及港币每股值，所有报表金额为 CNY，快照未提供汇率，故 PE 与 EPS 的 CNY/HKD 对应关系无法直接核验（trailingPE 由供应商提供而非本地重算）。\n- **不可得项**：分部/地区收入、销量、价格、单位经济、客户集中度、股权激励费用、所得税明细、有息债务期限结构、2021 年数据、`quarterly.cashflow` 全部为空。内部人交易仅供应商“最近最多 30 条”，非完整披露历史。\n\n## 后续核查问题\n\n1. 2024–2025 年毛利率提升 8.3 个百分点中，多少来自收入结构变化、多少来自单一业务成本效率改善？请提供分部收入与分部毛利，以验证“业务组合变化”假设。\n2. 2022 年净利率（33.95%）高于经营利润率（20.55%）的具体构成是什么？请提供税前利润、投资收益/联营损益与所得税明细。\n3. 资本开支从 47,407 百万增至 112,881 百万（CNY，2023→2025）的投向分布为何？是否可归为经常性投入？这直接决定 2026 年自由现金流（2025 年 190,171 百万）的可持续性。\n4. 供应商 forwardPE 10.917541 所隐含的前瞻 EPS 水平与增速假设是什么？供应商 revenueGrowth 11.0% 与 earningsGrowth 1.8% 的对照期与口径分别为何？\n\n**Rating**: Not Assessed — peer set empty and TTM/quarterly cash flow unavailable; proportional conclusion is limited to margin and cash-generation evidence.\nFINAL TRANSACTION PROPOSAL: **HOLD**",
+    "news_report": "# 0700.HK（腾讯控股）过去一周新闻与宏观环境研究报告\n**报告期：2026-11-06 至 2026-11-13｜数据环境：新闻源 + Polymarket 预测市场（本次运行 FRED 未配置，宏观部分以新闻与市场价格隐含概率为依据，未使用宏观指标时间序列）**\n\n---\n\n## 一、核心结论\n\n过去一周 0700.HK 的定价由两股反向力量主导：\n\n- **压制项**：美国准备敲定\"远程算力\"新规（禁止中国 AI 公司通过海外数据中心间接获取先进芯片），叠加 Nvidia 管理层危机引发的\"芯片流向中国\"审查，直接打在腾讯 AI 资本开支叙事上；同时 Oracle 放弃约 70 亿美元与腾讯的芯片租赁交易，从供给侧暴露了腾讯算力采购的脆弱性。\n- **支撑项**：估值处于低位（前瞻 PE 约 10.9 倍、TTM PE 13.6 倍），资金正从美国 AI 硬件轮动至便宜的中国互联网资产，腾讯云首次进入 Gartner 边缘分发平台魔力象限\"领导者\"，且 11 月 18 日三季报是明确的正向催化剂。\n\n宏观上出现了一个对港股 AI 资产非常不利的转折：**通胀数据偏热 → 长端收益率跳升 → 12 月议息会议出现\"大幅加息\"讨论**，Polymarket 上\"2026 年一次都不降息\"的概率高达 98%。这解释了为什么\"便宜\"并没有立刻转化为股价弹性。\n\n**判断：事件驱动的观望期，不是趋势加仓期。** 11 月 18 日财报前不宜追高，但 380 港元下方的估值中枢对中期资金有吸引力。\n\n---\n\n## 二、过去一周公司相关新闻（按影响排序）\n\n### 1. 美国拟敲定\"远程 AI 算力\"规则 —— 本周最大利空\n据报道（The Information 于周三引述两名知情人士，Investing.com 转载），美国商务部正准备敲定规则，阻止中国 AI 企业通过位于其他国家的数据中心远程获取先进 AI 芯片。消息落地后，周四阿里巴巴（HK:9988）与腾讯（HK:0700）双双下跌，**腾讯跌约 2%，阿里跌幅更深**（Investing.com，`https://finance.yahoo.com/technology/ai/articles/alibaba-tencent-shares-fall-report-054436336.html`；GuruFocus 明确指出该消息距腾讯 11 月 18 日财报不足一周，`https://finance.yahoo.com/markets/stocks/articles/tencent-stocks-slip-2-u-161708956.html`）。\n\n**为什么这条最重要**：过去两年中国大模型公司（含腾讯混元）规避出口管制的主要路径就是\"租用境外算力\"。规则从\"卖不卖芯片\"升级为\"用不用得到算力\"，把监管风险从硬件贸易层面推进到云服务层面。这不仅是成本问题，而是训练与推理的**可用性**问题——对估值的影响是非线性的。\n\n### 2. Nvidia 领导层危机的外溢\n周四美股走弱，Nvidia 股价因 CEO 黄仁勋辞职而下跌（Reuters，`https://finance.yahoo.com/markets/stocks/articles/asian-stocks-fragile-nvidia-plummets-015524144.html`；The Independent 报道其辞职与其与一名被指为中国情报资产的人士的关系有关，`https://www.independent.co.uk/tech/nvidia-share-price-huang-ceo-b3083807.html`）。同期有报道称与北京情报资产相关的网络获得了约 24 万颗受限 GPU（The Information 经 GuruFocus 转述，`https://finance.yahoo.com/markets/stocks/articles/nvidia-stocks-slide-4-43-175809767.html`）。周五中国 AI 股再度承压（Investing.com，`https://finance.yahoo.com/technology/ai/articles/china-ai-stocks-tumble-nvidia-064035259.html`）；Barron's 直接以\"黄仁勋的离开对阿里和中国是坏消息\"为题，讨论中资企业与美国技术的关联将被更严格审视（`https://www.barrons.com/articles/nvidia-alibaba-tencent-china-stocks-462175ef`）。\n\n**推论（非事实）**：政治压力上升会提高\"远程算力\"规则以最严版本落地的概率，也提高了未来针对云服务的次级制裁风险。\n\n### 3. Oracle 放弃约 70 亿美元腾讯芯片租赁\n多篇报道称 Oracle 取消了与腾讯估算 70 亿美元规模的芯片租赁交易，随后 Microsoft 也在终止 2023 年向 Oracle 租用 AI 算力的协议（TIKR，`https://www.tikr.com/blog/oracle-just-walked...` 对应 `https://www.barchart.com/story/news/8724636/oracle-just-walked-away-from-a-7-billion-tencent-deal-heres-what-it-means-for-orcl-stock`；`https://www.tikr.com/blog/oracle-lost-a-7-billion-tencent-deal-and-a-microsoft-contract-in-3-days-sell-or-load-up`）。Oracle CFO 随后对 CNBC 表示公司将在 2028 财年下半年实现正现金流、2029 财年自由现金流超 300 亿美元（TIKR，`https://www.tikr.com/blog/oracle-cfo-promises-30-billion-plus-in-free-cash-flow-by-fiscal-2029-after-a-70-plunge`）。\n\n**双向解读**：短期是腾讯算力采购受阻的确认信号；中期则说明腾讯没有把自己锁进高价的第三方长约——在算力价格与地缘风险都高度不确定时，放弃这笔交易也可能是审慎的资本配置。不可只按空头叙事解读。\n\n### 4. 正面：Gartner 首次边缘分发平台魔力象限\"领导者\"\n腾讯云在 Gartner 首个 Edge Distribution Platforms 魔力象限中被评为 Leader，评估范围覆盖 CDN 与应用加速（Simply Wall St.，`https://finance.yahoo.com/technology/ai/articles/tencent-sehk-700-lands-gartner-161217261.html`）。这是云业务在**非 GPU 依赖型**收入上的定位改善，对毛利率结构是边际正面。\n\n### 5. 资金面：从美国 AI 硬件轮动至中国互联网\nTIKR 指出阿里一周涨 12%（苹果在中国 AI 上线中选择 Qwen 之后），资金正从美国 AI 硬件撤出、流入阿里与腾讯这类低估值中国互联网股（`https://www.tikr.com/blog/alibaba-just-gained-12-in-a-week-as-the-nasdaq-fell-take-profits-or-buy-more`）。高盛在 Q3 财报季前将中国互联网列为首选，理由是游戏、云计算、AI 及交易平台利润率改善（Investing.com，`https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-names-top-china-064508768.html`）。\n\n**需要警惕的对照数据**：Simply Wall St. 称以 2025 年 11 月 10 日为起点、持有腾讯一年（含股息）回报为 **-35.0%**，且指出\"利润增长但股价下跌\"（`https://finance.yahoo.com/markets/stocks/articles/tencent-shares-slid-even-though-150857001.html`）。这说明当前的低估值是**估值倍数持续压缩**的结果，而不是盈利恶化——市场在给监管与地缘风险打折。\n\n### 6. 政治日历\n路透报道深圳将于下周举办 APEC 相关活动，美国总统特朗普等领导人将出席，城市宣传语为\"Gather in Shenzhen, Witness the Wonders\"（`https://finance.yahoo.com/news/apec-host-shenzhen-china-next-050331673.html`）。**含义**：短期内中美双方都有维持对话的动机，这降低了未来两周内出现极端升级的概率；但反之，峰会后的\"松绑预期落空\"是 11 月下旬的主要回撤风险。\n\n---\n\n## 三、宏观背景：本周出现了关键的利率路径反转\n\n- **通胀偏热、长端跳升**：10 年期美债收益率因通胀数据偏热而跳涨，加息预期升温（Yahoo Finance AlphaCheck，`https://finance.yahoo.com/markets/article/10-year-treasury-yield-jumps-as-odds-of-rate-hike-rise-amid-hot-inflation-print-alphacheck-144120699.html`；`https://finance.yahoo.com/markets/article/copy-tech-rises-coreweave-results-reignite-ai-trade-alphacheck-150655549.html`）。\n- **政策方向是\"加息\"而非\"降息\"**：Barchart 报道 12 月议息会议正在酝酿\"大幅加息\"（jumbo rate hike）的辩论，因债券收益率在通胀数据后大幅上行（`https://finance.yahoo.com/economy/policy/articles/jumbo-rate-hike-debate-brewing-174127330.html`）。白银日报亦以\"市场为再一次加息做准备\"为标题（`https://finance.yahoo.com/personal-finance/investing/article/silver-prices-today-thursday-november-12-2026-silver-holds-at-open-as-markets-prep-for-another-fed-rate-increase-123331268.html`）。\n- **预测市场定价（Polymarket，2026-11-13）**：\n  - \"2026 年不降息\"：**Yes 98%**（成交额 961 万美元，一周 +0.4pp）——利率路径已基本无悬念。\n  - \"美国在 2026 年底前陷入衰退\"：**Yes 2%**（成交额 248 万美元，一周 **-2.2pp**）。\n  - 各档降息次数市场（6/9/10/11 次）报价均在 0.05% 附近，属于深度价外。\n- **贵金属反映实际利率上行**：黄金在一度跌至 13 个月低点后回升至 3,900 美元上方，周内表现受美联储预期拖累（`https://finance.yahoo.com/markets/commodities/articles/gold-recovers-above-3-900-100822733.html`；WSJ 报道金价跌至一年多以低点、美元与收益率走强，`https://finance.yahoo.com/m/bf3a3bef-c399-3a94-a3c8-54c6fe44f7a4/gold-falls-to-more-than.html`）。\n\n**对 0700.HK 的传导**：\n\n1. **折现率**：港股成长股对美债长端最敏感。收益率上行直接压制 10–13 倍 PE 的\"合理估值\"上限，这是本周腾讯\"便宜却涨不动\"的主因。\n2. **\"衰退概率 2%、加息概率上升\"的组合 = 无风险利率上行 + 盈利不衰退**。这个组合对高质量现金流公司（腾讯自由现金流约 1,185 亿元人民币，见快照）在**绝对收益**上并非灾难，但对**估值扩张**极为不利。腾讯的回报因此必须来自盈利与回购，而非倍数修复。\n3. **港币/流动性**：美元利率上行通常收紧香港银行体系流动性、抬升 HIBOR，对南向资金成本与港股风险偏好形成拖累。这是我给\"财报前不追高\"的主要宏观理由。\n4. **无衰退 + 加息 = 美元偏强**，对人民币计价盈利的港股形成汇兑层面的负面（报表币种为 CNY，报价为 HKD，快照明确两者不同）。\n\n**诚实标注**：本次运行 FRED 未配置，我没有 CPI、核心 PCE、失业率、联邦基金利率的具体读数，上述宏观判断基于新闻文本与预测市场隐含概率，**不含宏观数据点**。做仓位决策前应以官方数据复核。\n\n---\n\n## 四、基本面锚（快照 f56c6debb8b9477c9e2a7e237a517a96，来源 Yahoo Finance / yfinance，取数时间 2026-11-13）\n\n| 项目 | 数值 | 口径 |\n|---|---|---|\n| 股价 / 市值 | HK$386.60 / 约 HK$3.48 万亿 | 报价币种 HKD |\n| 财报币种 | CNY | 与报价币种不同，不可直接相加 |\n| TTM\n\n## 新闻工具返回的原始来源\n- [www.tikr.com](https://www.tikr.com/blog/oracle-now-gets-16-billion-a-year-per-gigawatt-up-from-10-billion?ref=yahoofinance&tlnk=yf-261113-wx42c469)\n- [finance.yahoo.com](https://finance.yahoo.com/technology/ai/articles/china-ai-stocks-tumble-nvidia-064035259.html)\n- [www.barrons.com](https://www.barrons.com/articles/nvidia-alibaba-tencent-china-stocks-462175ef?siteid=yhoof2&yptr=yahoo)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/asian-stocks-fragile-nvidia-plummets-015524144.html)\n- [www.tikr.com](https://www.tikr.com/blog/dbss-290-oracle-target-still-implies-126-upside-even-after-a-cut?ref=yahoofinance&tlnk=yf-261112-cv8xpwhw)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/tencent-stocks-slip-2-u-161708956.html)\n- [www.independent.co.uk](https://www.independent.co.uk/tech/nvidia-share-price-huang-ceo-b3083807.html)\n- [finance.yahoo.com](https://finance.yahoo.com/technology/ai/articles/alibaba-tencent-shares-fall-report-054436336.html)\n- [finance.yahoo.com](https://finance.yahoo.com/news/apec-host-shenzhen-china-next-050331673.html)\n- [finance.yahoo.com](https://finance.yahoo.com/technology/ai/articles/u-finalizing-rule-block-china-042215614.html)\n- [www.tikr.com](https://www.tikr.com/blog/oracle-cfo-promises-30-billion-plus-in-free-cash-flow-by-fiscal-2029-after-a-70-plunge?ref=yahoofinance&tlnk=yf-261111-fv69mxwf)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/nvidia-stocks-slide-4-43-175809767.html)\n- [finance.yahoo.com](https://finance.yahoo.com/technology/ai/articles/tencent-sehk-700-lands-gartner-161217261.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/visa-v-stock-could-reasonable-151103730.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/tencent-shares-slid-even-though-150857001.html)\n- [www.tikr.com](https://www.tikr.com/blog/oracle-lost-a-7-billion-tencent-deal-and-a-microsoft-contract-in-3-days-sell-or-load-up?ref=yahoofinance&tlnk=yf-261110-cf749w5c)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-names-top-china-064508768.html)\n- [www.tikr.com](https://www.tikr.com/blog/the-stock-market-is-petrified-of-oracles-balance-sheet-as-microsoft-walks-away?ref=yahoofinance&tlnk=yf-261109-qqf46fhh)\n- [www.barchart.com](https://www.barchart.com/story/news/8724636/oracle-just-walked-away-from-a-7-billion-tencent-deal-heres-what-it-means-for-orcl-stock)\n- [www.tikr.com](https://www.tikr.com/blog/alibaba-just-gained-12-in-a-week-as-the-nasdaq-fell-take-profits-or-buy-more?ref=yahoofinance&tlnk=yf-261107-9466567f)\n- [finance.yahoo.com](https://finance.yahoo.com/personal-finance/investing/article/silver-price-today-friday-november-13-2026-silver-opens-down-3-slides-further-143536840.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/commodities/articles/silver-elephant-mining-submit-environmental-140910795.html)\n- [finance.yahoo.com](https://finance.yahoo.com/news/lunr-reports-q3-2026-results-140000984.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/commodities/articles/silver-elephant-submit-environmental-impact-133000093.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/5-things-investors-know-friday-132632191.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/modern-mining-begin-trading-today-130000455.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/abrasilver-further-strengthens-leadership-team-123000896.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/commodities/articles/cerrado-gold-acquires-past-producing-122600200.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/stocks/articles/triumph-gold-announces-strategic-review-113000978.html)\n- [finance.yahoo.com](https://finance.yahoo.com/markets/commodities/articles/americas-gold-silver-reports-financial-113000280.html)"
   },
   "retried_at": "2026-11-14T00:34:54.689856+08:00",
   "rating": "Overweight",

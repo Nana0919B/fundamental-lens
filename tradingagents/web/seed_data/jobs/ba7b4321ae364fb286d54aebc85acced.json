@@ -8,6 +8,4156 @@
   "created_at": "2026-11-13T14:45:57.842041+08:00",
   "status": "completed",
   "phase": "分析完成",
+  "data": {
+    "symbol": "INTC",
+    "profile": {
+      "companyOfficers": [
+        {
+          "maxAge": 1,
+          "name": "Mr. Lip-Bu  Tan",
+          "age": 66,
+          "title": "CEO & Director",
+          "yearBorn": 1959,
+          "fiscalYear": 2025,
+          "totalPay": 3828200,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. David A. Zinsner",
+          "age": 56,
+          "title": "Executive VP, CFO and Principal Financial & Accounting Officer",
+          "yearBorn": 1969,
+          "fiscalYear": 2025,
+          "totalPay": 4218200,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Nagasubramaniyan  Chandrasekaran",
+          "age": 50,
+          "title": "Executive VP, Chief Technology and Operations Officer & GM of Intel Foundry",
+          "yearBorn": 1975,
+          "fiscalYear": 2025,
+          "totalPay": 3473100,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Pushkar  Ranade Ph.D.",
+          "title": "CTO & Chief of Staff to the CEO",
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Ms. Cynthia A. Stoddard",
+          "age": 68,
+          "title": "Senior VP & Chief Information Officer",
+          "yearBorn": 1957,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. John William Pitzer",
+          "title": "Corporate Vice President of Corporate Planning & Investor Relations",
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Ms. Aparna  Bawa Esq.",
+          "age": 46,
+          "title": "Executive VP and Chief Legal & People Officer",
+          "yearBorn": 1979,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Ms. Annie Shea Weckesser",
+          "title": "Senior VP and Chief Marketing & Communications Officer",
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. Dean E. Jarnac Jr.",
+          "age": 52,
+          "title": "Executive VP & Chief Sales Officer",
+          "yearBorn": 1973,
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        },
+        {
+          "maxAge": 1,
+          "name": "Mr. James A. Murray",
+          "title": "Chief Antitrust Counsel and VP of Law & Policy Group",
+          "fiscalYear": 2025,
+          "exercisedValue": 0,
+          "unexercisedValue": 0
+        }
+      ],
+      "heldPercentInsiders": 0.13913,
+      "heldPercentInstitutions": 0.64001,
+      "mostRecentQuarter": 1790380800.0,
+      "address1": "2200 Mission College Boulevard",
+      "zip": "95054-1549",
+      "phone": "408 765 8080",
+      "exchange": "NMS",
+      "longName": "Intel Corporation",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "country": "United States",
+      "city": "Santa Clara",
+      "website": "https://www.intel.com",
+      "longBusinessSummary": "Intel Corporation designs, develops, manufactures, markets, sells, and services computing and related end products and services in the United States, Ireland, Israel, and internationally. It operates through three segments: CCG, DCAI, and Intel Foundry. The company offers client computing group products, including client and commercial CPUs, discrete client GPUs, edge computing, and connectivity products; data center and AI products, such as server CPUs, discrete GPUs, and networking products; and semiconductors comprising wafer fabrication, substrates, and other related products and services. It also provides driving assistance and self-driving solutions; and develops and manufactures multi-beam mask writing tools. The company sells its products through sales organizations, distributors, resellers, retailers, and OEM partners. It serves original equipment manufacturers, original design manufacturers, cloud service providers, and other manufacturers and service providers. Intel Corporation has a strategic collaboration with Infosys Limited to develop a multi-layer AI fabric that unifies infrastructure, models, data, applications, and workflows into a composable and agent-ready ecosystem. The company was incorporated in 1968 and is headquartered in Santa Clara, California.",
+      "fullTimeEmployees": 81100.0,
+      "currency": "USD",
+      "financialCurrency": "USD",
+      "marketCap": 325278007296.0,
+      "currentPrice": 61.2,
+      "trailingPE": null,
+      "forwardPE": 34.18116,
+      "priceToBook": 2.8279653,
+      "trailingEps": -2.35,
+      "returnOnEquity": -0.0962,
+      "returnOnAssets": 0.01783,
+      "grossMargins": 0.40152,
+      "operatingMargins": 0.10317001,
+      "profitMargins": -0.20089,
+      "revenueGrowth": 0.209,
+      "earningsGrowth": -0.327,
+      "totalRevenue": 59891998720.0,
+      "netIncomeToCommon": -12032000000.0,
+      "freeCashflow": 806499968.0,
+      "totalCash": 54004998144.0,
+      "totalDebt": 50133999616.0,
+      "currentRatio": 2.208,
+      "debtToEquity": 38.108,
+      "sharesOutstanding": 5315000000.0,
+      "dividendYield": 0.0
+    },
+    "statements": {
+      "annual": {
+        "income": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Tax Effect Of Unusual Items",
+              "values": [
+                473300700.0,
+                -1917892900.0,
+                26285400.0,
+                1359154600.0
+              ]
+            },
+            {
+              "name": "Tax Rate For Calcs",
+              "values": [
+                0.2557,
+                0.2563,
+                0.2577,
+                0.2581
+              ]
+            },
+            {
+              "name": "Normalized EBITDA",
+              "values": [
+                12503000000.0,
+                8686000000.0,
+                11140000000.0,
+                16033000000.0
+              ]
+            },
+            {
+              "name": "Total Unusual Items",
+              "values": [
+                1851000000.0,
+                -7483000000.0,
+                102000000.0,
+                5266000000.0
+              ]
+            },
+            {
+              "name": "Total Unusual Items Excluding Goodwill",
+              "values": [
+                1851000000.0,
+                -7483000000.0,
+                102000000.0,
+                5266000000.0
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operation Net Minority Interest",
+              "values": [
+                -267000000.0,
+                -18756000000.0,
+                1689000000.0,
+                8014000000.0
+              ]
+            },
+            {
+              "name": "Reconciled Depreciation",
+              "values": [
+                11706000000.0,
+                11379000000.0,
+                9602000000.0,
+                13035000000.0
+              ]
+            },
+            {
+              "name": "Reconciled Cost Of Revenue",
+              "values": [
+                34478000000.0,
+                35756000000.0,
+                32517000000.0,
+                36188000000.0
+              ]
+            },
+            {
+              "name": "EBITDA",
+              "values": [
+                14354000000.0,
+                1203000000.0,
+                11242000000.0,
+                21299000000.0
+              ]
+            },
+            {
+              "name": "EBIT",
+              "values": [
+                2648000000.0,
+                -10176000000.0,
+                1640000000.0,
+                8264000000.0
+              ]
+            },
+            {
+              "name": "Net Interest Income",
+              "values": [
+                -271000000.0,
+                981000000.0,
+                629000000.0,
+                166000000.0
+              ]
+            },
+            {
+              "name": "Interest Expense",
+              "values": [
+                1091000000.0,
+                1034000000.0,
+                878000000.0,
+                496000000.0
+              ]
+            },
+            {
+              "name": "Interest Income",
+              "values": [
+                1007000000.0,
+                1805000000.0,
+                1335000000.0,
+                589000000.0
+              ]
+            },
+            {
+              "name": "Normalized Income",
+              "values": [
+                -1644699300.0,
+                -13190892900.0,
+                1613285400.0,
+                4107154600.0
+              ]
+            },
+            {
+              "name": "Net Income From Continuing And Discontinued Operation",
+              "values": [
+                -267000000.0,
+                -18756000000.0,
+                1689000000.0,
+                8014000000.0
+              ]
+            },
+            {
+              "name": "Total Expenses",
+              "values": [
+                52876000000.0,
+                57809000000.0,
+                54197000000.0,
+                60718000000.0
+              ]
+            },
+            {
+              "name": "Total Operating Income As Reported",
+              "values": [
+                -2214000000.0,
+                -11678000000.0,
+                93000000.0,
+                2334000000.0
+              ]
+            },
+            {
+              "name": "Diluted Average Shares",
+              "values": [
+                4530000000.0,
+                4280000000.0,
+                4212000000.0,
+                4123000000.0
+              ]
+            },
+            {
+              "name": "Basic Average Shares",
+              "values": [
+                4530000000.0,
+                4280000000.0,
+                4190000000.0,
+                4108000000.0
+              ]
+            },
+            {
+              "name": "Diluted EPS",
+              "values": [
+                -0.06,
+                -4.38,
+                0.4,
+                1.94
+              ]
+            },
+            {
+              "name": "Basic EPS",
+              "values": [
+                -0.06,
+                -4.38,
+                0.4,
+                1.95
+              ]
+            },
+            {
+              "name": "Diluted NI Availto Com Stockholders",
+              "values": [
+                -267000000.0,
+                -18756000000.0,
+                1689000000.0,
+                8014000000.0
+              ]
+            },
+            {
+              "name": "Net Income Common Stockholders",
+              "values": [
+                -267000000.0,
+                -18756000000.0,
+                1689000000.0,
+                8014000000.0
+              ]
+            },
+            {
+              "name": "Net Income",
+              "values": [
+                -267000000.0,
+                -18756000000.0,
+                1689000000.0,
+                8014000000.0
+              ]
+            },
+            {
+              "name": "Minority Interests",
+              "values": [
+                -293000000.0,
+                477000000.0,
+                14000000.0,
+                -3000000.0
+              ]
+            },
+            {
+              "name": "Net Income Including Noncontrolling Interests",
+              "values": [
+                26000000.0,
+                -19233000000.0,
+                1675000000.0,
+                8017000000.0
+              ]
+            },
+            {
+              "name": "Net Income Continuous Operations",
+              "values": [
+                26000000.0,
+                -19233000000.0,
+                1675000000.0,
+                8017000000.0
+              ]
+            },
+            {
+              "name": "Tax Provision",
+              "values": [
+                1531000000.0,
+                8023000000.0,
+                -913000000.0,
+                -249000000.0
+              ]
+            },
+            {
+              "name": "Pretax Income",
+              "values": [
+                1557000000.0,
+                -11210000000.0,
+                762000000.0,
+                7768000000.0
+              ]
+            },
+            {
+              "name": "Other Income Expense",
+              "values": [
+                1851000000.0,
+                -7483000000.0,
+                102000000.0,
+                5266000000.0
+              ]
+            },
+            {
+              "name": "Special Income Charges",
+              "values": [
+                2833000000.0,
+                -7317000000.0,
+                -152000000.0,
+                808000000.0
+              ]
+            },
+            {
+              "name": "Gain On Sale Of Business",
+              "values": [
+                5324000000.0,
+                0.0,
+                0.0,
+                1000000000.0
+              ]
+            },
+            {
+              "name": "Other Special Charges",
+              "values": [
+                -121000000.0,
+                858000000.0,
+                -329000000.0,
+                -1187000000.0
+              ]
+            },
+            {
+              "name": "Write Off",
+              "values": [
+                822000000.0,
+                3978000000.0,
+                259000000.0,
+                341000000.0
+              ]
+            },
+            {
+              "name": "Restructuring And Mergern Acquisition",
+              "values": [
+                1790000000.0,
+                2481000000.0,
+                222000000.0,
+                1038000000.0
+              ]
+            },
+            {
+              "name": "Gain On Sale Of Security",
+              "values": [
+                -982000000.0,
+                -166000000.0,
+                254000000.0,
+                4458000000.0
+              ]
+            },
+            {
+              "name": "Net Non Operating Interest Income Expense",
+              "values": [
+                -271000000.0,
+                981000000.0,
+                629000000.0,
+                166000000.0
+              ]
+            },
+            {
+              "name": "Total Other Finance Cost",
+              "values": [
+                187000000.0,
+                -210000000.0,
+                -172000000.0,
+                -73000000.0
+              ]
+            },
+            {
+              "name": "Interest Expense Non Operating",
+              "values": [
+                1091000000.0,
+                1034000000.0,
+                878000000.0,
+                496000000.0
+              ]
+            },
+            {
+              "name": "Interest Income Non Operating",
+              "values": [
+                1007000000.0,
+                1805000000.0,
+                1335000000.0,
+                589000000.0
+              ]
+            },
+            {
+              "name": "Operating Income",
+              "values": [
+                -23000000.0,
+                -4708000000.0,
+                31000000.0,
+                2336000000.0
+              ]
+            },
+            {
+              "name": "Operating Expense",
+              "values": [
+                18398000000.0,
+                22053000000.0,
+                21680000000.0,
+                24530000000.0
+              ]
+            },
+            {
+              "name": "Research And Development",
+              "values": [
+                13774000000.0,
+                16546000000.0,
+                16046000000.0,
+                17528000000.0
+              ]
+            },
+            {
+              "name": "Selling General And Administration",
+              "values": [
+                4624000000.0,
+                5507000000.0,
+                5634000000.0,
+                7002000000.0
+              ]
+            },
+            {
+              "name": "Gross Profit",
+              "values": [
+                18375000000.0,
+                17345000000.0,
+                21711000000.0,
+                26866000000.0
+              ]
+            },
+            {
+              "name": "Cost Of Revenue",
+              "values": [
+                34478000000.0,
+                35756000000.0,
+                32517000000.0,
+                36188000000.0
+              ]
+            },
+            {
+              "name": "Total Revenue",
+              "values": [
+                52853000000.0,
+                53101000000.0,
+                54228000000.0,
+                63054000000.0
+              ]
+            },
+            {
+              "name": "Operating Revenue",
+              "values": [
+                52853000000.0,
+                53101000000.0,
+                54228000000.0,
+                63054000000.0
+              ]
+            }
+          ]
+        },
+        "balance": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31",
+            "2021-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Treasury Shares Number",
+              "values": [
+                null,
+                null,
+                0.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Ordinary Shares Number",
+              "values": [
+                4994000000.0,
+                4330000000.0,
+                4228000000.0,
+                4137000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Share Issued",
+              "values": [
+                4994000000.0,
+                4330000000.0,
+                4228000000.0,
+                4137000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Debt",
+              "values": [
+                32320000000.0,
+                41762000000.0,
+                42187000000.0,
+                30863000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Debt",
+              "values": [
+                46585000000.0,
+                50011000000.0,
+                49266000000.0,
+                42007000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tangible Book Value",
+              "values": [
+                87597000000.0,
+                70886000000.0,
+                73410000000.0,
+                67814000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Invested Capital",
+              "values": [
+                160866000000.0,
+                149281000000.0,
+                154856000000.0,
+                143430000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Working Capital",
+              "values": [
+                32113000000.0,
+                11658000000.0,
+                15216000000.0,
+                18252000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Tangible Assets",
+              "values": [
+                87597000000.0,
+                70886000000.0,
+                73410000000.0,
+                67814000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock Equity",
+              "values": [
+                114281000000.0,
+                99270000000.0,
+                105590000000.0,
+                101423000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Capitalization",
+              "values": [
+                158367000000.0,
+                145552000000.0,
+                152568000000.0,
+                139107000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Equity Gross Minority Interest",
+              "values": [
+                126360000000.0,
+                105032000000.0,
+                109965000000.0,
+                103286000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Minority Interest",
+              "values": [
+                12079000000.0,
+                5762000000.0,
+                4375000000.0,
+                1863000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Stockholders Equity",
+              "values": [
+                114281000000.0,
+                99270000000.0,
+                105590000000.0,
+                101423000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gains Losses Not Affecting Retained Earnings",
+              "values": [
+                113000000.0,
+                -711000000.0,
+                -215000000.0,
+                -562000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Equity Adjustments",
+              "values": [
+                113000000.0,
+                -711000000.0,
+                -215000000.0,
+                -562000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Retained Earnings",
+              "values": [
+                48983000000.0,
+                49032000000.0,
+                69156000000.0,
+                70405000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Capital Stock",
+              "values": [
+                65185000000.0,
+                50949000000.0,
+                36649000000.0,
+                31580000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock",
+              "values": [
+                65185000000.0,
+                50949000000.0,
+                36649000000.0,
+                31580000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Preferred Stock",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Liabilities Net Minority Interest",
+              "values": [
+                85069000000.0,
+                91453000000.0,
+                81607000000.0,
+                78817000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Liabilities Net Minority Interest",
+              "values": [
+                53494000000.0,
+                55787000000.0,
+                53554000000.0,
+                46662000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Current Liabilities",
+              "values": [
+                9408000000.0,
+                9505000000.0,
+                6576000000.0,
+                8978000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tradeand Other Payables Non Current",
+              "values": [
+                null,
+                null,
+                null,
+                3796000000.0,
+                4305000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Liabilities",
+              "values": [
+                null,
+                null,
+                null,
+                202000000.0,
+                2667000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Revenue",
+              "values": [
+                null,
+                null,
+                null,
+                null,
+                185000000.0
+              ]
+            },
+            {
+              "name": "Non Current Deferred Taxes Liabilities",
+              "values": [
+                null,
+                null,
+                null,
+                202000000.0,
+                2667000000.0
+              ]
+            },
+            {
+              "name": "Long Term Debt And Capital Lease Obligation",
+              "values": [
+                44086000000.0,
+                46282000000.0,
+                46978000000.0,
+                37684000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt",
+              "values": [
+                44086000000.0,
+                46282000000.0,
+                46978000000.0,
+                37684000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Liabilities",
+              "values": [
+                31575000000.0,
+                35666000000.0,
+                28053000000.0,
+                32155000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Liabilities",
+              "values": [
+                null,
+                null,
+                -12000000.0,
+                44000000.0,
+                991000000.0
+              ]
+            },
+            {
+              "name": "Current Deferred Liabilities",
+              "values": [
+                null,
+                null,
+                2900000000.0,
+                2400000000.0,
+                2800000000.0
+              ]
+            },
+            {
+              "name": "Current Debt And Capital Lease Obligation",
+              "values": [
+                2499000000.0,
+                3729000000.0,
+                2288000000.0,
+                4323000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Debt",
+              "values": [
+                2499000000.0,
+                3729000000.0,
+                2288000000.0,
+                4323000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Borrowings",
+              "values": [
+                2499000000.0,
+                3729000000.0,
+                2288000000.0,
+                423000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Commercial Paper",
+              "values": [
+                null,
+                null,
+                null,
+                3900000000.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Pensionand Other Post Retirement Benefit Plans Current",
+              "values": [
+                3990000000.0,
+                3343000000.0,
+                3655000000.0,
+                4084000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Payables And Accrued Expenses",
+              "values": [
+                25086000000.0,
+                28594000000.0,
+                22110000000.0,
+                21304000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Accrued Expenses",
+              "values": [
+                14600000000.0,
+                14282000000.0,
+                12425000000.0,
+                9458000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Payables",
+              "values": [
+                10486000000.0,
+                14312000000.0,
+                9685000000.0,
+                11846000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Tax Payable",
+              "values": [
+                604000000.0,
+                1756000000.0,
+                1107000000.0,
+                2251000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Income Tax Payable",
+              "values": [
+                604000000.0,
+                1756000000.0,
+                1107000000.0,
+                2251000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Accounts Payable",
+              "values": [
+                9882000000.0,
+                12556000000.0,
+                8578000000.0,
+                9595000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Assets",
+              "values": [
+                211429000000.0,
+                196485000000.0,
+                191572000000.0,
+                182103000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Assets",
+              "values": [
+                147741000000.0,
+                149161000000.0,
+                148303000000.0,
+                131696000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Current Assets",
+              "values": [
+                7131000000.0,
+                7475000000.0,
+                13647000000.0,
+                11315000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Investments And Advances",
+              "values": [
+                8512000000.0,
+                5383000000.0,
+                5829000000.0,
+                5912000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Investments",
+              "values": [
+                null,
+                null,
+                null,
+                null,
+                840000000.0
+              ]
+            },
+            {
+              "name": "Investmentin Financial Assets",
+              "values": [
+                8512000000.0,
+                5383000000.0,
+                5829000000.0,
+                5902000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Available For Sale Securities",
+              "values": [
+                8512000000.0,
+                5383000000.0,
+                5829000000.0,
+                5902000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Equity Investment",
+              "values": [
+                null,
+                null,
+                5000000.0,
+                10000000.0,
+                16000000.0
+              ]
+            },
+            {
+              "name": "Investments In Other Ventures Under Equity Method",
+              "values": [
+                null,
+                null,
+                null,
+                10000000.0,
+                16000000.0
+              ]
+            },
+            {
+              "name": "Goodwill And Other Intangible Assets",
+              "values": [
+                26684000000.0,
+                28384000000.0,
+                32180000000.0,
+                33609000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Intangible Assets",
+              "values": [
+                2772000000.0,
+                3691000000.0,
+                4589000000.0,
+                6018000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Goodwill",
+              "values": [
+                23912000000.0,
+                24693000000.0,
+                27591000000.0,
+                27591000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net PPE",
+              "values": [
+                105414000000.0,
+                107919000000.0,
+                96647000000.0,
+                80860000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Accumulated Depreciation",
+              "values": [
+                -106464000000.0,
+                -102193000000.0,
+                -98010000000.0,
+                -93386000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gross PPE",
+              "values": [
+                211878000000.0,
+                210112000000.0,
+                194657000000.0,
+                174246000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Construction In Progress",
+              "values": [
+                34543000000.0,
+                50418000000.0,
+                43442000000.0,
+                36727000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Machinery Furniture Equipment",
+              "values": [
+                111940000000.0,
+                103150000000.0,
+                100033000000.0,
+                92711000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Properties",
+              "values": [
+                65395000000.0,
+                56544000000.0,
+                51182000000.0,
+                44808000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Current Assets",
+              "values": [
+                63688000000.0,
+                47324000000.0,
+                43269000000.0,
+                50407000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Assets",
+              "values": [
+                10815000000.0,
+                9586000000.0,
+                3706000000.0,
+                4712000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Assets Held For Sale Current",
+              "values": [
+                null,
+                null,
+                null,
+                45000000.0,
+                6942000000.0
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                11618000000.0,
+                12198000000.0,
+                11127000000.0,
+                13224000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Finished Goods",
+              "values": [
+                2785000000.0,
+                3422000000.0,
+                3758000000.0,
+                4142000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Work In Process",
+              "values": [
+                7840000000.0,
+                7432000000.0,
+                6203000000.0,
+                7565000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Raw Materials",
+              "values": [
+                993000000.0,
+                1344000000.0,
+                1166000000.0,
+                1517000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Receivables",
+              "values": [
+                3839000000.0,
+                3478000000.0,
+                3402000000.0,
+                4133000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Accounts Receivable",
+              "values": [
+                3839000000.0,
+                3478000000.0,
+                3402000000.0,
+                4133000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Cash Equivalents And Short Term Investments",
+              "values": [
+                37416000000.0,
+                22062000000.0,
+                25034000000.0,
+                28338000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Short Term Investments",
+              "values": [
+                23151000000.0,
+                13813000000.0,
+                17955000000.0,
+                17194000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash And Cash Equivalents",
+              "values": [
+                14265000000.0,
+                8249000000.0,
+                7079000000.0,
+                11144000000.0,
+                null
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "periods": [
+            "2025-12-31",
+            "2024-12-31",
+            "2023-12-31",
+            "2022-12-31",
+            "2021-12-31"
+          ],
+          "rows": [
+            {
+              "name": "Free Cash Flow",
+              "values": [
+                -4949000000.0,
+                -15656000000.0,
+                -14279000000.0,
+                -9411000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Repurchase Of Capital Stock",
+              "values": [
+                null,
+                null,
+                0.0,
+                0.0,
+                -2415000000.0
+              ]
+            },
+            {
+              "name": "Repayment Of Debt",
+              "values": [
+                -7243000000.0,
+                -9637000000.0,
+                -4367000000.0,
+                -4984000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Issuance Of Debt",
+              "values": [
+                3493000000.0,
+                10324000000.0,
+                11391000000.0,
+                10493000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Issuance Of Capital Stock",
+              "values": [
+                null,
+                12714000000.0,
+                1511000000.0,
+                1032000000.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Capital Expenditure",
+              "values": [
+                -14646000000.0,
+                -23944000000.0,
+                -25750000000.0,
+                -24844000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Paid Supplemental Data",
+              "values": [
+                1106000000.0,
+                987000000.0,
+                613000000.0,
+                459000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Income Tax Paid Supplemental Data",
+              "values": [
+                2299000000.0,
+                2202000000.0,
+                2621000000.0,
+                4282000000.0,
+                null
+              ]
+            },
+            {
+              "name": "End Cash Position",
+              "values": [
+                14712000000.0,
+                8249000000.0,
+                7079000000.0,
+                11144000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Beginning Cash Position",
+              "values": [
+                8249000000.0,
+                7079000000.0,
+                11144000000.0,
+                4827000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Changes In Cash",
+              "values": [
+                6463000000.0,
+                1170000000.0,
+                -4065000000.0,
+                6317000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Financing Cash Flow",
+              "values": [
+                11587000000.0,
+                11138000000.0,
+                8505000000.0,
+                1115000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Financing Activities",
+              "values": [
+                11587000000.0,
+                11138000000.0,
+                8505000000.0,
+                1115000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Other Financing Charges",
+              "values": [
+                1860000000.0,
+                11063000000.0,
+                3527000000.0,
+                626000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Proceeds From Stock Option Exercised",
+              "values": [
+                13477000000.0,
+                987000000.0,
+                1042000000.0,
+                977000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Dividends Paid",
+              "values": [
+                0.0,
+                -1599000000.0,
+                -3088000000.0,
+                -5997000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock Dividend Paid",
+              "values": [
+                0.0,
+                -1599000000.0,
+                -3088000000.0,
+                -5997000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Common Stock Issuance",
+              "values": [
+                null,
+                12714000000.0,
+                0.0,
+                1032000000.0,
+                -2415000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Payments",
+              "values": [
+                null,
+                null,
+                0.0,
+                0.0,
+                -2415000000.0
+              ]
+            },
+            {
+              "name": "Common Stock Issuance",
+              "values": [
+                null,
+                12714000000.0,
+                1511000000.0,
+                1032000000.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Net Issuance Payments Of Debt",
+              "values": [
+                -3750000000.0,
+                687000000.0,
+                7024000000.0,
+                5509000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Short Term Debt Issuance",
+              "values": [
+                0.0,
+                0.0,
+                -3944000000.0,
+                3945000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Short Term Debt Payments",
+              "values": [
+                -3493000000.0,
+                -7349000000.0,
+                -3944000000.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Short Term Debt Issuance",
+              "values": [
+                3493000000.0,
+                7349000000.0,
+                0.0,
+                3945000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Long Term Debt Issuance",
+              "values": [
+                -3750000000.0,
+                687000000.0,
+                10968000000.0,
+                1564000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt Payments",
+              "values": [
+                -3750000000.0,
+                -2288000000.0,
+                -423000000.0,
+                -4984000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt Issuance",
+              "values": [
+                0.0,
+                2975000000.0,
+                11391000000.0,
+                6548000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Investing Cash Flow",
+              "values": [
+                -14821000000.0,
+                -18256000000.0,
+                -24041000000.0,
+                -10231000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Investing Activities",
+              "values": [
+                -14821000000.0,
+                -18256000000.0,
+                -24041000000.0,
+                -10231000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Other Investing Changes",
+              "values": [
+                1929000000.0,
+                1118000000.0,
+                1574000000.0,
+                -1329000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Investment Purchase And Sale",
+              "values": [
+                -8261000000.0,
+                4570000000.0,
+                135000000.0,
+                10044000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Sale Of Investment",
+              "values": [
+                16058000000.0,
+                42510000000.0,
+                44549000000.0,
+                53691000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of Investment",
+              "values": [
+                -24319000000.0,
+                -37940000000.0,
+                -44414000000.0,
+                -43647000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Business Purchase And Sale",
+              "values": [
+                6157000000.0,
+                0.0,
+                0.0,
+                5898000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Sale Of Business",
+              "values": [
+                6157000000.0,
+                0.0,
+                0.0,
+                6579000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of Business",
+              "values": [
+                null,
+                -82000000.0,
+                -13000000.0,
+                -681000000.0,
+                -209000000.0
+              ]
+            },
+            {
+              "name": "Net PPE Purchase And Sale",
+              "values": [
+                -14646000000.0,
+                -23944000000.0,
+                -25750000000.0,
+                -24844000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of PPE",
+              "values": [
+                -14646000000.0,
+                -23944000000.0,
+                -25750000000.0,
+                -24844000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Cash Flow",
+              "values": [
+                9697000000.0,
+                8288000000.0,
+                11471000000.0,
+                15433000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Operating Activities",
+              "values": [
+                9697000000.0,
+                8288000000.0,
+                11471000000.0,
+                15433000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Working Capital",
+              "values": [
+                -1747000000.0,
+                1103000000.0,
+                -569000000.0,
+                339000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Other Working Capital",
+              "values": [
+                -2245000000.0,
+                1867000000.0,
+                -1982000000.0,
+                -990000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Payables And Accrued Expense",
+              "values": [
+                1085000000.0,
+                416000000.0,
+                -1415000000.0,
+                -1562000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Accrued Expense",
+              "values": [
+                788000000.0,
+                -218000000.0,
+                -614000000.0,
+                -1533000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Payable",
+              "values": [
+                297000000.0,
+                634000000.0,
+                -801000000.0,
+                -29000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Account Payable",
+              "values": [
+                297000000.0,
+                634000000.0,
+                -801000000.0,
+                -29000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Prepaid Assets",
+              "values": [
+                null,
+                null,
+                null,
+                -24000000.0,
+                -1583000000.0
+              ]
+            },
+            {
+              "name": "Change In Inventory",
+              "values": [
+                -138000000.0,
+                -1105000000.0,
+                2097000000.0,
+                -2436000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Change In Receivables",
+              "values": [
+                -449000000.0,
+                -75000000.0,
+                731000000.0,
+                5327000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Changes In Account Receivables",
+              "values": [
+                -449000000.0,
+                -75000000.0,
+                731000000.0,
+                5327000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Cash Items",
+              "values": [
+                476000000.0,
+                3491000000.0,
+                -424000000.0,
+                1074000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Stock Based Compensation",
+              "values": [
+                2434000000.0,
+                3410000000.0,
+                3229000000.0,
+                3128000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Asset Impairment Charge",
+              "values": [
+                515000000.0,
+                2252000000.0,
+                33000000.0,
+                301000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Deferred Tax",
+              "values": [
+                328000000.0,
+                6132000000.0,
+                -2033000000.0,
+                -5148000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Deferred Income Tax",
+              "values": [
+                328000000.0,
+                6132000000.0,
+                -2033000000.0,
+                -5148000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation Amortization Depletion",
+              "values": [
+                11706000000.0,
+                11379000000.0,
+                9602000000.0,
+                13035000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation And Amortization",
+              "values": [
+                11706000000.0,
+                11379000000.0,
+                9602000000.0,
+                13035000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Amortization Cash Flow",
+              "values": [
+                949000000.0,
+                1428000000.0,
+                1755000000.0,
+                1907000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Amortization Of Intangibles",
+              "values": [
+                949000000.0,
+                1428000000.0,
+                1755000000.0,
+                1907000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation",
+              "values": [
+                10757000000.0,
+                9951000000.0,
+                7847000000.0,
+                11128000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Gains Losses",
+              "values": [
+                -4041000000.0,
+                -246000000.0,
+                -42000000.0,
+                -5313000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gain Loss On Investment Securities",
+              "values": [
+                1282000000.0,
+                -246000000.0,
+                -42000000.0,
+                -4254000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gain Loss On Sale Of Business",
+              "values": [
+                -5323000000.0,
+                0.0,
+                0.0,
+                -1059000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operations",
+              "values": [
+                26000000.0,
+                -19233000000.0,
+                1675000000.0,
+                8017000000.0,
+                null
+              ]
+            }
+          ]
+        }
+      },
+      "quarterly": {
+        "income": {
+          "periods": [
+            "2026-09-30",
+            "2026-06-30",
+            "2026-03-31",
+            "2025-12-31",
+            "2025-09-30",
+            "2025-06-30"
+          ],
+          "rows": [
+            {
+              "name": "Tax Effect Of Unusual Items",
+              "values": [
+                148596000.0,
+                -5095200000.0,
+                -2092800000.0,
+                -101768600.0,
+                259536510.712724,
+                null
+              ]
+            },
+            {
+              "name": "Tax Rate For Calcs",
+              "values": [
+                0.116,
+                0.4,
+                0.4,
+                0.2557,
+                0.066463,
+                null
+              ]
+            },
+            {
+              "name": "Normalized EBITDA",
+              "values": [
+                6257000000.0,
+                5464000000.0,
+                4686000000.0,
+                4046000000.0,
+                3943000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Unusual Items",
+              "values": [
+                1281000000.0,
+                -12738000000.0,
+                -5232000000.0,
+                -398000000.0,
+                3905000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Unusual Items Excluding Goodwill",
+              "values": [
+                1281000000.0,
+                -12738000000.0,
+                -5232000000.0,
+                -398000000.0,
+                3905000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operation Net Minority Interest",
+              "values": [
+                3320000000.0,
+                -11033000000.0,
+                -3728000000.0,
+                -591000000.0,
+                4063000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Reconciled Depreciation",
+              "values": [
+                3232000000.0,
+                3224000000.0,
+                3136000000.0,
+                3027000000.0,
+                2992000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Reconciled Cost Of Revenue",
+              "values": [
+                9417000000.0,
+                9619000000.0,
+                8230000000.0,
+                8731000000.0,
+                8435000000.0,
+                null
+              ]
+            },
+            {
+              "name": "EBITDA",
+              "values": [
+                7538000000.0,
+                -7274000000.0,
+                -546000000.0,
+                3648000000.0,
+                7848000000.0,
+                null
+              ]
+            },
+            {
+              "name": "EBIT",
+              "values": [
+                4306000000.0,
+                -10498000000.0,
+                -3682000000.0,
+                621000000.0,
+                4856000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Interest Income",
+              "values": [
+                125000000.0,
+                -47000000.0,
+                352000000.0,
+                186000000.0,
+                -189000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Expense",
+              "values": [
+                324000000.0,
+                321000000.0,
+                264000000.0,
+                283000000.0,
+                282000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Income",
+              "values": [
+                461000000.0,
+                334000000.0,
+                333000000.0,
+                325000000.0,
+                228000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Normalized Income",
+              "values": [
+                2187596000.0,
+                -3390200000.0,
+                -588800000.0,
+                -294768600.0,
+                417536510.712724,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing And Discontinued Operation",
+              "values": [
+                3320000000.0,
+                -11033000000.0,
+                -3728000000.0,
+                -591000000.0,
+                4063000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Expenses",
+              "values": [
+                13937000000.0,
+                14162000000.0,
+                12643000000.0,
+                13124000000.0,
+                12795000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Operating Income As Reported",
+              "values": [
+                2522000000.0,
+                1796000000.0,
+                -3136000000.0,
+                580000000.0,
+                683000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Diluted Average Shares",
+              "values": [
+                5307000000.0,
+                5104000000.0,
+                5083000000.0,
+                4856000000.0,
+                4531000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Basic Average Shares",
+              "values": [
+                5244000000.0,
+                5104000000.0,
+                5083000000.0,
+                4856000000.0,
+                4514000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Diluted EPS",
+              "values": [
+                0.6,
+                -2.16,
+                -0.73,
+                -0.12,
+                0.9,
+                null
+              ]
+            },
+            {
+              "name": "Basic EPS",
+              "values": [
+                0.63,
+                -2.16,
+                -0.73,
+                -0.12,
+                0.9,
+                null
+              ]
+            },
+            {
+              "name": "Diluted NI Availto Com Stockholders",
+              "values": [
+                3320000000.0,
+                -11033000000.0,
+                -3728000000.0,
+                -591000000.0,
+                4063000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Common Stockholders",
+              "values": [
+                3320000000.0,
+                -11033000000.0,
+                -3728000000.0,
+                -591000000.0,
+                4063000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income",
+              "values": [
+                3320000000.0,
+                -11033000000.0,
+                -3728000000.0,
+                -591000000.0,
+                4063000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Minority Interests",
+              "values": [
+                -200000000.0,
+                -185000000.0,
+                553000000.0,
+                -258000000.0,
+                -207000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Including Noncontrolling Interests",
+              "values": [
+                3520000000.0,
+                -10848000000.0,
+                -4281000000.0,
+                -333000000.0,
+                4270000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Income Continuous Operations",
+              "values": [
+                3520000000.0,
+                -10848000000.0,
+                -4281000000.0,
+                -333000000.0,
+                4270000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Tax Provision",
+              "values": [
+                462000000.0,
+                29000000.0,
+                335000000.0,
+                671000000.0,
+                304000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Pretax Income",
+              "values": [
+                3982000000.0,
+                -10819000000.0,
+                -3946000000.0,
+                338000000.0,
+                4574000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Other Income Expense",
+              "values": [
+                1281000000.0,
+                -12738000000.0,
+                -5232000000.0,
+                -398000000.0,
+                3905000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Special Income Charges",
+              "values": [
+                -109000000.0,
+                -262000000.0,
+                -4132000000.0,
+                -260000000.0,
+                5295000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gain On Sale Of Business",
+              "values": [
+                0.0,
+                null,
+                null,
+                -222000000.0,
+                5546000000.0,
+                94000000.0
+              ]
+            },
+            {
+              "name": "Other Special Charges",
+              "values": [
+                22000000.0,
+                7000000.0,
+                31000000.0,
+                -173000000.0,
+                33000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Write Off",
+              "values": [
+                32000000.0,
+                94000000.0,
+                4027000000.0,
+                175000000.0,
+                72000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Restructuring And Mergern Acquisition",
+              "values": [
+                55000000.0,
+                161000000.0,
+                74000000.0,
+                36000000.0,
+                146000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gain On Sale Of Security",
+              "values": [
+                1390000000.0,
+                -12476000000.0,
+                -1100000000.0,
+                -138000000.0,
+                -1390000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Net Non Operating Interest Income Expense",
+              "values": [
+                125000000.0,
+                -47000000.0,
+                352000000.0,
+                186000000.0,
+                -189000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Other Finance Cost",
+              "values": [
+                12000000.0,
+                60000000.0,
+                -283000000.0,
+                -144000000.0,
+                135000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Expense Non Operating",
+              "values": [
+                324000000.0,
+                321000000.0,
+                264000000.0,
+                283000000.0,
+                282000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Interest Income Non Operating",
+              "values": [
+                461000000.0,
+                334000000.0,
+                333000000.0,
+                325000000.0,
+                228000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Income",
+              "values": [
+                2576000000.0,
+                1966000000.0,
+                934000000.0,
+                550000000.0,
+                858000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Expense",
+              "values": [
+                4520000000.0,
+                4543000000.0,
+                4413000000.0,
+                4393000000.0,
+                4360000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Research And Development",
+              "values": [
+                3490000000.0,
+                3368000000.0,
+                3375000000.0,
+                3219000000.0,
+                3231000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Selling General And Administration",
+              "values": [
+                1030000000.0,
+                1175000000.0,
+                1038000000.0,
+                1174000000.0,
+                1129000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Gross Profit",
+              "values": [
+                7096000000.0,
+                6509000000.0,
+                5347000000.0,
+                4943000000.0,
+                5218000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Cost Of Revenue",
+              "values": [
+                9417000000.0,
+                9619000000.0,
+                8230000000.0,
+                8731000000.0,
+                8435000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Total Revenue",
+              "values": [
+                16513000000.0,
+                16128000000.0,
+                13577000000.0,
+                13674000000.0,
+                13653000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Operating Revenue",
+              "values": [
+                16513000000.0,
+                16128000000.0,
+                13577000000.0,
+                13674000000.0,
+                13653000000.0,
+                null
+              ]
+            }
+          ]
+        },
+        "balance": {
+          "periods": [
+            "2026-09-30",
+            "2026-06-30",
+            "2026-03-31",
+            "2025-12-31",
+            "2025-09-30",
+            "2025-06-30",
+            "2025-03-31"
+          ],
+          "rows": [
+            {
+              "name": "Ordinary Shares Number",
+              "values": [
+                5310000000.0,
+                5043000000.0,
+                5023000000.0,
+                4994000000.0,
+                4766000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Share Issued",
+              "values": [
+                5310000000.0,
+                5043000000.0,
+                5023000000.0,
+                4994000000.0,
+                4766000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Debt",
+              "values": [
+                28288000000.0,
+                37663000000.0,
+                27784000000.0,
+                32320000000.0,
+                35412000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Debt",
+              "values": [
+                50134000000.0,
+                50537000000.0,
+                45031000000.0,
+                46585000000.0,
+                46553000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Tangible Book Value",
+              "values": [
+                92005000000.0,
+                64532000000.0,
+                88207000000.0,
+                87597000000.0,
+                79587000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Invested Capital",
+              "values": [
+                165048000000.0,
+                138079000000.0,
+                156425000000.0,
+                160866000000.0,
+                152929000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Working Capital",
+              "values": [
+                45178000000.0,
+                21543000000.0,
+                35272000000.0,
+                32113000000.0,
+                19434000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Tangible Assets",
+              "values": [
+                92005000000.0,
+                64532000000.0,
+                88207000000.0,
+                87597000000.0,
+                79587000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock Equity",
+              "values": [
+                114914000000.0,
+                87542000000.0,
+                111394000000.0,
+                114281000000.0,
+                106376000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Capitalization",
+              "values": [
+                161231000000.0,
+                136091000000.0,
+                154421000000.0,
+                158367000000.0,
+                150433000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Equity Gross Minority Interest",
+              "values": [
+                131556000000.0,
+                103143000000.0,
+                124989000000.0,
+                126360000000.0,
+                116730000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Minority Interest",
+              "values": [
+                16642000000.0,
+                15601000000.0,
+                13595000000.0,
+                12079000000.0,
+                10354000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Stockholders Equity",
+              "values": [
+                114914000000.0,
+                87542000000.0,
+                111394000000.0,
+                114281000000.0,
+                106376000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Gains Losses Not Affecting Retained Earnings",
+              "values": [
+                -232000000.0,
+                -80000000.0,
+                -44000000.0,
+                113000000.0,
+                19000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Equity Adjustments",
+              "values": [
+                -232000000.0,
+                -80000000.0,
+                -44000000.0,
+                113000000.0,
+                19000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Retained Earnings",
+              "values": [
+                36969000000.0,
+                33842000000.0,
+                45179000000.0,
+                48983000000.0,
+                49602000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Capital Stock",
+              "values": [
+                78177000000.0,
+                53780000000.0,
+                66259000000.0,
+                65185000000.0,
+                56755000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Common Stock",
+              "values": [
+                78177000000.0,
+                53780000000.0,
+                66259000000.0,
+                65185000000.0,
+                56755000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Preferred Stock",
+              "values": [
+                null,
+                null,
+                null,
+                0.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Liabilities Net Minority Interest",
+              "values": [
+                97018000000.0,
+                99296000000.0,
+                80343000000.0,
+                85069000000.0,
+                87784000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Liabilities Net Minority Interest",
+              "values": [
+                59622000000.0,
+                63626000000.0,
+                53458000000.0,
+                53494000000.0,
+                55487000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Current Liabilities",
+              "values": [
+                13305000000.0,
+                15077000000.0,
+                10431000000.0,
+                9408000000.0,
+                11430000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt And Capital Lease Obligation",
+              "values": [
+                46317000000.0,
+                48549000000.0,
+                43027000000.0,
+                44086000000.0,
+                44057000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt",
+              "values": [
+                46317000000.0,
+                48549000000.0,
+                43027000000.0,
+                44086000000.0,
+                44057000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Current Liabilities",
+              "values": [
+                37396000000.0,
+                35670000000.0,
+                26885000000.0,
+                31575000000.0,
+                32297000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Current Deferred Liabilities",
+              "values": [
+                null,
+                null,
+                null,
+                null,
+                3200000000.0,
+                3000000000.0,
+                2700000000.0
+              ]
+            },
+            {
+              "name": "Current Debt And Capital Lease Obligation",
+              "values": [
+                3817000000.0,
+                1988000000.0,
+                2004000000.0,
+                2499000000.0,
+                2496000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Current Debt",
+              "values": [
+                3817000000.0,
+                1988000000.0,
+                2004000000.0,
+                2499000000.0,
+                2496000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Borrowings",
+              "values": [
+                null,
+                null,
+                null,
+                2499000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Pensionand Other Post Retirement Benefit Plans Current",
+              "values": [
+                3905000000.0,
+                3748000000.0,
+                2824000000.0,
+                3990000000.0,
+                3756000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Payables And Accrued Expenses",
+              "values": [
+                29674000000.0,
+                29934000000.0,
+                22057000000.0,
+                25086000000.0,
+                22845000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Current Accrued Expenses",
+              "values": [
+                20843000000.0,
+                21178000000.0,
+                14898000000.0,
+                14600000000.0,
+                11752000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Payables",
+              "values": [
+                8831000000.0,
+                8756000000.0,
+                7159000000.0,
+                10486000000.0,
+                11093000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Tax Payable",
+              "values": [
+                null,
+                null,
+                null,
+                604000000.0,
+                825000000.0,
+                887000000.0,
+                1873000000.0
+              ]
+            },
+            {
+              "name": "Income Tax Payable",
+              "values": [
+                null,
+                null,
+                null,
+                604000000.0,
+                825000000.0,
+                887000000.0,
+                1873000000.0
+              ]
+            },
+            {
+              "name": "Accounts Payable",
+              "values": [
+                8831000000.0,
+                8756000000.0,
+                7159000000.0,
+                9882000000.0,
+                10268000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Assets",
+              "values": [
+                228574000000.0,
+                202439000000.0,
+                205332000000.0,
+                211429000000.0,
+                204514000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Total Non Current Assets",
+              "values": [
+                146000000000.0,
+                145226000000.0,
+                143175000000.0,
+                147741000000.0,
+                152783000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Current Assets",
+              "values": [
+                8979000000.0,
+                8065000000.0,
+                7049000000.0,
+                7131000000.0,
+                12280000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Investments And Advances",
+              "values": [
+                8798000000.0,
+                8410000000.0,
+                8481000000.0,
+                8512000000.0,
+                8667000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Investmentin Financial Assets",
+              "values": [
+                8798000000.0,
+                8410000000.0,
+                8481000000.0,
+                8512000000.0,
+                572000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Available For Sale Securities",
+              "values": [
+                8798000000.0,
+                8410000000.0,
+                8481000000.0,
+                8512000000.0,
+                572000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Equity Investment",
+              "values": [
+                null,
+                null,
+                null,
+                null,
+                8095000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Goodwill And Other Intangible Assets",
+              "values": [
+                22909000000.0,
+                23010000000.0,
+                23187000000.0,
+                26684000000.0,
+                26789000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Intangible Assets",
+              "values": [
+                2444000000.0,
+                2545000000.0,
+                2722000000.0,
+                2772000000.0,
+                2877000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Goodwill",
+              "values": [
+                20465000000.0,
+                20465000000.0,
+                20465000000.0,
+                23912000000.0,
+                23912000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net PPE",
+              "values": [
+                105314000000.0,
+                105741000000.0,
+                104458000000.0,
+                105414000000.0,
+                105047000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Accumulated Depreciation",
+              "values": [
+                -111913000000.0,
+                -109918000000.0,
+                -107896000000.0,
+                -106464000000.0,
+                -105063000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Gross PPE",
+              "values": [
+                217227000000.0,
+                215659000000.0,
+                212354000000.0,
+                211878000000.0,
+                210110000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Construction In Progress",
+              "values": [
+                null,
+                null,
+                null,
+                34543000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Machinery Furniture Equipment",
+              "values": [
+                null,
+                null,
+                null,
+                111940000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Properties",
+              "values": [
+                null,
+                null,
+                null,
+                65395000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Current Assets",
+              "values": [
+                82574000000.0,
+                57213000000.0,
+                62157000000.0,
+                63688000000.0,
+                51731000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Current Assets",
+              "values": [
+                11408000000.0,
+                10961000000.0,
+                12876000000.0,
+                10815000000.0,
+                6105000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Inventory",
+              "values": [
+                13068000000.0,
+                12492000000.0,
+                12426000000.0,
+                11618000000.0,
+                11489000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Finished Goods",
+              "values": [
+                3038000000.0,
+                2761000000.0,
+                2504000000.0,
+                2785000000.0,
+                3603000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Work In Process",
+              "values": [
+                8797000000.0,
+                8685000000.0,
+                9004000000.0,
+                7840000000.0,
+                6751000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Raw Materials",
+              "values": [
+                1233000000.0,
+                1046000000.0,
+                918000000.0,
+                993000000.0,
+                1135000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Receivables",
+              "values": [
+                4093000000.0,
+                4033000000.0,
+                4066000000.0,
+                3839000000.0,
+                3202000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Accounts Receivable",
+              "values": [
+                4093000000.0,
+                4033000000.0,
+                4066000000.0,
+                3839000000.0,
+                3202000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash Cash Equivalents And Short Term Investments",
+              "values": [
+                54005000000.0,
+                29727000000.0,
+                32789000000.0,
+                37416000000.0,
+                30935000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Short Term Investments",
+              "values": [
+                32159000000.0,
+                16853000000.0,
+                15542000000.0,
+                23151000000.0,
+                19794000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash And Cash Equivalents",
+              "values": [
+                21846000000.0,
+                12874000000.0,
+                17247000000.0,
+                14265000000.0,
+                11141000000.0,
+                null,
+                null
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "periods": [
+            "2026-09-30",
+            "2026-06-30",
+            "2026-03-31",
+            "2025-12-31",
+            "2025-09-30",
+            "2025-06-30",
+            "2025-03-31"
+          ],
+          "rows": [
+            {
+              "name": "Free Cash Flow",
+              "values": [
+                1058000000.0,
+                4450000000.0,
+                -2540000000.0,
+                800000000.0,
+                121000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Repayment Of Debt",
+              "values": [
+                -119000000.0,
+                -8332000000.0,
+                -1500000000.0,
+                0.0,
+                -4341000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Issuance Of Debt",
+              "values": [
+                0.0,
+                13000000000.0,
+                0.0,
+                0.0,
+                0.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Capital Expenditure",
+              "values": [
+                -4024000000.0,
+                -2556000000.0,
+                -3636000000.0,
+                -3488000000.0,
+                -2425000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Interest Paid Supplemental Data",
+              "values": [
+                557000000.0,
+                -69000000.0,
+                600000000.0,
+                -50000000.0,
+                642000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Income Tax Paid Supplemental Data",
+              "values": [
+                223000000.0,
+                643000000.0,
+                261000000.0,
+                360000000.0,
+                146000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "End Cash Position",
+              "values": [
+                22398000000.0,
+                13597000000.0,
+                17695000000.0,
+                14712000000.0,
+                11141000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Beginning Cash Position",
+              "values": [
+                13597000000.0,
+                17695000000.0,
+                14712000000.0,
+                11141000000.0,
+                9693000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Changes In Cash",
+              "values": [
+                8801000000.0,
+                -4098000000.0,
+                2983000000.0,
+                3571000000.0,
+                1448000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Financing Cash Flow",
+              "values": [
+                23309000000.0,
+                -7342000000.0,
+                -1206000000.0,
+                5849000000.0,
+                5152000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Financing Activities",
+              "values": [
+                23309000000.0,
+                -7342000000.0,
+                -1206000000.0,
+                5849000000.0,
+                5152000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Other Financing Charges",
+              "values": [
+                62000000.0,
+                -12010000000.0,
+                -133000000.0,
+                831000000.0,
+                1525000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Proceeds From Stock Option Exercised",
+              "values": [
+                309000000.0,
+                0.0,
+                427000000.0,
+                8963000000.0,
+                286000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash Dividends Paid",
+              "values": [
+                null,
+                null,
+                null,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Common Stock Dividend Paid",
+              "values": [
+                null,
+                null,
+                null,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Net Issuance Payments Of Debt",
+              "values": [
+                -119000000.0,
+                4668000000.0,
+                -1500000000.0,
+                0.0,
+                -4341000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Short Term Debt Issuance",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1997000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Short Term Debt Payments",
+              "values": [
+                0.0,
+                null,
+                null,
+                0.0,
+                -1997000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Short Term Debt Issuance",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Long Term Debt Issuance",
+              "values": [
+                -119000000.0,
+                4668000000.0,
+                -1500000000.0,
+                0.0,
+                -2344000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt Payments",
+              "values": [
+                -119000000.0,
+                -8332000000.0,
+                -1500000000.0,
+                0.0,
+                -2344000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Long Term Debt Issuance",
+              "values": [
+                0.0,
+                null,
+                null,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "name": "Investing Cash Flow",
+              "values": [
+                -19590000000.0,
+                -3762000000.0,
+                3093000000.0,
+                -6566000000.0,
+                -6250000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Investing Activities",
+              "values": [
+                -19590000000.0,
+                -3762000000.0,
+                3093000000.0,
+                -6566000000.0,
+                -6250000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Other Investing Changes",
+              "values": [
+                -498000000.0,
+                56000000.0,
+                67000000.0,
+                417000000.0,
+                -436000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Investment Purchase And Sale",
+              "values": [
+                -15068000000.0,
+                -1262000000.0,
+                7258000000.0,
+                -2824000000.0,
+                -7640000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Sale Of Investment",
+              "values": [
+                4346000000.0,
+                4285000000.0,
+                14448000000.0,
+                5094000000.0,
+                3031000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of Investment",
+              "values": [
+                -19414000000.0,
+                -5547000000.0,
+                -7190000000.0,
+                -7918000000.0,
+                -10671000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Business Purchase And Sale",
+              "values": [
+                0.0,
+                0.0,
+                -596000000.0,
+                -671000000.0,
+                4251000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Sale Of Business",
+              "values": [
+                0.0,
+                0.0,
+                0.0,
+                -671000000.0,
+                4251000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of Business",
+              "values": [
+                0.0,
+                0.0,
+                -596000000.0,
+                null,
+                0.0,
+                0.0,
+                null
+              ]
+            },
+            {
+              "name": "Net PPE Purchase And Sale",
+              "values": [
+                -4024000000.0,
+                -2556000000.0,
+                -3636000000.0,
+                -3488000000.0,
+                -2425000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Purchase Of PPE",
+              "values": [
+                -4024000000.0,
+                -2556000000.0,
+                -3636000000.0,
+                -3488000000.0,
+                -2425000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Operating Cash Flow",
+              "values": [
+                5082000000.0,
+                7006000000.0,
+                1096000000.0,
+                4288000000.0,
+                2546000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Cash Flow From Continuing Operating Activities",
+              "values": [
+                5082000000.0,
+                7006000000.0,
+                1096000000.0,
+                4288000000.0,
+                2546000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Working Capital",
+              "values": [
+                -1000000000.0,
+                1227000000.0,
+                -3498000000.0,
+                459000000.0,
+                -1365000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Other Working Capital",
+              "values": [
+                -1040000000.0,
+                42000000.0,
+                -1156000000.0,
+                374000000.0,
+                461000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Payables And Accrued Expense",
+              "values": [
+                676000000.0,
+                1255000000.0,
+                -1317000000.0,
+                825000000.0,
+                -876000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Accrued Expense",
+              "values": [
+                165000000.0,
+                803000000.0,
+                -1175000000.0,
+                247000000.0,
+                -481000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Payable",
+              "values": [
+                511000000.0,
+                452000000.0,
+                -142000000.0,
+                578000000.0,
+                -395000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Account Payable",
+              "values": [
+                511000000.0,
+                452000000.0,
+                -142000000.0,
+                578000000.0,
+                -395000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Inventory",
+              "values": [
+                -576000000.0,
+                -66000000.0,
+                -808000000.0,
+                -129000000.0,
+                -108000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Change In Receivables",
+              "values": [
+                -60000000.0,
+                -4000000.0,
+                -217000000.0,
+                -611000000.0,
+                -842000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Changes In Account Receivables",
+              "values": [
+                -60000000.0,
+                -4000000.0,
+                -217000000.0,
+                -611000000.0,
+                -842000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Other Non Cash Items",
+              "values": [
+                null,
+                null,
+                3965000000.0,
+                104000000.0,
+                -10000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Stock Based Compensation",
+              "values": [
+                587000000.0,
+                686000000.0,
+                621000000.0,
+                538000000.0,
+                548000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Unrealized Gain Loss On Investment Securities",
+              "values": [
+                -259000000.0,
+                50000000.0,
+                54000000.0,
+                null,
+                -133000000.0,
+                -415000000.0,
+                null
+              ]
+            },
+            {
+              "name": "Asset Impairment Charge",
+              "values": [
+                -3937000000.0,
+                4224000000.0,
+                62000000.0,
+                -182000000.0,
+                59000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Deferred Tax",
+              "values": [
+                83000000.0,
+                -18000000.0,
+                -9000000.0,
+                205000000.0,
+                17000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Deferred Income Tax",
+              "values": [
+                83000000.0,
+                -18000000.0,
+                -9000000.0,
+                205000000.0,
+                17000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation Amortization Depletion",
+              "values": [
+                3232000000.0,
+                3224000000.0,
+                3136000000.0,
+                3027000000.0,
+                2992000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation And Amortization",
+              "values": [
+                3232000000.0,
+                3224000000.0,
+                3136000000.0,
+                3027000000.0,
+                2992000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Amortization Cash Flow",
+              "values": [
+                190000000.0,
+                235000000.0,
+                234000000.0,
+                241000000.0,
+                234000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Amortization Of Intangibles",
+              "values": [
+                190000000.0,
+                235000000.0,
+                234000000.0,
+                241000000.0,
+                234000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Depreciation",
+              "values": [
+                3042000000.0,
+                2989000000.0,
+                2902000000.0,
+                2786000000.0,
+                2758000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Operating Gains Losses",
+              "values": [
+                -1113000000.0,
+                12426000000.0,
+                1046000000.0,
+                1901000000.0,
+                -3832000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Gain Loss On Investment Securities",
+              "values": [
+                -1131000000.0,
+                12426000000.0,
+                1046000000.0,
+                1869000000.0,
+                1523000000.0,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Gain Loss On Sale Of Business",
+              "values": [
+                null,
+                null,
+                null,
+                32000000.0,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "name": "Net Income From Continuing Operations",
+              "values": [
+                3520000000.0,
+                -10848000000.0,
+                -4281000000.0,
+                -333000000.0,
+                4270000000.0,
+                null,
+                null
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "errors": [],
+    "source": "Yahoo Finance / yfinance",
+    "retrieved_at": "2026-11-13T14:46:04.596170+08:00",
+    "period_note": "财务表为供应商返回口径；季度现金流可能是累计值，请核对原始披露。",
+    "filings": {
+      "source": "SEC EDGAR",
+      "cik": "0000050863",
+      "documents": [
+        {
+          "form": "10-Q",
+          "filed": "2026-10-30",
+          "period": "2026-09-26",
+          "accession": "0000050863-26-000191",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000191/intc-20260926.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2026-07-24",
+          "period": "2026-06-27",
+          "accession": "0000050863-26-000157",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000157/intc-20260627.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2026-04-24",
+          "period": "2026-03-28",
+          "accession": "0000050863-26-000079",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000079/intc-20260328.htm"
+        },
+        {
+          "form": "10-K",
+          "filed": "2026-01-23",
+          "period": "2025-12-27",
+          "accession": "0000050863-26-000011",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2025-11-06",
+          "period": "2025-09-27",
+          "accession": "0000050863-25-000179",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086325000179/intc-20250927.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2025-07-24",
+          "period": "2025-06-28",
+          "accession": "0000050863-25-000109",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086325000109/intc-20250628.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2025-04-25",
+          "period": "2025-03-29",
+          "accession": "0000050863-25-000074",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086325000074/intc-20250329.htm"
+        },
+        {
+          "form": "10-K",
+          "filed": "2025-01-31",
+          "period": "2024-12-28",
+          "accession": "0000050863-25-000009",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086325000009/intc-20241228.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2024-11-01",
+          "period": "2024-09-28",
+          "accession": "0000050863-24-000149",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086324000149/intc-20240928.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2024-08-02",
+          "period": "2024-06-29",
+          "accession": "0000050863-24-000124",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086324000124/intc-20240629.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2024-04-26",
+          "period": "2024-03-30",
+          "accession": "0000050863-24-000076",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086324000076/intc-20240330.htm"
+        },
+        {
+          "form": "10-K",
+          "filed": "2024-01-26",
+          "period": "2023-12-30",
+          "accession": "0000050863-24-000010",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086324000010/intc-20231230.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2023-10-27",
+          "period": "2023-09-30",
+          "accession": "0000050863-23-000103",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086323000103/intc-20230930.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2023-07-28",
+          "period": "2023-07-01",
+          "accession": "0000050863-23-000069",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086323000069/intc-20230701.htm"
+        },
+        {
+          "form": "10-Q",
+          "filed": "2023-04-28",
+          "period": "2023-04-01",
+          "accession": "0000050863-23-000028",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086323000028/intc-20230401.htm"
+        },
+        {
+          "form": "10-K",
+          "filed": "2023-01-27",
+          "period": "2022-12-31",
+          "accession": "0000050863-23-000006",
+          "amendment": false,
+          "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086323000006/intc-20221231.htm"
+        }
+      ],
+      "note": "原文包含附注和经营披露；仅列最近提交，修订文件单独列出。修订并不自动替换 Yahoo 表格。"
+    }
+  },
   "research_snapshot": {
     "id": "ba7b4321ae364fb286d54aebc85acced",
     "schema_version": 2,
@@ -18675,6 +22825,23 @@
     "previous_id": null,
     "changes": []
   },
+  "peers_data": [
+    {
+      "symbol": "NVDA",
+      "source": "Yahoo Finance / yfinance",
+      "retrieved_at": "2026-11-13T14:46:05.623543+08:00",
+      "industry": "Semiconductors",
+      "mostRecentQuarter": 1785024000.0,
+      "longName": "NVIDIA Corporation",
+      "currency": "USD",
+      "financialCurrency": "USD",
+      "trailingPE": 21.010115,
+      "priceToBook": 17.525045,
+      "returnOnEquity": 1.17211,
+      "profitMargins": 0.63663,
+      "revenueGrowth": 1.059
+    }
+  ],
   "reports": {
     "fundamentals_report": "# INTC（Intel Corporation）公司基本面综合报告\n\n**数据基准**：快照 ID `ba7b4321ae364fb286d54aebc85acced`，来源 Yahoo Finance / yfinance，数据获取时间 2026-11-13T14:46:04（+08:00），快照日 2026-11-13。报价货币与财务报表货币均为 USD。最新财季为 2026-09-30（对应 2026-09-26 的 10-Q）。下文所有百分比均由快照中的比率小数换算得出，不作二次计算；金额单位为美元原始报表口径，未作汇率折算。\n\n**知识边界说明**：我的知识截止时间为 2024 年 4 月，更早于本快照的数据日期。本报告的全部财务事实只来自上述快照，不包含我对 Intel 公司 2024 年之后经营情况的独立了解；凡快照未覆盖的内容，我一律标注为缺失或推断。\n\n---\n\n## 一、业务概览（事实）\n\n- **身份与分类**：Intel Corporation，Technology / Semiconductors，美国公司，总部加州圣克拉拉，1968 年成立，交易所 NMS（纳斯达克），员工 81,100 人（`profile.fullTimeEmployees`）。\n- **分部结构**：公司自述经营三个分部——CCG（客户端计算）、DCAI（数据中心与 AI）、Intel Foundry（`profile.longBusinessSummary`）。产品覆盖客户端与商用 CPU、独立 GPU、边缘计算与连接芯片、服务器 CPU、网络产品，以及晶圆制造、基板等制造服务；另有自动驾驶辅助方案与多波束掩模写入设备。\n- **销售渠道**：自有销售组织、分销商、经销商、零售商及 OEM 合作方；客户包括 OEM/ODM、云服务商等。\n- **管理层**：CEO 兼董事 Lip-Bu Tan（66 岁）；CFO 暨首席会计官 David A. Zinsner；Intel Foundry 总经理暨 CTO/COO N. Chandrasekaran；CTO 暨 CEO 幕僚长 Pushkar Ranade（`profile.companyOfficers`）。CEO 与 CFO 的 2025 财年总薪酬分别为 3,828,200 与 4,218,200 美元，行使与未行使期权价值均记为 0。\n- **股权结构**：内部人持股 13.913%，机构持股 64.001%（`profile.heldPercentInsiders`、`profile.heldPercentInstitutions`）。\n- **资本回报**：股息率 0.0%，2025 财年与 2026 年前三季度现金流量表的\"现金股利支付\"均为 0（`profile.dividendYield`；`annual.cashflow`、`quarterly.cashflow` 中 Cash Dividends Paid 行）。\n\n**重要边界**：快照仅提供分部名称，未提供任何分部、产品或地区的收入、利润数值。依规则，本报告不据分部名称反推金额，因此**无法给出 CCG/DCAI/Foundry 各自的规模与盈亏**。这是本报告最大的分析缺口。\n\n---\n\n## 二、财务质量\n\n### 2.1 损益：收入停滞、盈利剧烈波动\n\n| 指标（年度，12-31） | 2025 | 2024 | 2023 | 2022 |\n|---|---|---|---|---|\n| 营业收入（%） | 183.75亿→528.53亿 | 531.01亿 | 542.28亿 | 630.54亿 |\n| 毛利率（计算口径） | 34.77% | 32.66% | 40.04% | 42.61% |\n| 经营利润率（计算口径） | -0.04% | -8.87% | 0.06% | 3.70% |\n| 净利率（计算口径） | -0.51% | -35.32% | 3.11% | 12.71% |\n| ROE（平均净资产） | -0.25% | -18.31% | 1.63% | 不适用 |\n| ROA（平均总资产） | -0.13% | -9.67% | 0.90% | 不适用 |\n\n（来源：`calculated_metrics.history`，公式版本 1.0；分母非正或缺失时不计算，故 2022 年 ROE/ROA 为空，非零。）\n\n收入端：2025 财年 528.53 亿美元，同比 -0.47%（`annual.income.46.0` vs `.1`）；2024 财年 531.01 亿，同比 -2.08%；2023 财年 542.28 亿，同比 -14.00%。三年连续负增长，2025 年降幅收窄至基本持平。\n\n利润端：2024 财年是明显的\"洗大澡\"年份——净利润 -187.56 亿美元（`annual.income.23.1`），税前 -112.10 亿，其中\"非经常项目合计\"为 -74.83 亿，商誉与减值等一次性项目、递延税资产减值共同放大了亏损。2025 财年净利润收窄至 -2.67 亿，主要靠 **出售业务的 53.24 亿美元收益**（`annual.income` \"Gain On Sale Of Business\" 行）与 18.51 亿非经常性净收益托底；扣除非经常项目后的\"标准化净利\"仍为 -16.45 亿。**结论：2025 年接近盈亏平衡并不来自主营业务改善，而来自资产处置。** 这是判断盈利质量的关键事实。\n\n### 2.2 最新四个季度（TTM，截至 2026-09-30）\n\n快照提供的 TTM 汇总（`ttm`）：营收 598.92 亿，毛利 238.95 亿，经营利润 60.26 亿，净利润 **-120.32 亿**。毛利率 39.9%（238.95/598.92），净利率约 -20.1%——与供应商一致性指标 `profile.profitMargins` = -20.09% 吻合。\n\nTTM 净利为负、而 2025 全年仅 -2.67 亿，差异全部来自 **2026 年第二季度单季净亏损 110.33 亿美元**（`quarterly.income.23.1`）。该季\"证券投资损益\"一项为 -124.76 亿（`quarterly.income` Gain On Sale Of Security），是亏损的主要来源，而非经营层面。单季经营利润仍为正：2026Q2 为 19.66 亿。\n\n季度收入轨迹（`quarterly.income.46`）：\n- 2026Q3 165.13 亿（环比 +2.39%，同比 +20.95%——`growth` 中 2026-09-30 vs 2025-09-30）\n- 2026Q2 161.28 亿（环比 +18.79%）\n- 2026Q1 135.77 亿（环比 -0.71%）\n- 2025Q4 136.74 亿（环比 +0.15%）\n\n**这是全报告最重要的正面事实：最近两个季度的同比增速转正至 +20.95%，且经营利润率连续四季为正。** 但净利受非经营项目扰动极大，不能线性外推。\n\n### 2.3 现金流：资本开支压顶，自由现金流长期为负\n\n|（年度，USD）| 2025 | 2024 | 2023 | 2022 |\n|---|---|---|---|---|\n| 经营现金流 | 96.97亿 | 82.88亿 | 114.71亿 | 154.33亿 |\n| 资本开支（流出） | -146.46亿 | -239.44亿 | -257.50亿 | -248.44亿 |\n| 自由现金流 | **-49.49亿** | **-156.56亿** | **-142.79亿** | **-94.11亿** |\n\n（`annual.cashflow` Operating Cash Flow / Capital Expenditure / Free Cash Flow 行。）\n\n资本开支从 2024 年的 239.44 亿压缩至 2025 年的 146.46 亿（降幅约 39%），经营现金流同步回升，使 FCF 缺口从 -156.56 亿大幅收窄至 -49.49 亿。方向正确，但**仍未转正**。\n\n供应商口径的 TTM FCF 为 +8.06 亿（`profile.freeCashflow`），与 2025 年度计算值 -49.49 亿方向相反，属于**口径差异**：供应商 TTM 采用最近四季数据，计算口径指标采用年报。季度现金流量表可能存在累计口径不明的问题（快照 `period_note` 与 `limitations` 明确提示\"季度现金流累计口径不明时不计算 TTM\"），因此对 +8.06 亿应谨慎，不可视为年度趋势的确认。\n\n### 2.4 资产负债表：流动性充裕，但股东权益被回购与增发反复搅动\n\n- 2026-09-30：总资产 2,285.74 亿，总负债 970.18 亿，权益 1,149.14 亿，少数股东权益 166.42 亿（`quarterly.balance`）。\n- 资产负债率（计算口径）：2025 年度 40.24%（2024 年 46.54%，2023 年 42.60%，2022 年 43.28%），2026Q3 单点 42.4%（970.18/2,285.74，直接由报表值相除，仅作参照）。\n- 流动比率：2025 年度 2.017；供应商当前值 2.208（`profile.currentRatio`）。2024 年度为 1.327，同比大幅改善。\n- 现金及短期投资 540.05 亿，总债务 501.34 亿（`profile.totalCash`、`profile.totalDebt`），净现金约 +38.71 亿；净债务报表值为 282.88 亿（`quarterly.balance` Net Debt），两者差异源于口径：净债务=债务-现金及现金等价物（不含短期投资）。**引用时必须注明用哪一个口径。**\n- debtToEquity = 38.108（供应商口径，已是百分数，即 38.1%），不是由快照报表行相除得出。\n\n**需特别提示的会计现象**：股本（Capital Stock）从 2025-12-31 的 651.85 亿波动至 2026-03-31 的 662.59 亿、2026-06-30 的 537.80 亿、2026-09-30 的 781.77 亿（`quarterly.balance` Capital Stock 行）。同时，2025 财年现金流量表\"股票期权行权所得\"为 134.77 亿（`annual.cashflow` Proceeds From Stock Option Exercised）。这意味着期间存在**大规模股权发行**——这是股权稀释的直接证据，也是 2025 年末权益从 992.70 亿回升至 1,142.81 亿的主要原因之一。发行股数从 2025-12-31 的 49.94 亿股增至 2026-09-30 的 53.10 亿股。这不属于分红回馈，而是资产负债表修复。\n\n### 2.5 需要点名的数据不一致\n\n- 快照 profile 的 `totalRevenue` 为 598.92 亿（TTM 口径），而 2025 年报 Total Revenue 为 528.53 亿。**两者不是同一期间**，不可混用。\n- `profile.grossMargins` = 40.15%、`operatingMargins` = 10.32%、`returnOnAssets` = +1.78%，但 `profile.profitMargins` = -20.09% 且 `returnOnEquity` = -9.62%。毛利与经营利润为正而净利为负，与上文\"2026Q2 非经营性证券损失 -124.76 亿\"完全一致，属**可解释的资金结构现象**，不是数据错误。但也说明供应商比率是\"拼接口径\"，各项分子分母的期间可能不一致。\n- `earningsGrowth` = -32.7% 与 `revenueGrowth` = +20.9% 同时存在：收入增长而利润下滑，符合上述一次性项目解释。\n\n---\n\n## 三、趋势判断\n\n**事实链条（按时间）**\n1. 2022→2023：收入 -14.0%，毛利率从 42.6% 掉到 40.0%，净利润 80.14 亿 → 16.89 亿。行业库存周期下行。\n2. 2023→2024：收入 -2.1%，毛利率降至 32.7%，减值与重组集中体现，净亏 187.56 亿，ROE -18.31%。周期底部 + 战略调整成本。\n3. 2024→2025：收入 -0.5%（基本持平），毛利率回升至 34.8%，经营盈亏接近零，净亏收窄至 2.67 亿（含 53.24 亿出售收益）。资本开支砍 39%，FCF 缺口收窄三分之二。\n4. 2025Q4→2026Q3：季度收入从 136.74 亿抬",
     "operating_report": "快照：ba7b4321ae364fb286d54aebc85acced · 来源：Yahoo Finance / yfinance · 获取时间：2026-11-13T14:46:04.596170+08:00\n\n# 英特尔公司（INTC）经营表现分析\n\n**快照 ID**：`ba7b4321ae364fb286d54aebc85acced`｜**来源**：Yahoo Finance / yfinance（`retrieved_at` 2026-11-13T14:46:04+08:00）｜**数据时点**：2026-11-13｜**币种**：报价与财报均为 USD（`currency`/`financialCurrency` = USD）｜**对齐指标口径版本**：`formula_version` 1.0\n\n---\n\n## 核心结论\n\n1. **收入结构处于低增长的平台期，但盈利出现显著、尚不均衡的修复。** 年度 `Total Revenue` 从 2022 年的 630.54 亿 USD 连续三年降到 2025 年的 528.53 亿 USD；`growth.revenue` 显示 2023 年 -13.998%、2024 年 -2.078%、2025 年 -0.467%（年比年，匹配同为 12-31 年度口径），降幅逐年收窄。季度口径显示 2026-09-30 单季 `Total Revenue` 为 165.13 亿 USD，同比（对 2025-09-30 的 136.53 亿 USD）+20.948%。**这是单季同比，不能直接外推为全年趋势**。\n2. **TTM 盈利质量存在内部矛盾，需警惕。** `ttm` 汇总（2025-12-31 至 2026-09-30 四个季度）显示 `revenue` 598.92 亿、`gross_profit` 238.95 亿、`operating_income` 60.26 亿，但 `net_income` 为 **-120.32 亿**。即经营层面为正、净利为负，差额只能来自经营外项目。快照未披露分部、产品线、地区、价格/销量或任何经营 KPI，**不能归因于任何具体业务原因**。\n3. **现金创造能力是结构性短板。** `calculated_metrics.history` 中 `free_cashflow`（公式：经营现金流 + 资本开支，Yahoo 流出为负）连续四年为负：2022 年 -94.11 亿、2023 年 -142.79 亿、2024 年 -156.56 亿、2025 年 -49.49 亿 USD（`annual.cashflow.5.x`、`annual.cashflow.38.x`）。但有 `profile.freeCashflow` = 8.065 亿 USD 为正，两者**口径不同**（前者为年度报表口径，后者为供应商近期口径），不可混用。\n4. 整体判断：**经营利润率修复有报表证据支持；净利与现金流改善的可持续性证据不足**。\n\n---\n\n## 事实与证据\n\n### 一、收入与利润轨迹（年度，USD，同一 12-31 报告日口径）\n\n| 指标（字段名） | 2022-12-31 | 2023-12-31 | 2024-12-31 | 2025-12-31 |\n|---|---|---|---|---|\n| `Total Revenue`（亿） | 630.54 | 542.28 | 531.01 | 528.53 |\n| `Gross Profit`（亿） | 268.66 | 217.11 | 173.45 | 183.75 |\n| `Operating Income`（亿） | 23.36 | 0.31 | -47.08 | -0.23 |\n| `Net Income`（亿） | 80.14 | 16.89 | -187.56 | -2.67 |\n| `Normalized EBITDA`（亿） | 160.33 | 111.40 | 86.86 | 125.03 |\n| 计算毛利率 `gross_margin` | 42.61% | 40.04% | 32.66% | 34.77% |\n| 计算经营利润率 `operating_margin` | 3.70% | 0.06% | -8.87% | -0.04% |\n| 计算净利率 `net_margin` | 12.71% | 3.11% | -35.32% | -0.51% |\n\n证据引用：`annual.income.46.0`–`46.3`（Total Revenue）、`annual.income.44.x`（Gross Profit）、`annual.income.40.x`（Operating Income）、`annual.income.23.x`（Net Income）、`annual.income.2.x`（Normalized EBITDA，按表内行序）；比率来自 `calculated_metrics.history` 对应 `period`。\n\n要点：**毛利率自 2024 年 32.66% 回升至 2025 年 34.77%，经营亏损从 -47.08 亿收窄至 -0.23 亿 USD**——这是报表层面可见的修复。但 2025 年 `Gross Profit` 增加 10.30 亿 USD 而 `Total Revenue` 减少 2.48 亿 USD，说明毛利改善来自成本端（`Cost Of Revenue` 从 357.56 亿降至 344.78 亿 USD，`annual.income.45.x`），**而非收入扩张**。成本下降的具体驱动（产能利用率、折旧、产品组合、一次性项目）快照未披露。\n\n### 二、费用结构\n\n- `Research And Development`（`annual.income.42.x`）：175.28 → 160.46 → 165.46 → 137.74 亿 USD（2022→2025）。2025 年同比减少 27.72 亿 USD，同时 `Total Revenue` 基本持平，R&D 强度从 31.2% 降至 26.1%（由上述两项相除得出）。\n- `Selling General And Administration`（`annual.income.43.x`）：70.02 → 56.34 → 55.07 → 46.24 亿 USD，连续下降。\n- `Total Expenses`（`annual.income.16.x`）：607.18 → 541.97 → 578.09 → 528.76 亿 USD。\n- **已观察到的财务关系**：2025 年经营亏损接近零，同时 R&D 与 SG&A 合计减少约 36.5 亿 USD，而毛利仅增加 10.3 亿 USD。因此 2025 年经营利润率从 -8.87% 回到 -0.04%，**在算术上主要由费用削减支撑，而非毛利扩张**。\n\n### 三、季度视角（USD，单季，非累计——快照标注为各季度独立期）\n\n| 指标 | 2025-09-30 | 2025-12-31 | 2026-03-31 | 2026-06-30 | 2026-09-30 |\n|---|---|---|---|---|---|\n| `Total Revenue`（亿） | 136.53 | 136.74 | 135.77 | 161.28 | 165.13 |\n| `Gross Profit`（亿） | 52.18 | 49.43 | 53.47 | 65.09 | 70.96 |\n| `Operating Income`（亿） | 8.58 | 5.50 | 9.34 | 19.66 | 25.76 |\n| `Net Income`（亿） | 40.63 | -5.91 | -37.28 | -110.33 | 33.20 |\n| `Total Unusual Items`（亿） | +39.05 | -3.98 | -52.32 | **-127.38** | +12.81 |\n\n证据引用：`quarterly.income.46.0`–`46.3`、`quarterly.income.44.x`、`quarterly.income.40.x`、`quarterly.income.23.x`、`quarterly.income.3.x`。\n\n- 季度经营利润率（`quarterly.income.40` ÷ `46`）：8.58/136.53 = 6.28%（2025Q3）→ 4.02% → 6.88% → **12.19%** → **15.60%**（2026Q3）。经营层面改善趋势在最近五个季度是连续且单调向上的。\n- **净利与经营利润的方向严重背离**，且背离与 `Total Unusual Items` 的符号和量级高度同步。2026-06-30 单季 `Total Unusual Items` 为 -127.38 亿 USD、`Gain Loss On Investment Securities` 为 -124.76 亿 USD（`quarterly.income.34.x`），当季净利 -110.33 亿 USD。**这是已观察到的财务关系：净利波动与投资证券损益及非经常项目相关，而非与经营利润相关。** 这些项目的经济实质（是否为市值计价、减值或处置）快照未说明。\n\n### 四、现金流与现金转换\n\n- 年度经营现金流 `Operating Cash Flow`（`annual.cashflow.38.x`）：154.33 → 114.71 → 82.88 → 96.97 亿 USD。资本开支 `Capital Expenditure`（`annual.cashflow.5.x`）：-248.44 → -257.50 → -239.44 → -146.46 亿 USD。**已观察到的财务关系**：2025 年经营现金流增加 14.09 亿、资本开支减少 92.98 亿 USD，二者共同使年度自由现金流从 -156.56 亿改善到 -49.49 亿 USD。资本开支的削减幅度远大于经营现金流的改善，**FCF 改善在算术上主要来自投资收缩**；资本开支下降是产能项目完工、节奏调整还是削减，快照未披露。\n- **净利与经营现金流的质量关系**：2025 年 `Net Income` -2.67 亿 USD，而 `Operating Cash Flow` 96.97 亿 USD；差额主要由 `Depreciation Amortization Depletion` 117.06 亿 USD（`annual.cashflow.61.x`）和 `Stock Based Compensation` 24.34 亿 USD 支撑。**说明当前经营现金流对净利润的转化依赖非现金折旧摊销，而非盈利本身**。\n- 季度现金流：`quarterly.cashflow` 中 2026-09-30 的 `Operating Cash Flow` 50.82 亿、`Capital Expenditure` -40.24 亿、`Free Cash Flow` 10.58 亿 USD。`period_note` 明确**季度现金流可能为累计值**，快照未标注口径，`calculated_metrics.limitations` 也说明“季度现金流累计口径不明时不计算 TTM”。因此**不使用季度现金流做 TTM 求和或趋势外推**。\n\n### 五、资产负债表与营运资本\n\n- `Cash Cash Equivalents And Short Term Investments`（`balance.72.x`）：2022-12-31 283.38 亿 → 2025-12-31 374.16 亿 → 2026-09-30 **540.05 亿 USD**。同期 `Total Debt`（`balance.4.x`）：420.07 → 465.85 → 501.34 亿 USD。\n- **已观察到的财务关系**：现金及短期投资在 2026 年前九个月增加 165.89 亿 USD，`Total Debt` 增加 35.49 亿 USD。同期 `Ordinary Shares Number` 从 49.94 亿股增至 53.10 亿股（`quarterly.balance.0.x`），`Capital Stock` 从 651.85 亿增至 781.77 亿 USD（`balance.17.x`）——**股本与资本公积同步大幅增加，提示期间存在股权融资**。年度表中 `Issuance Of Capital Stock`（`annual.cashflow.19.x`）2024 年为 127.14 亿 USD、2023 年为 15.11 亿 USD、2025 年为 null；`Proceeds From Stock Option Exercised` 2025 年为 134.77 亿 USD。**这些项目的具体性质（增发、可转债转换、期权行权）快照未逐项披露，无法确认。**\n- 营运资本：`Working Capital`（`balance.7.x`）由 2024-12-31 的 116.58 亿升至 2025-12-31 的 321.13 亿 USD，计算 `current_ratio` 由 1.327 升至 2.017。2026-09-30 单季 `current_ratio` 约 2.21（由 `profile.currentRatio` = 2.208 与 `quarterly.balance` 可印证）。**流动性改善明显，但其中多大比例来自现金与短投余额、多大比例来自短期债务结构，快照只给出余额层面信息，不做因果归因。**\n- `debt_ratio`（负债/资产）：2022 年 43.28% → 2024 年 46.54% → 2025 年 40.24%，2026-09-30 由 `quarterly.balance` 计算为 970.18/2285.74 = **42.44%**。`profile.debtToEquity` = 38.108（已是百分数，供应商当前口径，与计算口径 `debt_ratio` 不同，不可混用）。\n\n### 六、与用户指定可比公司对比（仅比率，不跨币种合并金额）\n\n| 指标 | INTC | NVDA | 可比性说明 |\n|---|---|---|---|\n| `returnOnEquity` | -9.62% | 117.211% | 供应商当前口径，二者报告期不同 |\n| `profitMargins` | -20.089% | 63.663% | 同上 |\n| `revenueGrowth` | 20.9% | 105.9% | 同上，非同一季度 |\n| `trailingPE` | null | 21.010115 | INTC 无",

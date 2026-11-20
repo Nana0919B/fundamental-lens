@@ -11,19 +11,19 @@ import pytest
 from tradingagents.web.bootstrap import SEED_DIR, initialize_shared_data
 
 
-def test_bundled_archive_is_complete_and_contains_no_aapl():
+def test_bundled_archive_is_complete_and_contains_current_research():
     manifest = json.loads((SEED_DIR / "manifest.json").read_text())
-    assert manifest["tickers"] == ["0700.HK", "INTC", "MSFT"]
+    assert manifest["tickers"] == ["0700.HK", "AAPL", "INTC", "MSFT"]
     with sqlite3.connect(f"file:{SEED_DIR / 'research.sqlite3'}?mode=ro", uri=True) as db:
         assert db.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
         assert db.execute("PRAGMA foreign_key_check").fetchall() == []
         for table, expected in manifest["table_counts"].items():
             assert db.execute(f'SELECT COUNT(*) FROM "{table}"').fetchone()[0] == expected
         jobs = list((SEED_DIR / "jobs").glob("*.json"))
-        assert len(jobs) == manifest["job_count"] == 4
+        assert len(jobs) == manifest["job_count"] == 6
         for path in jobs:
             job = json.loads(path.read_text())
-            assert job["ticker"] != "AAPL" and job["status"] == "completed"
+            assert job["status"] == "completed"
             raw = json.dumps(job["research_snapshot"], ensure_ascii=False, sort_keys=True, allow_nan=False)
             digest = hashlib.sha256(raw.encode()).hexdigest()
             assert digest == job["snapshot_digest"]
@@ -37,8 +37,17 @@ def test_bundled_archive_is_complete_and_contains_no_aapl():
                     job["research_snapshot"]["id"],
                 )).fetchone()
             assert json.loads(row[0]) == job["reports"]
+            if job.get("news_context"):
+                from tradingagents.dataflows.trendradar_adapter import validate_news_context
+
+                context = job["news_context"]
+                validate_news_context(context, job["ticker"], job["date"])
+                news = db.execute("SELECT payload FROM news_snapshots WHERE id=?", (
+                    context["snapshot_id"],
+                )).fetchone()
+                assert json.loads(news[0]) == context
         for line in db.iterdump():
-            assert "AAPL" not in line and "/Users/" not in line
+            assert "/Users/" not in line and "/private/" not in line
 
 
 @pytest.mark.parametrize("precreate", [False, True])
@@ -54,8 +63,8 @@ def test_first_start_loads_history_and_exports_without_network(monkeypatch, tmp_
     monkeypatch.setattr(server, "build_default_config", lambda: {"results_dir": str(tmp_path)})
     monkeypatch.setattr(server, "company_data", lambda *a: pytest.fail("Archive viewing must stay offline"))
     server.load_history()
-    assert len(server.JOBS) == 4
-    assert {job["ticker"] for job in server.JOBS.values()} == {"MSFT", "0700.HK", "INTC"}
+    assert len(server.JOBS) == 6
+    assert {job["ticker"] for job in server.JOBS.values()} == {"MSFT", "0700.HK", "INTC", "AAPL"}
     for job_id in server.JOBS:
         handler = object.__new__(server.Handler)
         handler.headers = {"Host": "127.0.0.1:8765"}
