@@ -100,6 +100,36 @@ async function interactionTests(){
  context.supplier={revenueGrowth:.117,mostRecentQuarter:1790380800};
  const growth=vm.runInContext('supplierGrowthNote(supplier)',context);
  assert(growth.includes('11.7%')&&growth.includes('2026-09-26')&&growth.includes('非 TTM'));
+ // Chart presentation must preserve signed values and must never turn missing data into zero.
+ context.chartPoints=[{period:'2024-06-30',value:-10},{period:'2025-06-30',value:null},{period:'2026-06-30',value:0}];
+ const chart=vm.runInContext('seriesChart(chartPoints,{unit:"亿 USD",compact:true})',context);
+ assert(chart.includes('-10 亿 USD')&&chart.includes('0 亿 USD'));
+ assert(!chart.includes('2025-06-30:')&&!chart.includes('NaN')&&!chart.includes('Infinity'));
+ assert.equal((chart.match(/<circle /g)||[]).length,2);
+ assert.equal((chart.match(/<polyline /g)||[]).length,2,'A missing period must break the trend line');
+ assert(chart.includes('>2025<')&&chart.includes('缺失值不绘制'));
+ assert.equal(vm.runInContext('readableSummary("snapshot未提供 operating_margin")',context),'本次资料未提供 经营利润率（比率原值）');
+ assert.equal(vm.runInContext('readableFormula("net_income / revenue")',context),'净利润 / 营业收入');
+ assert(vm.runInContext('seriesChart([{period:"2026-06-30",value:null}])',context).includes('没有可用的历史序列'));
+ assert(vm.runInContext('seriesChart([{period:"2026-06-30",value:4.95}],{digits:2})',context).includes('4.95'));
+ assert.equal(vm.runInContext('metricDisplay(.21,{unit:"ratio"})',context),'21%');
+ assert.equal(vm.runInContext('metricDisplay(null,{unit:"ratio"})',context),'—');
+ fixture.macro_context={reports:['## FRED：美国 CPI（CPIAUCSL）\n- 单位：指数，1982–1984=100；查询期间：2026。\n**最新读数：337.476（观察日期：2026-10-01）**']};
+ const macro=vm.runInContext('macroReadings()',context);
+ assert(macro.includes('337.476')&&macro.includes('指数，1982–1984=100')&&macro.includes('2026-10-01'));
+ assert(!macro.includes('337.476%'),'A price index must keep its actual unit');
+ const archived=JSON.stringify(fixture.data.statements);
+ vm.runInContext('job=fixture;financialRow="Total Revenue";financialView()',context);
+ assert.equal(JSON.stringify(fixture.data.statements),archived,'Chart selection must not mutate statement data');
+ const fakeRows=['营业收入 / Total Revenue','净利润 / Net Income'].map(text=>({hidden:false,querySelector(){return {textContent:text}}}));
+ nodes.get('#content').querySelectorAll=()=>fakeRows;
+ vm.runInContext('financialQuery="营业收入";filterFinancialRows()',context);
+ assert.equal(fakeRows[0].hidden,false);assert.equal(fakeRows[1].hidden,true);
+ vm.runInContext('financialQuery="no matching field";filterFinancialRows()',context);
+ assert.equal(nodes.get('#financial-no-results').hidden,false);
+ vm.runInContext('financialQuery="";filterFinancialRows()',context);
+ assert(fakeRows.every(r=>!r.hidden));assert.equal(nodes.get('#financial-no-results').hidden,true);
+ nodes.get('#content').querySelectorAll=()=>[];
  console.log('Seven panels, escaped evidence, financial units, submission failure/recovery, live completion and selection races passed.');
 }
 interactionTests().catch(error=>{console.error(error);process.exitCode=1});
