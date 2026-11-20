@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s), tabs=['研究简报','公司资料','经营分析','财务报告','财务指标','新闻分析','比较分析'];
 let selected=null,job=null,tab=0,frequency='annual',statement='income',jobs=[],loading=false;
 let selectionRevision=0,submitting=false,chartMode='revenue',toastTimer=null;
+let metricKey='net_margin',financialQuery='',financialRow='';
 const jobCache=new Map(), reportCache=new Map();
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>v==null||!Number.isFinite(Number(v))?'—':Number(v).toLocaleString('zh-CN',{maximumFractionDigits:d});
@@ -83,11 +84,11 @@ function yi(value){return value==null||!Number.isFinite(Number(value))?'—':fix
 function monogram(name){const text=String(name||'');return text.match(/[A-Z]/i)?.[0].toUpperCase()||text.slice(0,1)||'·';}
 function statusLabel(status){return {completed:'已完成研究',running:'分析中',queued:'等待分析',failed:'研究未完成'}[status]||'研究归档';}
 function ratingLabel(value){return {Buy:'买入',Overweight:'增持',Hold:'持有',Underweight:'减持',Sell:'卖出'}[value]||value||'尚未生成';}
-function annualSeries(rowName,kind='income'){
+function annualSeries(rowName,kind='income',includeMissing=false){
   const t=job.data?.statements?.annual?.[kind],row=t?.rows?.find(r=>r.name===rowName);
   if(!row)return [];
   return t.periods.map((period,i)=>({period,year:period.slice(0,4),value:row.values[i]}))
-    .filter(x=>x.value!=null&&Number.isFinite(Number(x.value))).slice(0,5).reverse();
+    .filter(x=>includeMissing||(x.value!=null&&Number.isFinite(Number(x.value)))).slice(0,5).reverse();
 }
 function lastPair(name,kind='income'){
   const series=annualSeries(name,kind);return series.length>=2?series.slice(-2):null;
@@ -146,7 +147,7 @@ function briefView(){
     ['财务质量','metrics_report',reportParagraph('metrics_report',115)],
     ['变化原因与待验证解释','operating_report',reportParagraph('operating_report',115,'变化原因')]
   ];
-  const first=researchCard('基本面研究','01',`<h2 class="article-title">${researchHeadline()}</h2><p class="lede">围绕本次财务表现，结合经营分析、财务指标与风险评估梳理公司基本面。</p><div class="findings">${findings.map(([title,key,text])=>`<div class="finding"><span class="finding-icon">${icon(text?'check':'clock',17)}</span><div><div class="finding-heading"><h4>${title}</h4>${reportButton(key,title,'阅读全文')}</div><p>${summaryMarkup(text||pendingReportText())}</p>${title==='变化原因与待验证解释'?'':summaryFact(key)}</div></div>`).join('')}</div>`,`<span class="source-label">财务事实 · 经营分析 · 风险核验</span>${reportButton('fundamentals_report','基本面研究','阅读完整研究')}`);
+  const first=researchCard('基本面研究','01',`<h2 class="article-title">${researchHeadline()}</h2><p class="lede">围绕本次财务表现，结合经营分析、财务指标与风险评估梳理公司基本面。</p><div class="findings">${findings.map(([title,key,text])=>`<div class="finding"><span class="finding-icon">${icon(text?'check':'clock',17)}</span><div><div class="finding-heading"><h4>${title}</h4>${reportButton(key,title,'阅读全文')}</div><p>${summaryMarkup(readableSummary(text||pendingReportText()))}</p>${title==='变化原因与待验证解释'?'':summaryFact(key)}</div></div>`).join('')}</div>`,`<span class="source-label">财务事实 · 经营分析 · 风险核验</span>${reportButton('fundamentals_report','基本面研究','阅读完整研究')}`);
   const decision=researchCard('综合判断','02',`<div class="rating-line"><span class="rating-tag">${escape(ratingLabel(job.rating))}${job.rating?' · '+escape(job.rating):''}</span><span class="note">本次研究的最终判断</span></div><p class="decision-note">${escape(reportParagraph('final_trade_decision',240)||pendingReportText())}</p>`,`<span class="source-label">来自多空讨论与风险评估</span>${reportButton('final_trade_decision','综合判断','查看判断依据')}`);
   const company=researchCard('公司研究简报','03',`<p class="prose">${escape(reportParagraph('company_brief',200)||pendingReportText())}</p>`,`<span class="source-label">汇集公司研究结论与风险提示</span>${reportButton('company_brief','公司研究简报','展开公司简报')}`);
   const plans=card('研究与交易计划',`<details><summary>研究经理观点</summary><div class="prose">${report('investment_plan')}</div></details><details><summary>交易方案</summary><div class="prose">${report('trader_investment_plan')}</div></details>`);
@@ -174,13 +175,125 @@ function prioritizedEvidence(refs){
   const score=r=>{if(!String(r.id||'').startsWith(prefix))return 1000;const i=priority.indexOf(r.field);return i<0?500:i;};
   return [...refs].sort((a,b)=>score(a)-score(b));
 }
+// Module views reuse archived statements, standardized analytics and original analyst reports.
+function moduleHeader(title,caption,action=''){
+  return `<div class="module-heading"><div><h2>${title}</h2><p>${escape(caption)}</p></div>${action}</div>`;
+}
+function reportSection(key,match){
+  const root=document.createElement('div');root.innerHTML=displayReport(job.report_html?.[key]||'');
+  const heading=[...root.querySelectorAll('h2,h3')].find(h=>h.textContent.includes(match));
+  if(!heading)return '';
+  let html='',node=heading.nextElementSibling;
+  while(node){if(/^H[1-6]$/.test(node.tagName)&&Number(node.tagName[1])<=Number(heading.tagName[1]))break;html+=node.outerHTML;node=node.nextElementSibling;}
+  return html;
+}
+function sectionExcerpt(key,section,limit){
+  const root=document.createElement('div');root.innerHTML=reportSection(key,section);
+  return excerpt(readableSummary(root.textContent||''),limit);
+}
+function analystDigest(key,title){
+  const text=reportParagraph(key,330,'核心结论');
+  return `<section class="card analyst-digest"><div class="card-heading"><h3>${icon('file',16)} ${title}</h3><span class="mini-label">智能体研究</span></div><p class="digest-copy">${summaryMarkup(readableSummary(text||pendingReportText()))}</p><div class="digest-notes">${[['变化原因与待验证解释','变化原因'],['风险提示','风险提示']].map(([label,section])=>`<div><h4>${label}</h4><p>${summaryMarkup(sectionExcerpt(key,section,175)||'请查看完整报告中的相关说明；本次资料未提供独立段落。')}</p></div>`).join('')}</div><div class="card-bottom"><span class="source-label">摘要来自本次归档报告 · 原始引用保留在全文</span>${reportButton(key,title,'阅读完整分析')}</div></section>`;
+}
+function fullAnalyst(key,title){return `<details class="card full-analyst"><summary>${title}</summary><div class="prose">${report(key)}</div></details>`;}
+function metricDisplay(value,definition){return definition?.unit==='ratio'?pct(value):definition?.unit==='currency'?money(value):num(value);}
+function seriesChart(points,{unit='',percent=false,label='历史趋势',compact=false,digits=1}={}){
+  const hasValue=p=>p.value!=null&&Number.isFinite(Number(p.value));
+  const valid=points.filter(hasValue);
+  if(!valid.length)return '<p class="note chart-empty">本次资料没有可用的历史序列。</p>';
+  const values=valid.map(p=>Number(p.value)),lo=Math.min(0,...values),hi=Math.max(0,...values),span=hi-lo||1;
+  const width=compact?340:580,font=compact?16:13;
+  const y=v=>32+(hi-v)/span*125;
+  const x=i=>points.length===1?width/2:48+i*(width-100)/(points.length-1);
+  const format=v=>percent?pct(v):num(v,digits);
+  // Keep missing periods on the time axis and break the line at each gap.
+  const segments=[];let segment=[];
+  points.forEach((p,i)=>{
+    if(hasValue(p)){segment.push(x(i)+','+y(p.value));}
+    else if(segment.length){segments.push(segment);segment=[];}
+  });
+  if(segment.length)segments.push(segment);
+  const grid=[0,.5,1].map(n=>`<line x1="30" x2="${width-30}" y1="${y(lo+span*n)}" y2="${y(lo+span*n)}" stroke="#e7ece4"/>`).join('');
+  const lines=segments.map(points=>`<polyline points="${points.join(' ')}" fill="none" stroke="#205c48" stroke-width="2.5" stroke-linejoin="round"/>`).join('');
+  const marks=points.map((p,i)=>`${hasValue(p)?`<g><title>${escape(p.period+': '+format(p.value)+' '+unit)}</title><circle cx="${x(i)}" cy="${y(p.value)}" r="4" fill="#205c48" stroke="white" stroke-width="2"/><text x="${x(i)}" y="${y(p.value)-12}" text-anchor="middle" fill="#205c48" font-size="${font}">${escape(format(p.value))}</text></g>`:''}<text x="${x(i)}" y="188" text-anchor="middle" fill="#606d65" font-size="${compact?16:12}">${escape(p.period.slice(0,compact?4:7))}</text>`).join('');
+  return `<div class="series-chart${compact?' compact-chart':''}"><svg viewBox="0 0 ${width} 205" role="img" aria-label="${escape(label+' · '+unit)}">${grid}<line x1="30" x2="${width-30}" y1="${y(0)}" y2="${y(0)}" stroke="#aebdaf" stroke-dasharray="3 4"/><text x="18" y="${y(0)+4}" text-anchor="end" fill="#606d65" font-size="${font}">0</text>${lines}${marks}</svg></div><p class="chart-caption">${escape(unit)}${valid.length<points.length?' · 缺失值不绘制、不连线，完整期间见数据明细':''}</p>`;
+}
+function readableSummary(text){
+  return String(text||'').replace(/snapshot/gi,'本次资料').replace(/calculated_metrics\.history/g,'历史指标').replace(/(?:annual|quarterly)\.(?:income|balance|cashflow)\.\d+(?:\.\d+)?/g,'对应报表科目').replace(/operating_margin/g,'经营利润率（比率原值）').replace(/net_margin/g,'净利率（比率原值）').replace(/free_cashflow/g,'自由现金流').replace(/insider_transactions/g,'内部人交易').replace(/period_note/g,'期间说明');
+}
+function readableFormula(formula){
+  const labels={revenue:'营业收入',gross_profit:'毛利润',operating_income:'营业利润',net_income:'净利润',prior_equity:'上期股东权益',equity:'股东权益',prior_assets:'上期总资产',assets:'总资产',current_assets:'流动资产',current_liabilities:'流动负债',total_liabilities:'负债合计',total_assets:'总资产',operating_cashflow:'经营活动现金流',capex:'资本开支'};
+  return String(formula||'本次资料未提供统一计算公式').replace(/[a-z_]+/g,word=>labels[word]||word).replace('Yahoo outflow-negative','现金流出使用负值');
+}
+function compactNewsHTML(html){
+  const root=document.createElement('div');root.innerHTML=html;
+  root.querySelectorAll('a[href]').forEach(a=>{
+    const url=a.getAttribute('href');
+    if(/^https?:\/\//i.test(url)&&a.textContent.trim()===url){
+      try{a.textContent=new URL(url).hostname.replace(/^www\./,'')+' 原文 ↗';}catch{}
+    }
+  });
+  // Older analyst reports contain plain-text URLs as well as Markdown links.
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];
+  while(walker.nextNode())if(!walker.currentNode.parentElement.closest('a,code,pre'))nodes.push(walker.currentNode);
+  nodes.forEach(node=>{
+    const matches=[...node.textContent.matchAll(/https?:\/\/[^\s<>]+/gi)];
+    if(!matches.length)return;
+    const fragment=document.createDocumentFragment();let end=0;
+    matches.forEach(match=>{
+      const url=match[0].replace(/[。，、；）]+$/,'');
+      fragment.append(document.createTextNode(node.textContent.slice(end,match.index)));
+      const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+      try{a.textContent=new URL(url).hostname.replace(/^www\./,'')+' 原文 ↗';}catch{a.textContent=url;}
+      fragment.append(a);end=match.index+url.length;
+    });
+    fragment.append(document.createTextNode(node.textContent.slice(end)));node.replaceWith(fragment);
+  });
+  return root.innerHTML;
+}
+function operatingView(){
+  const a=job.research_snapshot?.analytics||{},latest=a.history?.[0],currency=job.data.profile?.financialCurrency||'币种未提供';
+  const revenue=annualSeries('Total Revenue').at(-1),profit=annualSeries('Net Income').at(-1),cash=annualSeries('Free Cash Flow','cashflow').at(-1);
+  const tiles=[["年度营业收入",revenue],["年度净利润",profit],["年度自由现金流",cash]];
+  return moduleHeader('经营分析','年度经营表现与智能体解读',`<span class="period-tag">${escape(latest?.period||revenue?.period||'报告期未提供')} · 年度</span>`)+`<div class="module-stats">${tiles.map(([label,row])=>stat(label,yi(row?.value),'亿 '+currency+' · '+(row?.period||'期间未提供'))).join('')}${stat('年度经营利润率',pct(latest?.values?.operating_margin),'统一公式 · '+(latest?.period||'期间未提供'))}</div><div class="module-columns"><div class="content-main">${analystDigest('operating_report','独立经营结论')}${card('营收与利润的年度变化',`<div class="paired-charts"><div><h4>营业收入</h4>${seriesChart(annualSeries('Total Revenue','income',true).map(p=>({...p,value:p.value==null?null:p.value/1e8})),{unit:'亿 '+currency,label:'年度营业收入',compact:true})}</div><div><h4>净利润</h4>${seriesChart(annualSeries('Net Income','income',true).map(p=>({...p,value:p.value==null?null:p.value/1e8})),{unit:'亿 '+currency,label:'年度净利润',compact:true})}</div></div>`)}${fullAnalyst('operating_report','完整经营分析与证据引用')}</div><aside class="module-rail">${card('现金流观察',seriesChart(annualSeries('Free Cash Flow','cashflow',true).map(p=>({...p,value:p.value==null?null:p.value/1e8})),{unit:'亿 '+currency,label:'年度自由现金流',compact:true})+'<p class="note">自由现金流与资本开支结合观察，具体变化原因以报告证据为准。</p>')}${card('业务拆分覆盖','<p class="note">本次接口未提供按产品、业务分部或地区拆分的数据。待接入公司披露后展示构成图。</p>')}<p class="note">年度数据与 TTM 分开阅读。图表展示报告期变化，不单独证明经营原因。</p></aside></div>`;
+}
 function financialView(){
-  const p=job.data.profile||{},t=job.data.statements?.[frequency]?.[statement];
-  const name={income:'利润表',balance:'资产负债表',cashflow:'现金流量表'}[statement];
-  const currency=p.financialCurrency||'币种未提供';
-  const toolbar=`<div class="section-heading"><h2>财务报告</h2><span class="mini-label">金额单位：百万 ${escape(currency)}</span></div><div class="toolbar"><select id="frequency" aria-label="报表频率"><option value="annual" ${frequency==='annual'?'selected':''}>年度报告</option><option value="quarterly" ${frequency==='quarterly'?'selected':''}>季度报告</option></select><select id="statement" aria-label="财务报表">${[['income','利润表'],['balance','资产负债表'],['cashflow','现金流量表']].map(([v,label])=>`<option value="${v}" ${statement===v?'selected':''}>${label}</option>`).join('')}</select></div>`;
-  const content=t?.rows?.length?`<p class="scroll-guidance">金额：百万 ${escape(currency)} · 共 ${t.rows.length} 项科目 · 表内上下滚动查看更多，左右滑动看报告期 ↔</p>`+table(['科目 · 百万 '+currency,...t.periods],prioritizedFinancialRows(t.rows,statement).map(row=>[fieldName(row.name)===row.name?row.name:fieldName(row.name)+' / '+row.name,...row.values.map(v=>financialValue(row.name,v))])).replace('class="table-wrap"','class="table-wrap financial-scroll" tabindex="0" aria-label="可滚动财务报表"')+`<p class="note" style="margin-top:15px">每股项目保留原值，股数以百万股计，税率以百分比展示。其余科目按供应商原名保留。</p>`:'<p class="note">数据源未提供此报表。</p>';
-  return toolbar+card('财务报表 · '+name,content);
+  const p=job.data.profile||{},t=job.data.statements?.[frequency]?.[statement],currency=p.financialCurrency||'币种未提供';
+  const names=[['income','利润表'],['balance','资产负债表'],['cashflow','现金流量表']],name=names.find(([v])=>v===statement)[1];
+  const rows=prioritizedFinancialRows(t?.rows||[],statement),selectedRow=rows.find(r=>r.name===financialRow)||rows[0];
+  const points=selectedRow?(t.periods||[]).map((period,i)=>({period,value:selectedRow.values[i]})).reverse():[];
+  const perShare=/EPS|Per Share/i.test(selectedRow?.name||''),tax=/Tax Rate/i.test(selectedRow?.name||''),shares=/Shares/i.test(selectedRow?.name||'');
+  const unit=tax?'百分比':perShare?currency+' / 股':shares?'百万股':'百万 '+currency;
+  const chart=seriesChart(points.map(p=>({...p,value:p.value==null?null:tax||perShare?p.value:p.value/1e6})),{unit,percent:tax,digits:perShare?2:1,label:fieldName(selectedRow?.name||'')});
+  return moduleHeader('财务报告','完整科目与报告期对照',`<span class="period-tag">财报币种 ${escape(currency)}</span>`)+`<section class="card statement-workspace"><div class="statement-controls"><div class="statement-switch" role="group" aria-label="选择报表">${names.map(([value,label])=>`<button data-statement="${value}" aria-pressed="${statement===value}" class="${statement===value?'active':''}">${label}</button>`).join('')}</div><div class="toolbar"><select id="frequency" aria-label="报表频率"><option value="annual" ${frequency==='annual'?'selected':''}>年度报告</option><option value="quarterly" ${frequency==='quarterly'?'selected':''}>季度报告</option></select><select id="statement" aria-label="财务报表">${names.map(([v,label])=>`<option value="${v}" ${statement===v?'selected':''}>${label}</option>`).join('')}</select></div></div><div class="statement-chart"><div><span class="eyebrow">科目趋势 · ${frequency==='annual'?'年度':'季度'}</span><h3>${escape(fieldName(selectedRow?.name||'未提供数据'))}</h3><label class="field compact-field">查看科目<select id="financial-row" aria-label="查看科目趋势">${rows.map(r=>`<option value="${escape(r.name)}" ${r===selectedRow?'selected':''}>${escape(fieldName(r.name))}</option>`).join('')}</select></label></div><div>${chart}${frequency==='quarterly'&&statement==='cashflow'?'<p class="note">季度现金流可能为累计口径，请核对原始披露。</p>':''}</div></div><div class="table-heading"><h3>财务报表 · ${name}</h3><label class="row-search">${icon('search',15)}<input id="financial-search" type="search" value="${escape(financialQuery)}" placeholder="搜索中英文科目" aria-label="搜索财务科目"></label></div><p class="scroll-guidance">金额：百万 ${escape(currency)} · <span id="financial-row-count">共 ${rows.length} 项科目</span> · 表内上下滚动，左右滑动看报告期 ↔</p>${rows.length?table(['科目 · 百万 '+currency,...t.periods],rows.map(row=>[fieldName(row.name)===row.name?row.name:fieldName(row.name)+' / '+row.name,...row.values.map(v=>financialValue(row.name,v))])).replace('class="table-wrap"','class="table-wrap financial-scroll" tabindex="0" aria-label="可滚动财务报表"'):'<p class="note">数据源未提供此报表。</p>'}<p id="financial-no-results" class="note" hidden>没有匹配科目，请尝试其他名称或清空搜索。</p><p class="note table-footnote">每股项目保留原值，股数以百万股计，税率以百分比展示。科目按供应商原名保留，优先列出核心科目。</p></section>`;
+}
+function filterFinancialRows(){
+  const query=financialQuery.trim().toLocaleLowerCase(),rows=[...$('#content').querySelectorAll('.financial-scroll tbody tr')];
+  let count=0;rows.forEach(row=>{row.hidden=!(row.querySelector('td')?.textContent||'').toLocaleLowerCase().includes(query);if(!row.hidden)count++;});
+  $('#financial-row-count').textContent=query?`匹配 ${count} / ${rows.length} 项科目`:`共 ${rows.length} 项科目`;
+  $('#financial-no-results').hidden=!query||count>0;
+}
+function metricsView(){
+  const a=job.research_snapshot?.analytics||{},defs=a.definitions||{},history=a.history||[],latest=history[0],p=job.data.profile||{};
+  const groups=[['盈利能力',['gross_margin','operating_margin','net_margin','roe','roa']],['偿债能力',['current_ratio','debt_ratio']],['现金创造',['free_cashflow']]];
+  const keys=Object.keys(defs);if(!keys.includes(metricKey))metricKey=keys[0]||'net_margin';
+  const definition=defs[metricKey],unit=definition?.unit==='currency'?'亿 '+(p.financialCurrency||'币种未提供'):definition?.unit==='ratio'?'%':'倍';
+  const points=[...history].reverse().map(h=>({period:h.period,value:h.values?.[metricKey]==null?null:definition?.unit==='currency'?h.values[metricKey]/1e8:h.values[metricKey]}));
+  return moduleHeader('财务指标','统一公式计算 · 年度历史对照',`<span class="period-tag">${escape(latest?.period||'报告期未提供')} · 年度</span>`)+`<div class="module-columns"><div class="content-main">${card('财务质量概览',`<div class="quality-groups">${groups.map(([label,keys])=>`<div class="quality-group"><h4>${label}</h4>${keys.map(k=>`<div class="quality-row"><span>${escape(defs[k]?.label||({gross_margin:'毛利率',operating_margin:'经营利润率',net_margin:'净利率',roe:'ROE',roa:'ROA',current_ratio:'流动比率',debt_ratio:'资产负债率',free_cashflow:'自由现金流'}[k]))}</span><strong>${escape(metricDisplay(latest?.values?.[k],defs[k]))}</strong></div>`).join('')}</div>`).join('')}</div><p class="note">基于年度报表计算；ROE、ROA 使用平均余额。自由现金流币种：${escape(p.financialCurrency||'未提供')}。</p>`)}${analystDigest('metrics_report','独立财务指标结论')}${card('历史指标趋势',`<div class="toolbar"><select id="metric-key" aria-label="选择历史财务指标">${keys.map(k=>`<option value="${escape(k)}" ${metricKey===k?'selected':''}>${escape(defs[k].label)}</option>`).join('')}</select><span class="mini-label">${escape(unit)} · 年度</span></div>${seriesChart(points,{unit,percent:definition?.unit==='ratio',label:definition?.label||'财务指标'})}<p class="note formula-note">计算公式：${escape(readableFormula(definition?.formula))}</p>`)}<details class="card"><summary>统一公式、历史数据与 TTM 明细</summary>${calculatedMetrics()}</details>${fullAnalyst('metrics_report','完整指标分析与证据引用')}</div><aside class="module-rail">${card('市场估值',`<p class="eyebrow">供应商当前归档口径</p><div class="valuation-main"><span>市盈率 · TTM</span><strong>${num(p.trailingPE)}<small> 倍</small></strong></div>${table(['指标','数值'],[['预期市盈率',num(p.forwardPE)],['市净率 PB',num(p.priceToBook)],['EPS · TTM',num(p.trailingEps)],['市值',money(p.marketCap)+' '+(p.currency||'')]])}<p class="note">交易币种 ${escape(p.currency||'未提供')}。估值与年度计算值期间可能不同。</p>`)}${card('供应商指标',`<details><summary>查看归档原值</summary>${table(['指标','数值'],[['经营利润率',pct(p.operatingMargins)],['ROE',pct(p.returnOnEquity)],['毛利率',pct(p.grossMargins)],['净利率',pct(p.profitMargins)],['ROA',pct(p.returnOnAssets)],['收入增长率',pct(p.revenueGrowth)],['利润增长率',pct(p.earningsGrowth)],['流动比率',num(p.currentRatio)],['债务 / 股东权益',p.debtToEquity==null?'—':num(p.debtToEquity)+'%'],['自由现金流',money(p.freeCashflow)+' '+(p.financialCurrency||'')]])}</details><p class="note">供应商当前指标与统一公式历史值分开展示；不得直接视为同一期间的变化。</p>`)}</aside></div>`;
+}
+function newsSources(){
+  const root=document.createElement('div');root.innerHTML=job.report_html?.news_report||'';
+  const seen=new Set();return [...root.querySelectorAll('a[href]')].filter(a=>{const url=a.getAttribute('href');if(!/^https?:\/\//i.test(url)||seen.has(url))return false;seen.add(url);return true;}).map(a=>({url:a.getAttribute('href'),title:a.textContent}));
+}
+function macroReadings(){
+  const reports=(job.macro_context||job.macro_update)?.reports||[];
+  return reports.map(text=>{const title=text.match(/^##\s+(.+)/m)?.[1],reading=text.match(/最新读数[：:]\s*([\d.,+-]+).*?观察日期[：:]\s*([\d-]+)/),unit=text.match(/- 单位[：:]\s*([^；。\n]+)/)?.[1];return title&&reading?`<div class="macro-reading"><span>${escape(title.replace(/^FRED[：:]\s*/,''))}</span><strong>${escape(reading[1])}<small>${escape(unit||'')}</small></strong><small>观察日期 ${escape(reading[2])}</small></div>`:'';}).join('');
+}
+function newsView(){
+  const body=job.report_html?.news_report,company=reportSection('news_report','公司层面')||reportSection('news_report','公司新闻')||reportSection('news_report','公司相关'),macro=reportSection('news_report','宏观环境')||reportSection('news_report','宏观背景'),transmission=reportSection('news_report','传导机制'),links=newsSources();
+  const context=job.macro_context||job.macro_update,readings=macroReadings(),items=job.news_context?.items||[];
+  const macroStatus=context?`<section class="macro-status"><h3>${icon('layers',15)} 宏观数据参与研究</h3><p class="note">${job.macro_consumed?'本版本已将 FRED 数据传给原新闻分析师，并重新运行综合判断。财务数据和财务分析沿用原版本。':'当前宏观数据仅作补充，尚未参与原新闻结论与综合判断。'}</p><button id="reanalyze-macro" class="text-button" type="button">用这份宏观数据重新分析新闻与综合判断 ${icon('arrow',14)}</button></section>`:'';
+  return moduleHeader('新闻分析','公司事件 · 宏观传导 · 原始来源',`<span class="period-tag">研究日期 ${escape(job.date)}</span>`)+`<div class="module-columns news-columns"><div class="content-main">${card('新闻事件与风险',`<div class="card-heading"><span class="eyebrow">原新闻分析智能体 · 本次归档结论</span>${reportButton('news_report','新闻分析','完整报告')}</div><p class="news-lede">${summaryMarkup(reportParagraph('news_report',430,'核心结论')||pendingReportText())}</p>`)}${company?card('公司事件',`<div class="prose event-sections">${compactNewsHTML(company)}</div>`):body?card('新闻分析正文',`<div class="prose">${report('news_report')}</div>`):specialistReport('news_report','新闻分析 · 事件、影响与风险')}${transmission?card('宏观如何影响公司',`<div class="prose">${transmission}</div>`):''}${macro?`<details class="card"><summary>宏观环境与分析依据</summary><div class="prose">${macro}</div></details>`:''}${company?fullAnalyst('news_report','完整新闻分析与全部来源'):''}${items.length?`<details class="card"><summary>采集新闻资料 · ${items.length} 条</summary><p class="note">采集列表不等同于已验证事件；具体判断以新闻智能体报告为准。</p>${items.map(item=>`<p class="news-source"><span>${escape(item.source||'来源未提供')} · ${escape(item.published_at||'发布时间未提供')}</span>${/^https?:\/\//i.test(item.url||'')?`<a href="${escape(item.url)}" target="_blank" rel="noopener noreferrer">${escape(item.title)} ↗</a>`:escape(item.title)}</p>`).join('')}</details>`:''}</div><aside class="module-rail">${context?card('FRED 宏观读数',readings||'<p class="note">本次宏观资料没有可解析的读数，完整信息保留在报告中。</p>'):card('宏观资料','<p class="note">本次归档未包含独立的 FRED 数据。</p>')}${macroStatus}${card('报告引用来源',links.length?`<p class="note">共 ${links.length} 个独立链接，保留分析师原始引用。</p><div class="news-links">${links.map((link,i)=>`<a href="${escape(link.url)}" target="_blank" rel="noopener noreferrer"><span>${String(i+1).padStart(2,'0')}</span>${escape(link.title||'原始来源')} ↗</a>`).join('')}</div>`:'<p class="note">本次报告未包含可提取的外部链接，请在完整报告中核对来源说明。</p>')}</aside></div>`;
 }
 function setSidebar(open){
   document.body.classList.toggle('sidebar-open',open);
@@ -220,8 +333,13 @@ function bindContent(){
     try{const next=await api('/api/jobs/'+encodeURIComponent(id)+'/reanalyze-macro',{method:'POST'});selected=next.id;tab=0;await select(next.id);await refresh();}
     catch(e){error(e.message);}finally{const b=$('#reanalyze-macro');if(b)b.disabled=false;}
   });
-  $('#frequency')?.addEventListener('change',e=>{frequency=e.target.value;draw();});
-  $('#statement')?.addEventListener('change',e=>{statement=e.target.value;draw();});
+  $('#content').querySelectorAll('[data-statement]').forEach(b=>b.addEventListener('click',()=>{statement=b.dataset.statement;financialRow='';draw();}));
+  $('#financial-row')?.addEventListener('change',e=>{financialRow=e.target.value;draw();});
+  $('#financial-search')?.addEventListener('input',e=>{financialQuery=e.target.value;filterFinancialRows();});
+  $('#metric-key')?.addEventListener('change',e=>{metricKey=e.target.value;draw();});
+  if(tab===3)filterFinancialRows();
+  $('#frequency')?.addEventListener('change',e=>{frequency=e.target.value;financialRow='';draw();});
+  $('#statement')?.addEventListener('change',e=>{statement=e.target.value;financialRow='';draw();});
 }
 function draw(){
   if(!job)return;
@@ -245,18 +363,16 @@ function draw(){
   $('#footer-source').textContent='资料来源：'+(job.data?.source||'待获取')+(job.macro_context||job.macro_update?' · FRED':'')+' · '+job.date;
   let html='';
   if(tab===0)html=briefView();
-  else if(tab===5){
-    html=(job.macro_update||job.macro_context?card('宏观数据参与研究',`<p class="note">${job.macro_consumed?'本版本已将 FRED 数据传给原新闻分析师，并重新运行综合判断。财务数据和财务分析沿用原版本。':'当前宏观数据仅作补充，尚未参与原新闻结论与综合判断。'}</p><button id="reanalyze-macro" class="button" type="button">用这份宏观数据重新分析新闻与综合判断</button>`):'')+specialistReport('news_report','新闻分析 · 事件、影响与风险');
+  else if(tab===5){html=newsView();
   }else if(!job.data){
     html=empty(job.data_status==='loading'?'正在加载公司资料和财务表格，请稍候…':'尚无结构化数据。发起新分析可同时获取公司资料、财务报表和指标。');
   }else if(tab===1){
     const fields=[['公司名称',p.longName],['行业',p.industry],['板块',p.sector],['国家 / 地区',p.country],['城市',p.city],['员工数',num(p.fullTimeEmployees,0)],['交易币种',p.currency],['财报币种',p.financialCurrency]];
     html=`<div class="content-grid"><div class="content-main">`+card('公司档案',`<div class="profile-grid">${fields.map(([k,v])=>`<div class="profile-item"><span>${k}</span><b>${escape(v||'—')}</b></div>`).join('')}</div>`)+card('业务简介',`<p class="prose">${escape(p.longBusinessSummary||'数据源未提供业务简介。')}</p>`)+companyExtras()+`</div>${researchRail()}</div>`;
   }else if(tab===2){
-    html=`<div class="content-grid"><div class="content-main">`+specialistReport('operating_report','AI 经营分析 · 结论与风险')+`<div class="grid">${stat('营业收入 · TTM',money(p.totalRevenue),p.financialCurrency)}${stat('净利润 · TTM',money(p.netIncomeToCommon),p.financialCurrency)}${stat('收入增长率',pct(p.revenueGrowth),'供应商最近报告期口径')}${stat('经营利润率',pct(p.operatingMargins),'当前归档资料')}</div><br>`+trend('Total Revenue','营收趋势')+trend('Net Income','净利润趋势')+`<p class="note warn">当前接口未提供按产品、业务分部或地区拆分的数据，因此暂不展示这些维度。趋势图仅比较报告期数据，不能单独解释业务变化原因。</p></div>${researchRail()}</div>`;
+    html=operatingView();
   }else if(tab===3)html=financialView();
-  else if(tab===4){
-    html=specialistReport('metrics_report','AI 财务指标分析 · 结论与风险')+calculatedMetrics()+card('财务指标',table(['维度','指标','数值'],[['估值','预期市盈率',num(p.forwardPE)],['估值','市净率 PB',num(p.priceToBook)],['现金','自由现金流（供应商）',money(p.freeCashflow)+' '+(p.financialCurrency||'')],['盈利','经营利润率',pct(p.operatingMargins)],['盈利','净资产收益率 ROE',pct(p.returnOnEquity)],['盈利','毛利率',pct(p.grossMargins)],['盈利','净利率',pct(p.profitMargins)],['盈利','ROA',pct(p.returnOnAssets)],['成长','收入增长率',pct(p.revenueGrowth)],['成长','利润增长率',pct(p.earningsGrowth)],['偿债','流动比率',num(p.currentRatio)],['偿债','债务 / 股东权益',p.debtToEquity==null?'—':num(p.debtToEquity)+'%'],['规模','市值',money(p.marketCap)+' '+(p.currency||'')],['每股','EPS · TTM',num(p.trailingEps)]]))+`<p class="note">供应商当前指标与本地统一公式历史值分开展示；报告期间、平均余额和币种口径可能不同。</p>`;
+  else if(tab===4){html=metricsView();
   }else if(tab===6){
     const peers=job.peers_data||[];
     html=alignedComparison()+card('同行比较',peers.length?table(['公司','交易币种','PE · TTM','PB','ROE','净利率','收入增长率'],[{symbol:job.ticker,...p},...peers].map(x=>[x.symbol+(x.error?'（不可用）':''),x.currency||'—',num(x.trailingPE),num(x.priceToBook),pct(x.returnOnEquity),pct(x.profitMargins),pct(x.revenueGrowth)])):'<p class="note">本次未选择同行。发起研究时，在“比较公司”中输入股票代码，使用逗号分隔。</p>')+`<p class="note warn">同行由你选择，建议使用业务模式和会计口径接近的公司。不混合不同币种的金额，不自动生成行业排名。</p>`+trend('Total Revenue','自身历史比较 · 营收');
@@ -268,7 +384,7 @@ function draw(){
   bindContent();requestAnimationFrame(updateTabHint);
 }
 function chooseStudy(id){
-  tab=0;chartMode='revenue';setSidebar(false);$('#tabs').scrollLeft=0;$('#detail-dialog').close();$('#research-dialog').close();
+  tab=0;chartMode='revenue';financialQuery='';financialRow='';setSidebar(false);$('#tabs').scrollLeft=0;$('#detail-dialog').close();$('#research-dialog').close();
   window.scrollTo({top:0,behavior:'smooth'});return select(id);
 }
 async function select(id){
