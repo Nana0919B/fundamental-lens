@@ -69,7 +69,10 @@ def test_stale_data_refreshes_once_and_partial_success_is_reused(cfg, monkeypatc
     first = refresh.ensure_news_fresh(cfg, DAY)
     assert first["status"] == "refreshed"
     assert first["counts"]["rss"]["failed"] == ["broken"]
-    assert refresh.ensure_news_fresh(cfg, DAY)["status"] == "reused"
+    assert "broken" in first["reason"]
+    reused = refresh.ensure_news_fresh(cfg, DAY)
+    assert reused["status"] == "reused"
+    assert reused["reason"] == first["reason"]
     assert len(calls) == 1
     command, kwargs = calls[0]
     assert isinstance(command, list) and "shell" not in kwargs

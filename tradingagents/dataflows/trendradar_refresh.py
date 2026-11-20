@@ -118,6 +118,9 @@ def ensure_news_fresh(config, trade_date):
                     if not isinstance(counts, dict) or not any(v.get("items", 0) > 0 for v in counts.values()):
                         raise ValueError("No collected items")
                     state = {"status": "refreshed", "counts": counts}
+                    failed = sorted({source for result in counts.values() for source in result.get("failed", [])})
+                    if failed:
+                        state["reason"] = "部分来源采集成功；以下来源失败：" + ", ".join(failed)
             except subprocess.TimeoutExpired:
                 state = {"status": "timeout", "reason": "Collection timed out; using available data and original news tools."}
             except (OSError, ValueError, TypeError):

@@ -269,8 +269,12 @@ def news_context_appendix(context):
     if context.get("refresh"):
         refresh = context["refresh"]
         lines.append(f"数据刷新：{refresh['status']}。{refresh.get('reason', '')}")
+        for kind, result in refresh.get("counts", {}).items():
+            label = {"hotlist": "热榜", "rss": "RSS"}.get(kind, kind)
+            lines.append(f"{label}采集：{result.get('items', 0)} 条（公司关键词筛选前）；"
+                         f"失败来源：{', '.join(result.get('failed', [])) or '无'}。")
     if coverage["sources_failed"]:
-        lines.append("采集失败来源：" + ", ".join(coverage["sources_failed"]))
+        lines.append("回看期内曾采集失败的来源（不代表当前仍失败）：" + ", ".join(coverage["sources_failed"]))
     for item in context["items"]:
         label = item["title"].replace("[", "［").replace("]", "］").replace("\n", " ")
         title = f"[{label}]({item['url']})" if safe_url(item["url"]) else label

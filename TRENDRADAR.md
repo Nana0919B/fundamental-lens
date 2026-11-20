@@ -81,6 +81,21 @@ the existing TradingAgents environment. Neither mode calls an AI model.
 Refresh state and a bounded-per-attempt collector log are kept under
 `output/.tradingagents-refresh/`. No cron or standing service is required.
 
+`refreshed` means at least one source supplied items; it does not mean every
+feed succeeded. Reports list collected totals before company keyword filtering
+and failed sources for each collection type. Coverage failures aggregate the
+lookback window, so a past failure can remain visible after a source recovers.
+Existing reports keep their frozen evidence; start a new research job to use
+newly collected news (retrying a job reuses its original evidence).
+
+If RSS fails, inspect `collector.log` for the underlying HTTP/TLS error. Edit
+`config/config.yaml` in the configured TrendRadar checkout, not TradingAgents.
+For example, Hacker News provides `https://news.ycombinator.com/rss`; Yahoo's
+AAPL feed is `https://finance.yahoo.com/rss/headline?s=AAPL` (specific to AAPL,
+not market-wide coverage). A 404 requires checking the feed URL; network/TLS
+errors and HTTP 429 require checking connectivity or waiting for rate limits.
+Re-run the explicit collector command below to verify the configured feeds.
+
 ## Collect data once
 
 For explicit manual collection with the lightweight local checkout:
