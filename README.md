@@ -432,3 +432,7 @@ Please reference our work if you find *TradingAgents* provides you with some hel
       url={https://arxiv.org/abs/2412.20138}, 
 }
 ```
+
+### Local TrendRadar news enrichment
+
+Optional read-only hotlist/RSS enrichment, frozen news evidence and recovery are described in [TRENDRADAR.md](TRENDRADAR.md). AI filtering is not enabled.
