@@ -198,6 +198,30 @@ def test_news_enrichment_survives_graph_checkpoint_without_refetch(tmp_path, mon
     assert log["news_context"] == context
 
 
+def test_collection_timeout_keeps_the_original_news_analysis_running(tmp_path, monkeypatch, offline):
+    import subprocess
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from tradingagents.dataflows import trendradar_refresh
+
+    project = tmp_path / "radar"
+    (project / "trendradar/crawler").mkdir(parents=True)
+    (project / "trendradar/crawler/fetcher.py").touch()
+    monkeypatch.setattr(trendradar_refresh, "utc_now",
+                        lambda: datetime(2026, 1, 9, 12, tzinfo=ZoneInfo("Asia/Shanghai")))
+
+    def timeout(*a, **k):
+        raise subprocess.TimeoutExpired("collector", 60)
+
+    monkeypatch.setattr(trendradar_refresh.subprocess, "run", timeout)
+    graph = _graph(tmp_path, monkeypatch, ScriptedModel(), trendradar_enabled=True,
+                   trendradar_data_dir=str(project / "output"))
+    state, signal = graph.propagate("NVDA", TRADE_DATE)
+    assert signal == "Overweight"
+    assert state["news_context"]["refresh"]["status"] == "timeout"
+    assert "get_news" in offline and "get_global_news" in offline
+    assert "timeout" in state["news_report"]
 
 
 @pytest.mark.unit

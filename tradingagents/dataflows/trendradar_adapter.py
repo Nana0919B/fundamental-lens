@@ -266,6 +266,9 @@ def news_context_appendix(context):
     coverage = context["coverage"]
     lines = ["\n\n## TrendRadar 新闻证据", f"快照：`{context['snapshot_id']}`；截止：{context['as_of']}",
              f"覆盖：{coverage['status']}。{coverage['reason']}"]
+    if context.get("refresh"):
+        refresh = context["refresh"]
+        lines.append(f"数据刷新：{refresh['status']}。{refresh.get('reason', '')}")
     if coverage["sources_failed"]:
         lines.append("采集失败来源：" + ", ".join(coverage["sources_failed"]))
     for item in context["items"]:

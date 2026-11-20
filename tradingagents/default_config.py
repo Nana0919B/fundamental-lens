@@ -12,6 +12,11 @@ _ENV_OVERRIDES = {
     "TRADINGAGENTS_TRENDRADAR_DATA_DIR": "trendradar_data_dir",
     "TRADINGAGENTS_TRENDRADAR_TIMEZONE": "trendradar_timezone",
     "TRADINGAGENTS_TRENDRADAR_ARTICLE_LIMIT": "trendradar_article_limit",
+    "TRADINGAGENTS_TRENDRADAR_AUTO_REFRESH": "trendradar_auto_refresh",
+    "TRADINGAGENTS_TRENDRADAR_PROJECT_DIR": "trendradar_project_dir",
+    "TRADINGAGENTS_TRENDRADAR_REFRESH_MINUTES": "trendradar_refresh_minutes",
+    "TRADINGAGENTS_TRENDRADAR_REFRESH_TIMEOUT": "trendradar_refresh_timeout",
+    "TRADINGAGENTS_TRENDRADAR_PYTHON": "trendradar_python",
     "TRADINGAGENTS_LLM_PROVIDER":         "llm_provider",
     "TRADINGAGENTS_DEEP_THINK_LLM":       "deep_think_llm",
     "TRADINGAGENTS_QUICK_THINK_LLM":      "quick_think_llm",
@@ -150,6 +155,13 @@ def build_default_config() -> dict:
         "trendradar_article_limit": 30,
         "trendradar_lookback_days": 7,
         "trendradar_max_age_hours": 24,
+        "trendradar_auto_refresh": True,
+        "trendradar_project_dir": "",  # inferred from data_dir's parent when omitted
+        "trendradar_python": "",  # current interpreter; optional dependency isolation
+        "trendradar_refresh_minutes": 30,
+        "trendradar_refresh_timeout": 60,
+        "trendradar_refresh_failure_minutes": 5,
+        "trendradar_refresh_platforms": ["wallstreetcn-hot", "cls-hot", "zhihu"],
         # Per-ticker rule groups: direct, industry, macro (no AI classification).
         "trendradar_terms": {},
         "global_news_article_limit": 10,      # max articles for global/macro news

@@ -160,15 +160,15 @@ def run_job(job_id):
 
         graph_options = {}
         from tradingagents.dataflows.trendradar_adapter import (
-            build_news_context,
             validate_news_context,
         )
+        from tradingagents.dataflows.trendradar_refresh import prepare_news_context
 
         news = job.get("news_context")
         if news is not None:
             validate_news_context(news, job["ticker"], job["date"])
         elif config.get("trendradar_enabled") and not job.get("seed_reports", {}).get("news_report"):
-            news = build_news_context(config, job["ticker"], job["date"], snapshot["company"].get("profile", {}))
+            news = prepare_news_context(config, job["ticker"], job["date"], snapshot["company"].get("profile", {}))
         if news is not None:
             archive.archive_news_context(news)
             update(job_id, news_context=news)

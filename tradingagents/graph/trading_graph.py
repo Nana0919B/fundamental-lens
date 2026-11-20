@@ -372,9 +372,9 @@ class TradingAgentsGraph:
             state['macro_context'] = deepcopy(self.macro_context)
         from tradingagents.dataflows.research_store import ResearchStore
         from tradingagents.dataflows.trendradar_adapter import (
-            build_news_context,
             validate_news_context,
         )
+        from tradingagents.dataflows.trendradar_refresh import prepare_news_context
 
         news = getattr(self, "news_context", None)
         if news is not None:
@@ -383,7 +383,7 @@ class TradingAgentsGraph:
               and not getattr(self, "_resuming", False) and not self.seed_reports.get("news_report")):
             identity = (snapshot["company"].get("profile", {}) if snapshot else
                         resolve_instrument_identity(company_name) if not is_historical(trade_date) else {})
-            news = build_news_context(self.config, company_name, trade_date, identity)
+            news = prepare_news_context(self.config, company_name, trade_date, identity)
         if news is not None:
             ResearchStore(Path(self.config["data_cache_dir"]) / "news.sqlite3").archive_news_context(news)
             state["news_context"] = deepcopy(news)
