@@ -10,7 +10,29 @@ evidence, never a replacement for the original news tools.
 
 ## Local setup
 
-Enable in `.env` (loaded by CLI and the local web server):
+Use [Nana0919B/TrendRadar](https://github.com/Nana0919B/TrendRadar), branch
+`master`, for collection. This fork includes the lightweight collector imports,
+working Hacker News / Yahoo AAPL feeds, and the RSS publication-time timezone
+fix. Use commit `a7cafdb177adc966d2555febedd53ee582db713d` or a descendant;
+an unrelated upstream checkout does not guarantee these fixes.
+
+From the TradingAgents repository root, clone the fork into a sibling folder
+and install the collection dependencies in TradingAgents' virtual environment
+with `uv`:
+
+```sh
+git clone --branch master https://github.com/Nana0919B/TrendRadar.git ../TrendRadar
+uv pip install --python .venv/bin/python -e '.[trendradar]'
+git -C ../TrendRadar merge-base --is-ancestor a7cafdb177adc966d2555febedd53ee582db713d HEAD
+```
+
+For a pip-enabled environment, use `.venv/bin/python -m pip install -e '.[trendradar]'`
+instead of the `uv pip install` command.
+
+The last command must exit successfully (status 0). Find the checkout's absolute
+path with `git -C ../TrendRadar rev-parse --show-toplevel`, then substitute it
+for `/absolute/path/to/TrendRadar` below. Create `.env` from `.env.example` if
+needed and enable these settings (loaded by CLI and the local web server):
 
 ```dotenv
 TRADINGAGENTS_TRENDRADAR_ENABLED=true
@@ -32,27 +54,32 @@ block the original news tools.
 TrendRadar's source and local databases are **not bundled** with TradingAgents.
 Developers cloning only TradingAgents can run the original analysis normally;
 the optional enrichment is disabled by default. To enable collection, prepare a
-separate TrendRadar checkout and configure its path on that machine. There are
+separate checkout of the fork above and configure its path on that machine. There are
 no hard-coded personal paths in the runtime. Missing optional source, interpreter
 or dependencies is reported as refresh unavailable/failed, without blocking the
 original analysis. Existing readable fresh databases can be reused even if the
 collector checkout is absent.
 
-For a normal upstream checkout (whose package import may load AI dependencies),
-use its own fully installed environment, for example:
+The fork's lazy AppContext imports allow collection with the lightweight
+`.[trendradar]` extra in TradingAgents' existing environment. The collector
+loads the configured checkout directly; installing TrendRadar's full AI runtime
+is unnecessary. Leave `TRADINGAGENTS_TRENDRADAR_PYTHON` unset to use the same
+Python as TradingAgents, or set it to an absolute interpreter path with the
+collection dependencies installed. Collection does not call an AI model.
+
+For an existing checkout, switch its `origin` to the fork and update it:
 
 ```sh
-uv venv /absolute/path/to/TrendRadar/.venv --python 3.13
-uv pip install --python /absolute/path/to/TrendRadar/.venv/bin/python \
-  -e /absolute/path/to/TrendRadar
+git -C /absolute/path/to/TrendRadar remote set-url origin https://github.com/Nana0919B/TrendRadar.git
+git -C /absolute/path/to/TrendRadar pull --ff-only origin master
+git -C /absolute/path/to/TrendRadar merge-base --is-ancestor a7cafdb177adc966d2555febedd53ee582db713d HEAD
 ```
 
-Then set `TRADINGAGENTS_TRENDRADAR_PYTHON` to that environment's absolute Python
-path. This isolates its dependencies from TradingAgents. The collector script
-ships inside the TradingAgents package and can be executed by this dedicated
-interpreter without installing TradingAgents there. For this local checkout,
-the lazy AppContext change also allows the lightweight `.[trendradar]` extra in
-the existing TradingAgents environment. Neither mode calls an AI model.
+The configured interpreter loads the updated source on the next collection.
+Restart TradingAgents after changing `.env`. Run the manual collection command
+below to verify feeds; new research uses the new evidence, while existing jobs
+retain their frozen inputs. The fork's Yahoo RSS feed is AAPL-specific; configure
+additional company feeds in its `config/config.yaml` when researching other stocks.
 
 ## Automatic refresh
 
@@ -98,7 +125,7 @@ Re-run the explicit collector command below to verify the configured feeds.
 
 ## Collect data once
 
-For explicit manual collection with the lightweight local checkout:
+From the TradingAgents repository root, collect once using the fork:
 
 ```sh
 uv pip install --python .venv/bin/python -e '.[trendradar]'
@@ -112,8 +139,9 @@ also collected. This command never invokes AI, notifications, reports, or
 retention cleanup. It uses the checkout's source configuration and writes to
 its `output` directory (or explicit `--output-dir`). Use `--timezone` to match
 the configured source timezone. The old `scripts/collect_trendradar.py` entry
-point remains a compatibility wrapper. For upstream checkouts, run the packaged
-collector file using the dedicated environment described above.
+point remains a compatibility wrapper. Check stdout for each RSS source's
+item count and failure details. An overall successful exit can still represent
+partial collection; inspect both the hotlist and RSS results.
 
 ## Rules and limits
 

@@ -13,7 +13,7 @@ python -m tradingagents.web.server
 
 首次启动且数据目录为空时，自动复制 `tradingagents/web/seed_data/` 中的 SQLite 数据库与任务 JSON。初始归档包含 MSFT、0700.HK、INTC 的 4 个研究版本，研究日期为 2026-11-13；它们是历史归档，页面和 HTML 导出均可离线查看。初始数据不包含 AAPL、API 密钥、本机路径、模型记忆、运行日志或供应商缓存。数据库在 `research.sqlite3`，任务 JSON 用于恢复网页历史记录。
 
-数据目录已有任何文件时不会自动导入或覆盖；后续 `git pull` 也不覆盖自己的研究结果。使用 `--no-seed-data` 可跳过首次初始化。只查看已有研究不需要模型密钥；发起新研究时，再复制 `.env.example` 为 `.env` 并配置模型，按需安装 `python -m pip install -e '.[trendradar]'` 接入新闻采集。
+数据目录已有任何文件时不会自动导入或覆盖；后续 `git pull` 也不覆盖自己的研究结果。使用 `--no-seed-data` 可跳过首次初始化。只查看已有研究不需要模型密钥；发起新研究时，再复制 `.env.example` 为 `.env` 并配置模型，接入新闻采集时，先按 [TrendRadar 安装说明](TRENDRADAR.md) 克隆 [Nana0919B/TrendRadar](https://github.com/Nana0919B/TrendRadar) 的 `master` 分支，再安装 `python -m pip install -e '.[trendradar]'` 并配置该仓库的绝对路径；此 fork 包含 RSS 地址、发布时间时区与轻量采集修复，仅安装 extra 不会下载 TrendRadar。
 
 在仓库目录运行：
 

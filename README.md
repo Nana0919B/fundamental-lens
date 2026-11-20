@@ -130,7 +130,7 @@ coverage, task behavior, and configuration.
 
 Clone TradingAgents:
 ```bash
-git clone https://github.com/TauricResearch/TradingAgents.git
+git clone https://github.com/Nana0919B/fundamental-lens.git TradingAgents
 cd TradingAgents
 ```
 
@@ -437,4 +437,4 @@ Please reference our work if you find *TradingAgents* provides you with some hel
 
 ### Local TrendRadar news enrichment
 
-Optional read-only hotlist/RSS enrichment, frozen news evidence and recovery are described in [TRENDRADAR.md](TRENDRADAR.md). AI filtering is not enabled.
+Optional hotlist/RSS collection, frozen news evidence and recovery are described in [TRENDRADAR.md](TRENDRADAR.md). Use the [Nana0919B/TrendRadar fork](https://github.com/Nana0919B/TrendRadar) (`master`) to include the RSS URL and publication-time timezone fixes; installing the `trendradar` extra alone does not download this checkout. AI filtering is not enabled.
