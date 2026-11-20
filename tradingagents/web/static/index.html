@@ -1,5 +1,63 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FundAnalyst · 公司研究工作台</title><link rel="stylesheet" href="/style.css"></head><body>
-<aside><a class="brand" href="/">◈ <span>FundAnalyst<small>RESEARCH WORKSPACE</small></span></a><div class="side-label">研究工作台</div><div class="side-active">▦ &nbsp; 公司研究</div><div class="side-label history-label">最近的研究</div><div id="history"></div><div class="local"><i></i> 本地运行 · 数据保存在本机</div></aside>
-<main><header><span>工作台 <b>/</b> 公司研究</span><span class="pill">AI 辅助研究</span></header><section class="intro"><div><div class="eyebrow">EQUITY RESEARCH</div><h1>从数据，到公司洞察。</h1><p>连接财务事实、多空观点与风险判断，建立你的公司研究档案。</p></div><div class="engine">◈<small>POWERED BY<br>FundAnalyst</small></div></section>
-<form id="research-form"><label>股票市场<select id="market"><option value="auto">自动识别</option><option value="hk">港股</option><option value="cn">沪深 A 股</option><option value="us">美股</option></select></label><label>股票代码<input id="ticker" placeholder="AAPL / 00700 / 600519 / 000001" required maxlength="32" value="AAPL" autocomplete="off"></label><label>比较公司 <span>可选，最多 5 家</span> <button type="button" id="load-peers" class="small-button">载入同行池</button><input id="peers" placeholder="MSFT, GOOGL（建议同业）" maxlength="180"></label><button id="submit" type="submit">发起分析 <span>↗</span></button><div class="form-note">使用已配置的模型服务；每次研究会产生模型调用。支持港股及沪深 A 股代码；自动识别：1–5 位数字为港股，6 开头六位为沪股，0/3 开头六位为深股。分析日期为今日，完整流程通常需要数分钟。</div></form>
-<div id="error" role="alert" hidden></div><section id="workspace" hidden><div class="company-heading"><div><div class="eyebrow" id="company-symbol"></div><h2 id="company-name"></h2><p id="company-meta"></p></div><div id="rating"></div></div><div id="progress" role="status"></div><nav id="tabs" aria-label="研究栏目"></nav><section id="content"></section></section><section id="empty" class="empty"><div>◈</div><h2>你的下一份研究，从这里开始</h2><p>输入股票代码发起研究，或从左侧打开已有报告。</p><div class="empty-tags">财务数据 &nbsp; / &nbsp; 多空研究 &nbsp; / &nbsp; 风险评估</div></section><footer>FundAnalyst Research · AI 生成的判断请结合原始财报核验。行情与财务资料以数据源可用性为准。</footer></main><script src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FundAnalyst · 公司研究工作台</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23205c48%22/%3E%3Cpath%20d%3D%22M10%2024V8h14M10%2015h10%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%223%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <button class="sidebar-shade" id="sidebar-shade" aria-label="关闭导航" hidden></button>
+  <aside class="sidebar" id="sidebar" aria-label="研究导航">
+    <a class="brand" href="/" aria-label="FundAnalyst 公司研究首页">
+      <svg class="brand-mark" viewBox="0 0 32 34" fill="none" aria-hidden="true"><path d="M4 28V7l12-5 12 5v21l-12 5-12-5Z" stroke="currentColor" stroke-width="1.6"/><path d="M11 24V11h12M11 17h9" stroke="currentColor" stroke-width="2.1"/></svg>
+      <span>FundAnalyst<small>EQUITY RESEARCH</small></span>
+    </a>
+    <div class="side-label">工作空间</div>
+    <button class="side-nav active" id="research-home">公司研究</button>
+    <button class="side-nav" id="show-sources">资料与来源</button>
+    <div class="side-label history-label"><span>最近研究 <small id="history-count"></small></span><button class="icon-button" data-new-research aria-label="新建研究">＋</button></div>
+    <nav id="history" aria-label="历史研究"></nav>
+    <div class="local"><div id="connection-state"><i></i> 本地研究工作台</div><p>研究资料保存在本机</p></div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <div class="breadcrumbs"><button class="icon-button mobile-only" id="toggle-sidebar" aria-label="打开研究导航" aria-expanded="false" aria-controls="sidebar">☰</button><span class="crumb-root">工作空间</span><span class="crumb-root">/</span><b>公司研究</b></div>
+      <div class="topbar-actions"><button id="open-search" class="search-button" aria-label="查找已有研究">查找研究 <kbd>⌘ K</kbd></button><button id="mobile-actions" class="icon-button mobile-only" aria-label="更多研究操作">更多</button><span class="workspace-avatar" aria-label="本地工作空间">F</span></div>
+    </header>
+    <div class="workspace-container">
+      <div id="error" class="notice error-notice" role="alert" hidden></div>
+      <div id="detail-loading" class="loading-note" role="status" hidden>正在打开研究资料…</div>
+      <section id="workspace" aria-label="公司研究档案" hidden>
+        <div class="company-heading">
+          <div class="company-identity"><div class="company-monogram" id="company-symbol"></div><div><div class="ticker-line" id="company-ticker"></div><h1 id="company-name"></h1></div></div>
+          <div class="company-actions"><button class="button archive-button" id="show-versions">研究归档</button><a class="button export-button" id="export-report" target="_blank" rel="noopener">导出报告</a><button class="button primary" data-new-research><span aria-hidden="true">＋</span><span class="desktop-label">新建研究</span><span class="mobile-label">新建</span></button></div>
+        </div>
+        <div class="research-meta"><div class="meta-left"><span id="research-status" class="status-tag"></span><span id="archive-date"></span><span id="company-meta"></span></div><span id="archive-price"></span></div>
+        <div id="progress" class="notice progress-notice" role="status" hidden></div>
+        <div class="tabs-shell"><nav id="tabs" aria-label="研究栏目"></nav><button id="tab-next" class="tab-next" aria-label="向右查看更多栏目" hidden>›</button></div>
+        <section id="overview" class="overview" aria-label="财务概览" hidden></section>
+        <section id="content"></section>
+      </section>
+      <section id="empty" class="empty" hidden><div class="empty-mark" aria-hidden="true">◈</div><h1>开始一份公司研究</h1><p>选择已有归档，或输入股票代码建立新的研究。</p><button class="button primary" data-new-research>＋ 新建研究</button><p class="note">支持美股、港股和沪深 A 股。</p></section>
+      <footer><span>AI 辅助研究，结论请结合原始财报核验。</span><span id="footer-source">行情与财务资料以数据源可用性为准。</span></footer>
+    </div>
+  </main>
+  <dialog id="research-dialog" class="dialog compact" aria-labelledby="research-dialog-title">
+    <div class="dialog-header"><h2 id="research-dialog-title">新建公司研究</h2><button type="button" class="icon-button" data-close-dialog="research-dialog" aria-label="关闭新建研究">×</button></div>
+    <form id="research-form" class="dialog-body">
+      <label class="field">股票市场<select id="market"><option value="auto">自动识别</option><option value="hk">港股</option><option value="cn">沪深 A 股</option><option value="us">美股</option></select></label>
+      <label class="field">股票代码<input id="ticker" placeholder="MSFT / 00700 / 600519 / 000001" required maxlength="32" autocomplete="off"></label>
+      <label class="field">比较公司 <span>可选，最多 5 家</span><button type="button" id="load-peers" class="text-button">载入同行池</button><input id="peers" placeholder="例如 GOOGL, AMZN" maxlength="180" autocomplete="off"></label>
+      <p class="form-note">使用已配置的模型服务，每次研究会产生模型调用。支持港股及沪深 A 股；自动识别时，1–5 位数字为港股，6 开头六位为沪股，0/3 开头六位为深股。分析日期为今日，完整流程通常需要数分钟。</p>
+      <div id="form-error" class="notice error-notice" role="alert" hidden></div>
+      <div class="dialog-actions"><button type="button" class="button" data-close-dialog="research-dialog">取消</button><button id="submit" type="submit" class="button primary">发起分析 ↗</button></div>
+    </form>
+  </dialog>
+  <dialog id="detail-dialog" class="dialog" aria-labelledby="detail-title"><div class="dialog-header"><h2 id="detail-title"></h2><button class="icon-button" data-close-dialog="detail-dialog" aria-label="关闭详情">×</button></div><div id="detail-content" class="dialog-body"></div></dialog>
+  <dialog id="search-dialog" class="dialog compact" aria-labelledby="search-title"><div class="dialog-header"><h2 id="search-title">查找研究</h2><button class="icon-button" data-close-dialog="search-dialog" aria-label="关闭搜索">×</button></div><div class="dialog-body"><input id="search-input" class="search-input" placeholder="输入公司名称或股票代码" aria-label="查找已有研究" autocomplete="off"><div id="search-results"></div></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
