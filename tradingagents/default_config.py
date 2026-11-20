@@ -8,6 +8,10 @@ _TRADINGAGENTS_HOME = os.path.join(os.path.expanduser("~"), ".tradingagents")
 # of the existing default, so users can keep writing plain strings in
 # their .env file.
 _ENV_OVERRIDES = {
+    "TRADINGAGENTS_TRENDRADAR_ENABLED": "trendradar_enabled",
+    "TRADINGAGENTS_TRENDRADAR_DATA_DIR": "trendradar_data_dir",
+    "TRADINGAGENTS_TRENDRADAR_TIMEZONE": "trendradar_timezone",
+    "TRADINGAGENTS_TRENDRADAR_ARTICLE_LIMIT": "trendradar_article_limit",
     "TRADINGAGENTS_LLM_PROVIDER":         "llm_provider",
     "TRADINGAGENTS_DEEP_THINK_LLM":       "deep_think_llm",
     "TRADINGAGENTS_QUICK_THINK_LLM":      "quick_think_llm",
@@ -139,6 +143,15 @@ def build_default_config() -> dict:
         # Increase for longer lookback strategies or to broaden macro coverage;
         # decrease to reduce token usage in agent prompts.
         "news_article_limit": 20,             # max articles per ticker (ticker-news)
+        # Independent optional enrichment; never changes the configured news vendor chain.
+        "trendradar_enabled": False,
+        "trendradar_data_dir": "",
+        "trendradar_timezone": "Asia/Shanghai",
+        "trendradar_article_limit": 30,
+        "trendradar_lookback_days": 7,
+        "trendradar_max_age_hours": 24,
+        # Per-ticker rule groups: direct, industry, macro (no AI classification).
+        "trendradar_terms": {},
         "global_news_article_limit": 10,      # max articles for global/macro news
         "global_news_lookback_days": 7,       # macro news lookback window
         # Search queries used by get_global_news for macro headlines. Extend or

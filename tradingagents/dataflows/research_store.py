@@ -33,8 +33,32 @@ class ResearchStore:
                     macro_payload TEXT NOT NULL, report_payload TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS peer_pools (
                     ticker TEXT PRIMARY KEY, peers TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS news_snapshots (
+                    id TEXT PRIMARY KEY, ticker TEXT NOT NULL, trade_date TEXT NOT NULL,
+                    as_of TEXT NOT NULL, payload TEXT NOT NULL);
             """)
             yield db
+
+    def archive_news_context(self, context):
+        from tradingagents.dataflows.trendradar_adapter import validate_news_context
+
+        validate_news_context(context, context["ticker"], context["trade_date"])
+        raw = json.dumps(context, ensure_ascii=False, sort_keys=True, allow_nan=False)
+        with self.connect() as db:
+            db.execute("INSERT OR IGNORE INTO news_snapshots VALUES (?,?,?,?,?)",
+                       (context["snapshot_id"], context["ticker"], context["trade_date"], context["as_of"], raw))
+        return context["snapshot_id"]
+
+    def load_news_context(self, snapshot_id):
+        from tradingagents.dataflows.trendradar_adapter import validate_news_context
+
+        with self.connect() as db:
+            row = db.execute("SELECT payload FROM news_snapshots WHERE id=?", (snapshot_id,)).fetchone()
+        if row is None:
+            raise KeyError(snapshot_id)
+        context = json.loads(row[0])
+        validate_news_context(context, context["ticker"], context["trade_date"])
+        return context
 
     def archive_snapshot(self, snapshot):
         raw = json.dumps(snapshot, ensure_ascii=False, sort_keys=True, allow_nan=False)
