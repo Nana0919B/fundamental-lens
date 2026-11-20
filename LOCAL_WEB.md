@@ -1,5 +1,20 @@
 # 本地公司研究工作台
 
+首次拉取仓库后，可以直接启动并查看随仓库附带的研究数据：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+python -m tradingagents.web.server
+```
+
+访问 http://127.0.0.1:8765 。默认在 `~/.tradingagents/logs/web/` 创建可写数据目录，也可通过环境变量 `TRADINGAGENTS_RESULTS_DIR` 指定其他位置；例如 `TRADINGAGENTS_RESULTS_DIR=./reports python -m tradingagents.web.server`。
+
+首次启动且数据目录为空时，自动复制 `tradingagents/web/seed_data/` 中的 SQLite 数据库与任务 JSON。初始归档包含 MSFT、0700.HK、INTC 的 4 个研究版本，研究日期为 2026-11-13；它们是历史归档，页面和 HTML 导出均可离线查看。初始数据不包含 AAPL、API 密钥、本机路径、模型记忆、运行日志或供应商缓存。数据库在 `research.sqlite3`，任务 JSON 用于恢复网页历史记录。
+
+数据目录已有任何文件时不会自动导入或覆盖；后续 `git pull` 也不覆盖自己的研究结果。使用 `--no-seed-data` 可跳过首次初始化。只查看已有研究不需要模型密钥；发起新研究时，再复制 `.env.example` 为 `.env` 并配置模型，按需安装 `python -m pip install -e '.[trendradar]'` 接入新闻采集。
+
 在仓库目录运行：
 
 ```bash

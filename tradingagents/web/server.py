@@ -29,6 +29,7 @@ from tradingagents.default_config import build_default_config
 from tradingagents.report_brief import make_company_brief
 from tradingagents.report_html import render_report
 from tradingagents.reporting import _report_parts, write_report_tree
+from tradingagents.web.bootstrap import initialize_shared_data
 from tradingagents.web.presentation import present_report, readable_evidence
 
 ROOT = Path(__file__).parent / "static"
@@ -445,7 +446,8 @@ class Handler(BaseHTTPRequestHandler):
             if job_id not in JOBS:
                 return self.send({"error": "任务不存在"}, 404)
             file = STORE / "exports" / job_id / "complete_report.html"
-            if not file.exists():
+            job = JOBS[job_id]
+            if not file.exists() and not (job.get("status") == "completed" and job.get("reports")):
                 return self.send({"error": "该任务尚无完整导出文件"}, 404)
             display = display_reports(JOBS[job_id])
             state = {**display, "trade_date": JOBS[job_id]["date"]}
@@ -554,8 +556,11 @@ def enrich_import(job_id):
 def main():
     parser = argparse.ArgumentParser(description="FundAnalyst local research UI")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--no-seed-data", action="store_true", help="Start without bundled research data")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
+    if not args.no_seed_data and initialize_shared_data(STORE):
+        log.info("Loaded bundled research archive into %s", STORE)
     load_history()
     for job in list(JOBS.values()):
         if job.get("imported") and not job.get("data"):

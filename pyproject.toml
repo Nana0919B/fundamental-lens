@@ -57,7 +57,7 @@ include = ["tradingagents*", "cli*"]
 
 [tool.setuptools.package-data]
 cli = ["static/*"]
-tradingagents = ["assets/*.svg", "web/static/*"]
+tradingagents = ["assets/*.svg", "web/static/*", "web/seed_data/*.json", "web/seed_data/*.sqlite3", "web/seed_data/jobs/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

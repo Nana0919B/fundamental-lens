@@ -1,0 +1,28 @@
+{
+  "format_version": 1,
+  "description": "FundAnalyst shared historical research archive",
+  "tickers": [
+    "0700.HK",
+    "INTC",
+    "MSFT"
+  ],
+  "analysis_dates": [
+    "2026-11-13"
+  ],
+  "job_count": 4,
+  "table_counts": {
+    "snapshots": 3,
+    "facts": 4222,
+    "reports": 3,
+    "peer_pools": 3,
+    "report_versions": 1,
+    "news_snapshots": 0
+  },
+  "files": {
+    "jobs/1268ec029eb345a9b715bd7ce4cc40fc.json": "cb8edb53b9b937fb06632d2582da2a66e87a5c63b1f7058b1dc6b0ae91c907d9",
+    "jobs/143188fbd8524acfa8c455108739cd14.json": "a0f40751fd7bdb3adfec91f8223246c17598a15b29d8ff24d1fc73b62738eb73",
+    "jobs/ba7b4321ae364fb286d54aebc85acced.json": "b8b06b074e04be25572599189744ad0a8e84662e2892c8239a900a3036950333",
+    "jobs/f56c6debb8b9477c9e2a7e237a517a96.json": "502e1b4df6366a595815fd1613505b226f7dda02817a8fcd71190760cc8d2078",
+    "research.sqlite3": "24d29187f2935a61570113172410c75ec2c79dbe0c25eb2ca811da29e64bc77f"
+  }
+}
