@@ -30,10 +30,7 @@ def success(root, kind, day=DAY, stamp="11:50", status="success"):
 
 @pytest.fixture
 def cfg(tmp_path, monkeypatch):
-    project = tmp_path / "project"
-    (project / "trendradar/crawler").mkdir(parents=True)
-    (project / "trendradar/crawler/fetcher.py").touch()
-    config = {"trendradar_enabled": True, "trendradar_data_dir": str(project / "output")}
+    config = {"trendradar_enabled": True, "trendradar_data_dir": str(tmp_path / "data")}
     monkeypatch.setattr(refresh, "utc_now", lambda: NOW)
     return config
 
@@ -78,7 +75,8 @@ def test_stale_data_refreshes_once_and_partial_success_is_reused(cfg, monkeypatc
     assert isinstance(command, list) and "shell" not in kwargs
     assert kwargs["timeout"] == 60
     assert command[command.index("--output-dir") + 1] == str(root)
-    assert "trendradar_collect.py" in command[1]
+    assert command[1:3] == ["-m", "tradingagents.newsradar"]
+    assert "--project" not in command
 
 
 @pytest.mark.parametrize("error,status", [
@@ -106,13 +104,18 @@ def test_nonzero_exit_cools_down_then_retries(cfg, monkeypatch):
     assert len(calls) == 2
 
 
-def test_disabled_historical_and_missing_checkout_do_not_launch(cfg, monkeypatch):
+def test_disabled_and_historical_runs_do_not_launch(cfg, monkeypatch):
     monkeypatch.setattr(refresh.subprocess, "run", lambda *a, **k: pytest.fail("should not launch"))
     assert refresh.ensure_news_fresh({}, DAY)["status"] == "disabled"
     assert refresh.ensure_news_fresh({**cfg, "trendradar_auto_refresh": False}, DAY)["status"] == "disabled"
     assert refresh.ensure_news_fresh(cfg, "2026-01-08")["status"] == "historical"
-    cfg["trendradar_project_dir"] = "/missing/checkout"
-    assert refresh.ensure_news_fresh(cfg, DAY)["status"] == "unavailable"
+
+
+def test_collection_does_not_require_checkout_or_another_interpreter(cfg, monkeypatch):
+    cfg.update(trendradar_project_dir="/missing/checkout", trendradar_python="/missing/python")
+    calls = fake_collector(monkeypatch, cfg)
+    assert refresh.ensure_news_fresh(cfg, DAY)["status"] == "refreshed"
+    assert "/missing/python" not in calls[0][0]
 
 
 def test_another_collector_does_not_block_analysis(cfg, monkeypatch):

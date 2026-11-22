@@ -1,43 +1,36 @@
-# TrendRadar local news enrichment (P0 + P1)
+# Built-in NewsRadar news enrichment
 
-TradingAgents reads a separate TrendRadar checkout's SQLite files, recalls news
-with deterministic company aliases and optional industry/macro terms, and freezes
-the selected evidence before the News Analyst runs. Existing Yahoo/Alpha Vantage,
-FRED and prediction-market tools continue to work. No AI classification is used.
-Before freezing a new current-date context, TradingAgents reuses fresh source
-data or runs a bounded collector subprocess. Collection failures are optional
-evidence, never a replacement for the original news tools.
+TradingAgents includes `tradingagents.newsradar`: hotlist requests, RSS/Atom/JSON
+Feed parsing, daily SQLite storage and rank history. It is an independent,
+compact implementation of the public source interfaces and the existing news
+evidence database contract; it does not import or copy the external TrendRadar
+application. No second GitHub repository, YAML configuration, separate Python
+interpreter, LiteLLM, MCP service or AI classifier is required.
 
-## Local setup
-
-Use [Nana0919B/TrendRadar](https://github.com/Nana0919B/TrendRadar), branch
-`master`, for collection. This fork includes the lightweight collector imports,
-working Hacker News / Yahoo AAPL feeds, and the RSS publication-time timezone
-fix. Use commit `a7cafdb177adc966d2555febedd53ee582db713d` or a descendant;
-an unrelated upstream checkout does not guarantee these fixes.
-
-From the TradingAgents repository root, clone the fork into a sibling folder
-and install the collection dependencies in TradingAgents' virtual environment
-with `uv`:
+Normal installation includes its `requests` and `feedparser` dependencies:
 
 ```sh
-git clone --branch master https://github.com/Nana0919B/TrendRadar.git ../TrendRadar
-uv pip install --python .venv/bin/python -e '.[trendradar]'
-git -C ../TrendRadar merge-base --is-ancestor a7cafdb177adc966d2555febedd53ee582db713d HEAD
+python -m pip install -e .
 ```
 
-For a pip-enabled environment, use `.venv/bin/python -m pip install -e '.[trendradar]'`
-instead of the `uv pip install` command.
+The old `.[trendradar]` extra remains an empty compatibility alias. Live
+collection still requires network access to the configured news/RSS providers.
 
-The last command must exit successfully (status 0). Find the checkout's absolute
-path with `git -C ../TrendRadar rev-parse --show-toplevel`, then substitute it
-for `/absolute/path/to/TrendRadar` below. Create `.env` from `.env.example` if
-needed and enable these settings (loaded by CLI and the local web server):
+## Enable collection
+
+Add to `.env`, then restart an already-running CLI or Web service:
 
 ```dotenv
 TRADINGAGENTS_TRENDRADAR_ENABLED=true
-TRADINGAGENTS_TRENDRADAR_DATA_DIR=/absolute/path/to/TrendRadar/output
-TRADINGAGENTS_TRENDRADAR_PROJECT_DIR=/absolute/path/to/TrendRadar
+```
+
+The existing `TRADINGAGENTS_TRENDRADAR_*` configuration names and frozen snapshot
+format remain supported. Default data storage is `~/.tradingagents/newsradar/`.
+An optional override can point to any writable data directory, including existing
+compatible daily databases; it does not need a repository beside it:
+
+```dotenv
+TRADINGAGENTS_TRENDRADAR_DATA_DIR=/absolute/path/to/news-data
 TRADINGAGENTS_TRENDRADAR_TIMEZONE=Asia/Shanghai
 TRADINGAGENTS_TRENDRADAR_ARTICLE_LIMIT=30
 TRADINGAGENTS_TRENDRADAR_AUTO_REFRESH=true
@@ -45,203 +38,148 @@ TRADINGAGENTS_TRENDRADAR_REFRESH_MINUTES=30
 TRADINGAGENTS_TRENDRADAR_REFRESH_TIMEOUT=60
 ```
 
-The package default is disabled. Restart an already-running web server to read
-the new environment. Reading does not require installing TrendRadar or its AI
-runtime in TradingAgents. Missing, stale, corrupt or incompatible source
-databases produce explicit unavailable/partial coverage; they do not replace or
-block the original news tools.
+`TRADINGAGENTS_TRENDRADAR_PROJECT_DIR` and `TRADINGAGENTS_TRENDRADAR_PYTHON` are
+obsolete and ignored. Remove them from old environments. Existing archived
+research and its frozen inputs do not need rewriting.
 
-TrendRadar's source and local databases are **not bundled** with TradingAgents.
-Developers cloning only TradingAgents can run the original analysis normally;
-the optional enrichment is disabled by default. To enable collection, prepare a
-separate checkout of the fork above and configure its path on that machine. There are
-no hard-coded personal paths in the runtime. Missing optional source, interpreter
-or dependencies is reported as refresh unavailable/failed, without blocking the
-original analysis. Existing readable fresh databases can be reused even if the
-collector checkout is absent.
+## Modules and data flow
 
-The fork's lazy AppContext imports allow collection with the lightweight
-`.[trendradar]` extra in TradingAgents' existing environment. The collector
-loads the configured checkout directly; installing TrendRadar's full AI runtime
-is unnecessary. Leave `TRADINGAGENTS_TRENDRADAR_PYTHON` unset to use the same
-Python as TradingAgents, or set it to an absolute interpreter path with the
-collection dependencies installed. Collection does not call an AI model.
-
-For an existing checkout, switch its `origin` to the fork and update it:
-
-```sh
-git -C /absolute/path/to/TrendRadar remote set-url origin https://github.com/Nana0919B/TrendRadar.git
-git -C /absolute/path/to/TrendRadar pull --ff-only origin master
-git -C /absolute/path/to/TrendRadar merge-base --is-ancestor a7cafdb177adc966d2555febedd53ee582db713d HEAD
+```text
+newsradar/sources.py    Bundled sources and optional JSON overrides
+newsradar/parsing.py    Public API / RSS / Atom / JSON Feed normalization
+newsradar/storage.py    Daily SQLite, URL/GUID identity and rank history
+newsradar/collector.py  Per-source requests, retries and partial failure handling
+newsradar/__main__.py  Standalone collection command
+    -> trendradar_refresh.py  Freshness, lock, timeout and failure cooldown
+    -> trendradar_adapter.py  Read-only recall and frozen news_context
+    -> News Analyst           Unified report with original news/macro tools
 ```
 
-The configured interpreter loads the updated source on the next collection.
-Restart TradingAgents after changing `.env`. Run the manual collection command
-below to verify feeds; new research uses the new evidence, while existing jobs
-retain their frozen inputs. The fork's Yahoo RSS feed is AAPL-specific; configure
-additional company feeds in its `config/config.yaml` when researching other stocks.
-
-## Automatic refresh
-
-- Enabled enrichment automatically checks freshness before **new** current-date
-  research in both the CLI and Web flows. `AUTO_REFRESH=false` keeps read-only
-  operation.
-- Successful hotlist and RSS observations within 30 minutes are reused. A source
-  failure or touched database file alone is not evidence of freshness. Recent
-  observations just before midnight also count.
-- Otherwise a subprocess collects the configured financial platforms
-  (`wallstreetcn-hot`, `cls-hot`, `zhihu` by default) and enabled RSS feeds.
-  Programmatic `trendradar_refresh_platforms=[]` selects all configured platforms.
-- Default timeout: 60 seconds. Collection is killed on timeout. A nonblocking
-  file lock shared by runs using the same data directory prevents concurrent
-  collectors; another run continues with available data rather than waiting.
-- Failed/timed-out attempts have a 5-minute cooldown. A successful partial
-  collection is reused for 30 minutes to avoid repeatedly retrying broken feeds.
-  Missing data after a successful attempt is checked again rather than trusted
-  solely from the previous refresh marker.
-- The snapshot cutoff is taken **after** refresh, so newly collected items are
-  eligible. Failure still permits cached data within the existing 24-hour
-  fallback budget; otherwise evidence is unavailable and normal tools continue.
-- Frozen inputs, Web retries, checkpoint resumes and historical research do not
-  collect again. Reports expose the refresh outcome alongside coverage.
-
-Refresh state and a bounded-per-attempt collector log are kept under
-`output/.tradingagents-refresh/`. No cron or standing service is required.
-
-`refreshed` means at least one source supplied items; it does not mean every
-feed succeeded. Reports list collected totals before company keyword filtering
-and failed sources for each collection type. Coverage failures aggregate the
-lookback window, so a past failure can remain visible after a source recovers.
-Existing reports keep their frozen evidence; start a new research job to use
-newly collected news (retrying a job reuses its original evidence).
-
-If RSS fails, inspect `collector.log` for the underlying HTTP/TLS error. Edit
-`config/config.yaml` in the configured TrendRadar checkout, not TradingAgents.
-For example, Hacker News provides `https://news.ycombinator.com/rss`; Yahoo's
-AAPL feed is `https://finance.yahoo.com/rss/headline?s=AAPL` (specific to AAPL,
-not market-wide coverage). A 404 requires checking the feed URL; network/TLS
-errors and HTTP 429 require checking connectivity or waiting for rate limits.
-Re-run the explicit collector command below to verify the configured feeds.
-
-## Collect data once
-
-From the TradingAgents repository root, collect once using the fork:
-
-```sh
-uv pip install --python .venv/bin/python -e '.[trendradar]'
-.venv/bin/python -m tradingagents.dataflows.trendradar_collect \
-  --project /absolute/path/to/TrendRadar \
-  --platforms wallstreetcn-hot cls-hot zhihu
-```
-
-Omit `--platforms` to collect all configured platforms. Enabled RSS feeds are
-also collected. This command never invokes AI, notifications, reports, or
-retention cleanup. It uses the checkout's source configuration and writes to
-its `output` directory (or explicit `--output-dir`). Use `--timezone` to match
-the configured source timezone. The old `scripts/collect_trendradar.py` entry
-point remains a compatibility wrapper. Check stdout for each RSS source's
-item count and failure details. An overall successful exit can still represent
-partial collection; inspect both the hotlist and RSS results.
-
-## Rules and limits
-
-Programmatic configuration can add or override per-ticker recall terms:
+The package is installed in the same wheel as TradingAgents. Its Python API:
 
 ```python
-config.update(
-    trendradar_enabled=True,
-    trendradar_data_dir="/path/to/TrendRadar/output",
-    trendradar_lookback_days=7,
-    trendradar_max_age_hours=24,
-    trendradar_article_limit=30,
-    trendradar_terms={
-        "NVDA": {
-            "direct": ["英伟达", "NVIDIA"],
-            "industry": ["算力", "数据中心", "先进封装"],
-            "macro": ["出口管制"],
-        }
-    },
-)
+from tradingagents.newsradar import collect_once
+
+counts = collect_once('/path/to/news-data', platforms=['cls-hot', 'zhihu'])
 ```
 
-Built-in aliases cover several common US/HK companies. Resolved company names
-are also used. Industry/macro expansion is explicit, not inferred by a model.
-Rules match titles, use boundaries for ASCII words, and prioritize direct over
-industry over macro matches, then newest observations. URLs are deduplicated;
-other platforms observing that URL are retained in `other_sources`. The same
-event under different URLs is not semantically clustered in this phase.
+## Sources and customization
 
-At most 31 daily partitions per type, 10,000 rows per partition, 100 output
-articles (default 30), and 24 rank observations per article are retained. Each
-database is opened with SQLite `mode=ro`, query-only mode and a read transaction.
-There is no atomic transaction across different daily databases; the snapshot
-records observed collection times and partial coverage instead.
+Bundled hotlists are 华尔街见闻 (`wallstreetcn-hot`), 财联社热门 (`cls-hot`)
+and 知乎 (`zhihu`), requested through the public NewsNow API. Bundled RSS feeds
+are Hacker News and Yahoo's **AAPL-specific** feed; the latter is not a complete
+market-wide news source. Sources can fail or change independently of this code.
 
-## Time and evidence guarantees
+To add company-specific feeds or replace sources, create a local JSON file and
+set `TRADINGAGENTS_TRENDRADAR_SOURCES_FILE=/absolute/path/to/sources.json`:
 
-- The cutoff is the news context's preparation time, after optional refresh. A
-  hotlist's first observation is not a publication date; reports label unknown
-  publication dates explicitly.
-- Future rows, publication times and rank observations are excluded. Rows
-  revised after the cutoff are omitted because the prior content cannot safely
-  be reconstructed. TrendRadar's naive revision timestamps use its configured
-  local timezone.
-- Fresh extraction from mutable databases is allowed only for the current local
-  date. Historical requests return unavailable rather than reinterpret today's
-  database rows as point-in-time evidence. A previously frozen context may be
-  supplied for its original ticker/date, including on a later day.
-- A successful source observation within `trendradar_max_age_hours` is required;
-  failed observations do not count as fresh coverage. Even successful coverage
-  is partial: a hotlist is a sample, not proof of an absence of news.
-- Cross-platform ranks measure attention, not sentiment, truth or expected
-  returns. Summaries are feed data, not verified article bodies. No body fetch
-  or AI filtering takes place.
+```json
+{
+  "platforms": {
+    "enabled": true,
+    "api_url": "https://newsnow.busiyi.world/api/s",
+    "sources": [
+      {"id": "cls-hot", "name": "财联社热门", "expected_domain": "cls.cn"}
+    ]
+  },
+  "rss": {
+    "enabled": true,
+    "feeds": [
+      {"id": "yahoo-msft", "name": "Yahoo MSFT", "url": "https://finance.yahoo.com/rss/headline?s=MSFT"}
+    ]
+  }
+}
+```
 
-## Archive, recovery and display
+Source lists replace the corresponding bundled list. Do not request platform
+IDs absent from your list: set programmatic `trendradar_refresh_platforms=[]`
+to collect all configured platforms, or select IDs present in the file. Each
+source can have `enabled: false`. RSS accepts `max_items` (default 100).
+Malformed configuration is reported as a collection failure; existing company
+news tools continue normally. No external repository configuration is read.
 
-`news_context` contains its schema version, ticker/date, timezone-aware cutoff,
-rules, coverage and source-linked items. `snapshot_id` is SHA-256 over the full
-payload. Evidence IDs include day/type/platform/item ID, avoiding collisions
-between per-day databases.
+## Manual collection
 
-The graph archives contexts in `data_cache_dir/news.sqlite3`; web jobs also
-archive them in their research store and persist them on the job **before** any
-analyst runs. Job retries reuse those inputs. Graph checkpoint resumes use the
-checkpointed context without re-reading TrendRadar. An explicitly supplied
-context is validated and included in the run signature. Changed or mismatched
-evidence is rejected rather than silently fetched again.
+```sh
+python -m tradingagents.newsradar --platforms wallstreetcn-hot cls-hot zhihu
+python -m tradingagents.newsradar --output-dir /path/to/news-data --config-file /path/to/sources.json
+```
 
-For programmatic replay:
+`tradingagents-newsradar` is the installed console entry point. The earlier
+`python -m tradingagents.dataflows.trendradar_collect` and repository script
+`scripts/collect_trendradar.py` remain wrappers for the same built-in command.
+The old `--project` argument is removed. Collection only writes news data; it
+never sends notifications, calls an AI model, or regenerates research reports.
+
+## Refresh and recovery
+
+- New current-date research checks source freshness before preparing evidence.
+  Successful hotlist and RSS observations within 30 minutes are reused, even
+  across midnight. File modification times and failed attempts do not count.
+- Otherwise a bounded subprocess runs the installed collector. Each successful
+  source is committed separately; a later broken source or timeout cannot roll
+  back earlier successes. Rank 0 records a successfully observed off-list item;
+  a failed source does not imply that its previous items left the chart.
+- Default timeout is 60 seconds. A shared nonblocking file lock avoids duplicate
+  collectors; competing runs continue with available data. Failures have a
+  5-minute cooldown. Successful partial collection is reused for 30 minutes.
+- If refreshing fails, cached data within the existing 24-hour fallback budget
+  may still be used. Otherwise evidence is unavailable. Original Yahoo/Alpha
+  Vantage, FRED and prediction-market tools are not replaced.
+- Frozen inputs, Web retries, checkpoint resumes and historical runs do not
+  collect again. Fresh extraction from mutable daily databases is allowed only
+  for the current date; historical replay requires a previously frozen context.
+- The cutoff is taken after collection. Later revisions, publication times and
+  rank observations are excluded. Hotlist first-observation time is explicitly
+  distinguished from publication time. Missing offsets in feed dates are
+  normalized to UTC, independently of the execution host.
+
+Refresh state and the latest attempt's collector log live in
+`<data_dir>/.tradingagents-refresh/`. Reports expose collection outcomes and
+failed sources. An overall successful exit only means some source supplied
+items. No cron or standing external service is required.
+
+## Recall, snapshots and limits
+
+Rule-based recall uses the resolved company name, ticker aliases and optional
+per-ticker `trendradar_terms` groups (`direct`, `industry`, `macro`). ASCII terms
+use word boundaries. Direct matches precede industry and macro matches, then
+newer observations. Duplicate URLs retain other platform observations; events
+under different URLs are not semantically clustered. No AI filtering is used.
+
+The source adapter reads SQLite with `mode=ro` and a read transaction, retaining
+up to 31 days per type, 10,000 rows per partition, 100 articles (default 30) and
+24 rank observations per article. Daily databases are not one atomic global
+snapshot. Coverage is always partial: sampled hotlists do not prove that no
+other news exists, and rank measures attention rather than sentiment or returns.
+
+`news_context` retains its schema version, ticker/date, cutoff, recall rules,
+coverage, source-linked items and SHA-256 `snapshot_id`. The graph archives it
+in `data_cache_dir/news.sqlite3`; Web jobs additionally persist it in their
+research store before analysts run. Evidence IDs include date, source type,
+platform and item ID. Original source files are not needed for archived replay:
 
 ```python
 from tradingagents.dataflows.research_store import ResearchStore
+from tradingagents.graph.trading_graph import TradingAgentsGraph
 
-news = ResearchStore("/path/to/cache/news.sqlite3").load_news_context(snapshot_id)
+news = ResearchStore('/path/to/cache/news.sqlite3').load_news_context(snapshot_id)
 graph = TradingAgentsGraph(config=config, news_context=news)
-state, rating = graph.propagate(news["ticker"], news["trade_date"])
+state, rating = graph.propagate(news['ticker'], news['trade_date'])
 ```
 
-This freezes only the TrendRadar supplement. Existing company-news tools and
-other data paths retain their own historical limitations; replay is not a
-promise of identical model output or fully frozen external tool results.
+Only the NewsRadar supplement is frozen; other tools retain their own
+historical limitations. Model output is not promised to be identical. The News
+Analyst receives labelled evidence and appends deterministic references;
+its `news_report` still feeds the existing research and risk workflow.
 
-The News Analyst receives the context as labelled evidence and appends a
-deterministic source/coverage appendix even if the model omits references.
-The original `news_report` flows into downstream research and risk analysis.
-Full state logs and report headers contain the snapshot identity. Web news
-reports show the evidence appendix alongside the existing report.
-
-## Verification
+## Tests
 
 ```sh
-.venv/bin/python -m pytest tests/test_trendradar.py tests/test_trendradar_refresh.py tests/test_graph_end_to_end.py \
-  tests/test_news_recovery.py tests/test_news_lookahead.py tests/test_news_analyst_prompt.py
+python -m pytest tests/test_newsradar.py tests/test_trendradar.py tests/test_trendradar_refresh.py tests/test_graph_end_to_end.py
 ```
 
-Tests use real temporary SQLite files and scripted models, without external AI
-or source requests. Coverage includes source failures, corrupt/missing files,
-date boundaries, title revisions, alias matching, RSS, immutable archives,
-prompt injection of evidence, citations, web retry and graph checkpoint recovery.
-Refresh tests cover reuse, expiry, missing optional source, partial collection,
-timeout, nonzero exit, cooldown, real file-lock contention, midnight and original
-news tools continuing through a collector timeout.
+Tests cover public payload normalization, domain validation, timezone handling,
+RSS/Atom/JSON Feed, partial failure, URL/GUID deduplication, off-list/re-entry
+history, source overrides, subprocess collection without a checkout, snapshot
+compatibility, timeout/cooldown, file locks and original-analysis recovery.

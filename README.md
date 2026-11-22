@@ -435,6 +435,6 @@ Please reference our work if you find *TradingAgents* provides you with some hel
 }
 ```
 
-### Local TrendRadar news enrichment
+### Built-in NewsRadar news enrichment
 
-Optional hotlist/RSS collection, frozen news evidence and recovery are described in [TRENDRADAR.md](TRENDRADAR.md). Use the [Nana0919B/TrendRadar fork](https://github.com/Nana0919B/TrendRadar) (`master`) to include the RSS URL and publication-time timezone fixes; installing the `trendradar` extra alone does not download this checkout. AI filtering is not enabled.
+Hotlist/RSS collection, frozen news evidence and recovery are included in TradingAgents. No separate TrendRadar checkout or AI runtime is required. Enable collection with `TRADINGAGENTS_TRENDRADAR_ENABLED=true`; see [configuration and usage](TRENDRADAR.md). AI filtering is not enabled.

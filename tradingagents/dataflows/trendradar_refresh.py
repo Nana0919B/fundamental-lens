@@ -80,9 +80,6 @@ def ensure_news_fresh(config, trade_date):
         cooldown = max(1, int(config.get("trendradar_refresh_failure_minutes", 5)))
         if _fresh_partitions(root, now, timezone, minutes):
             return {"status": "reused", "reason": "Recent successful collection already exists."}
-        project = Path(config.get("trendradar_project_dir") or root.parent).expanduser().resolve()
-        if not (project / "trendradar/crawler/fetcher.py").is_file():
-            return {"status": "unavailable", "reason": "Optional TrendRadar checkout is missing; original news tools remain available."}
         metadata = root / ".tradingagents-refresh"
         metadata.mkdir(parents=True, exist_ok=True)
         state_path = metadata / "state.json"
@@ -98,12 +95,11 @@ def ensure_news_fresh(config, trade_date):
                 return prior
             result_file = metadata / "result.json"
             result_file.unlink(missing_ok=True)
-            # Absolute installed module path also works with a dedicated collector
-            # interpreter that has dependencies but not the TradingAgents package.
-            command = [str(config.get("trendradar_python") or sys.executable),
-                       str(Path(__file__).with_name("trendradar_collect.py")), "--project", str(project),
+            command = [sys.executable, "-m", "tradingagents.newsradar",
                        "--output-dir", str(root), "--timezone", str(timezone),
                        "--result-file", str(result_file)]
+            if config.get("trendradar_sources_file"):
+                command.extend(["--config-file", str(Path(config["trendradar_sources_file"]).expanduser().resolve())])
             platforms = config.get("trendradar_refresh_platforms", ["wallstreetcn-hot", "cls-hot", "zhihu"])
             if platforms:
                 command.extend(["--platforms", *platforms])

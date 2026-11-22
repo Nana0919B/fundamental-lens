@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "cryptography>=42.0",
+    "feedparser>=6.0.12,<7",
     "langchain-core>=1.6.5",
     "langchain-anthropic>=1.7.4",
     "langchain-google-genai>=4.4.0",
@@ -31,10 +32,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-trendradar = [
-    "PyYAML>=6.0",
-    "feedparser>=6.0.12,<7",
-]
+trendradar = []  # compatibility extra; collection is now included in the core install
 dev = [
     "ruff>=0.16",
     "pytest>=8.0",
@@ -48,6 +46,7 @@ bedrock = [
 
 [project.scripts]
 tradingagents = "cli.main:app"
+tradingagents-newsradar = "tradingagents.newsradar.__main__:main"
 
 [tool.setuptools.dynamic]
 version = {attr = "tradingagents.__version__"}

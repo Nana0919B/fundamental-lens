@@ -205,9 +205,6 @@ def test_collection_timeout_keeps_the_original_news_analysis_running(tmp_path, m
 
     from tradingagents.dataflows import trendradar_refresh
 
-    project = tmp_path / "radar"
-    (project / "trendradar/crawler").mkdir(parents=True)
-    (project / "trendradar/crawler/fetcher.py").touch()
     monkeypatch.setattr(trendradar_refresh, "utc_now",
                         lambda: datetime(2026, 1, 9, 12, tzinfo=ZoneInfo("Asia/Shanghai")))
 
@@ -216,7 +213,7 @@ def test_collection_timeout_keeps_the_original_news_analysis_running(tmp_path, m
 
     monkeypatch.setattr(trendradar_refresh.subprocess, "run", timeout)
     graph = _graph(tmp_path, monkeypatch, ScriptedModel(), trendradar_enabled=True,
-                   trendradar_data_dir=str(project / "output"))
+                   trendradar_data_dir=str(tmp_path / "newsdata"))
     state, signal = graph.propagate("NVDA", TRADE_DATE)
     assert signal == "Overweight"
     assert state["news_context"]["refresh"]["status"] == "timeout"
