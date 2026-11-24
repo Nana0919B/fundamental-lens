@@ -116,3 +116,56 @@ Yahoo 数据层本来就支持 `.HK`、`.SS`、`.SZ`。页面增加了市场选�
 宏观原文通过 `macro_context` 传入原 `news_analyst` 及后续多空研究、研究经理、交易员和风险决策角色。新闻分析继续使用原新闻工具，但不再重复请求已提供的宏观指标。新版本重做新闻和综合判断，注明观察日期、单位及最新修订值限制；CPI/PCE 指数水平不能直接当作通胀百分比。报告完成前不显示为“已用于分析”。
 
 原研究及其财务资料保持不变；新结果与宏观输入保存在任务 JSON、引擎状态和 SQLite 的 `report_versions` 中，并关联原任务及原财务快照。页面历史列表和 HTML 导出可查看新版本；它们不再把宏观补充当作未参与分析的附录。
+
+## 三地市场环境
+
+新增“市场环境”栏目，只读调用本机 tick-stock-panel 的既有 REST 接口，不修改面板源码，也不启用个股技术分析或新增技术分析师。沪深 A 股研究继续使用该面板，港股与美股环境通过富途官方 REST API 获取；不改动公司财务和新闻数据源。
+
+在 `.env` 配置（Token 不会传给浏览器或写入研究报告）：
+
+```dotenv
+TRADINGAGENTS_MARKET_ENVIRONMENT_ENABLED=true
+TSP_BASE=http://127.0.0.1:3018
+TSP_TOKEN=面板中创建的只含read:analysis权限的Token
+TRADINGAGENTS_MARKET_ENVIRONMENT_TIMEOUT=5
+TRADINGAGENTS_MARKET_ENVIRONMENT_MAX_AGE_DAYS=7
+```
+
+封装模块为 `tradingagents/dataflows/market_environment.py`，只调用 `GET /api/regime/history` 和概念/行业两种 `GET /api/regime/mainline`；不会触发同步、回算或交易。面板需要单独运行，并先确认行情数据源可用（可使用无需 Key 的免费历史日线）、完成日线同步和市场环境计算。服务可访问不代表已经具备市场数据；空表、认证失败和超时会作为缺失说明进入研究，禁止伪造中性分。
+
+每次研究只采集一次，冻结最近最多 30 条环境日记录和每日前五名行业/概念主线，保存于任务 JSON、SQLite 的 `market_environments` 表及引擎状态日志。研究和风险角色实际读取同一快照：基本面分析师、多空研究员、研究经理、交易员、三类风险分析师及最终决策者的提示词带入环境证据和解释要求。经营/财务指标专员仍只分析原财务快照。此接入不新增模型调用；提示词用量有所增加。页面“已传入流程”表示快照已提供给成功完成的图流程，不是模型使用质量或收益效果的保证。
+
+日期按北京时间处理，16:00 前只使用此前的完整日期，之后允许读取当日已计算结果；面板尚未更新时展示实际观察日期。默认超过截止日期 7 个自然日标记过期（可按长假调整阈值），过期值只供历史参考。行业/概念主线还依赖面板的成分数据表，缺表时环境本身可用而主线标记缺失；TickFlow Key 不会自动补齐其他数据源的成分表。主线按环境最新观察日展示；主线当前成分快照回看历史有归属漂移，市场评分不是收益概率，也不直接映射评级、仓位或全市场宏观判断。
+
+重试和 FRED 重分析复用原市场快照，先校验股票、研究日期及 SHA-256，损坏时拒绝复用，不静默补取最新数据。旧研究没有市场快照时不会自动改写；新建研究才采集。历史 CLI 研究只有传入当时冻结的 `market_environment` 才使用数据，不读取今天修订的历史表。完整 Markdown/HTML 导出附带同一份市场环境依据。
+
+验证：
+
+```bash
+python -m pytest tests/test_market_environment.py tests/test_web.py tests/test_financial_snapshot.py tests/test_macro_reanalysis.py tests/test_checkpoint_resume.py tests/test_reporting.py tests/test_report_html.py tests/test_analyst_execution.py -q
+node tests/web_render_smoke.cjs
+```
+
+### 港美股环境：富途官方 AppKey
+
+港美股环境不依赖 OpenD，也不回退到 Yahoo。只读访问 `https://webapi.futunn.com/api/v1.0/quote/{symbol}/history-kline`，使用 `ktype=2`、`autype=1`、`extended_time=0` 获取最多 370 根前复权普通交易时段日线；不调用交易或账户接口。
+
+```dotenv
+FUTU_API_KEY=你的官方AppKeyID
+FUTU_PRIVATE_KEY_PATH=你的本机PEM私钥文件路径
+FUTU_BASE_URL=https://webapi.futunn.com
+```
+
+更新 `.env` 后重启研究服务使配置生效。私钥留在本机文件中，不复制进 `.env` 或仓库。客户端支持 Ed25519、RSA PKCS#1 v1.5 + SHA256，从已准备好的最终 URL 生成请求路径与查询串签名，发送 `X-Api-Key`、`X-Timestamp`、`X-Nonce` 和签名 `Authorization`。不会将 AppKey 当作 Bearer Token，也不会在错误响应、快照、报告或浏览器中暴露凭据。AppKey 需在富途开发者后台上传对应公钥并授权相应行情读取接口；缺少私钥、时钟不准、无行情权限或配额不足时明确标记缺失。接口超时使用 `TRADINGAGENTS_MARKET_ENVIRONMENT_TIMEOUT`，不自动重试耗尽额度。
+
+参考样本固定且逐项公开：美股为 `US.SPY`、`US.QQQ`、`US.IWM`、`US.RSP`；港股为 `HK.02800`、`HK.02828`、`HK.03033`。这些分别为宽基/风格指数 ETF；以样本首项作为基准，**样本趋势广度不等同于交易所全市场涨跌家数**，也不是行业主线排行。全部参考资产按同一基准观察日对齐，不前填或后填缺失价格。
+
+港股按 `Asia/Hong_Kong`、美股按 `America/New_York`（自动处理夏令时）截断。港股 17:00、美股 16:30 当地时间之前只允许此前日期的完整日线；收盘缓冲后允许当日已发布日线。周末和节假日使用数据实际返回的最近交易日，显示观察日期及距截止日期的自然日数；不会制造假日记录或使用盘中未完成 K 线。
+
+计算版本为 `international_daily_v1`，至少需要 60 根有效日线：趋势分 = 高于 MA20 的 60 分 + 高于 MA60 的 40 分；动量分 = `clip(50 + 500 × 20日收益, 0, 100)`；广度分 = 对齐参考样本高于 MA20 的比例 × 100；波动分 = `clip(100 − 200 × 年化已实现波动率, 0, 100)`。20 日已实现波动率为最近 20 个简单日收益的样本标准差 × √252，使用小数比例。综合权重为趋势 40%、动量 30%、广度 20%、波动 10%，五档阈值为 70/55/45/30；这是可追溯的规则评分，没有收益概率校准或自动仓位映射。
+
+主基准不可用或不足 60 根时不生成环境判断；部分参考资产缺失标记部分可用，少于两只可对齐参考资产时广度和综合分为 null，不伪造 50 分。页面展示实际价格、均线、日收益、20 日收益、已实现波动率、60 日高点回撤及样本数量，港美股不展示 A 股涨停/封板/连板阶段指标。
+
+港美股快照沿用同一 SHA-256 校验、SQLite/任务/引擎日志归档、研究与风险角色共享上下文、跨日恢复及 HTML/Markdown 导出。旧港美股研究无环境归档时只提示未归档；重新研究才采集新数据。历史重放必须传入当时保存的快照，不用当前修订历史补写旧结论。
+
+官方契约：[AppKey 鉴权](https://open.futunn.com/api/overview/getting-started)、[历史 K 线](https://open.futunn.com/api/quote/basic-data/history-kline)。验证增加 `tests/test_international_environment.py` 和 `tests/test_futu_quotes.py`，覆盖两种签名、时区/夏令时、证券路由、缺失/过期数据、真实图的提示词和导出归档。
