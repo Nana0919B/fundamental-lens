@@ -63,6 +63,7 @@ class TradingAgentsGraph:
         macro_context: dict | None = None,
         seed_reports: dict | None = None,
         news_context: dict | None = None,
+        market_environment: dict | None = None,
     ):
         """Initialize the trading agents graph and components.
 
@@ -72,6 +73,7 @@ class TradingAgentsGraph:
             config: Configuration dictionary. If None, uses default config
             callbacks: Optional list of callback handlers (e.g., for tracking LLM/tool stats)
         """
+        self.market_environment = deepcopy(market_environment)
         self.macro_context = deepcopy(macro_context)
         self.news_context = deepcopy(news_context)
         self.seed_reports = deepcopy(seed_reports or {})
@@ -188,6 +190,8 @@ class TradingAgentsGraph:
             settings['seed_reports'] = self.seed_reports
         if getattr(self, 'news_context', None) is not None:
             settings['news_context'] = self.news_context
+        if getattr(self, 'market_environment', None) is not None:
+            settings['market_environment'] = self.market_environment
         digest = hashlib.sha256(json.dumps(settings, sort_keys=True, default=str).encode()).hexdigest()[:12]
         return "|".join([
             "analysts=" + ",".join(self.selected_analysts),
@@ -316,6 +320,7 @@ class TradingAgentsGraph:
             "data_vendors": dict(cfg.get("data_vendors") or {}),
             "tool_vendors": dict(cfg.get("tool_vendors") or {}),
             "trendradar_enabled": cfg.get("trendradar_enabled", False),
+            "market_environment_enabled": cfg.get("market_environment_enabled", True),
         }
 
     def save_reports(self, final_state, ticker, save_path=None, html=True) -> Path:
@@ -387,6 +392,19 @@ class TradingAgentsGraph:
         if news is not None:
             ResearchStore(Path(self.config["data_cache_dir"]) / "news.sqlite3").archive_news_context(news)
             state["news_context"] = deepcopy(news)
+        from tradingagents.dataflows.market_environment import (
+            build_market_environment,
+            validate_market_environment,
+        )
+        environment = getattr(self, 'market_environment', None)
+        if environment is None and not getattr(self, '_resuming', False):
+            environment = build_market_environment(
+                self.config, company_name, trade_date, allow_fetch=not bool(getattr(self, 'seed_reports', {})),
+            )
+        if environment is not None:
+            validate_market_environment(environment, company_name, trade_date, for_research=True)
+            ResearchStore(Path(self.config['data_cache_dir']) / 'environment.sqlite3').archive_market_environment(environment)
+            state['market_environment'] = deepcopy(environment)
         return state
 
     def _memory_step(self, state):
@@ -549,6 +567,7 @@ class TradingAgentsGraph:
             "research_snapshot": final_state.get("research_snapshot"),
             "macro_context": final_state.get("macro_context"),
             "news_context": final_state.get("news_context"),
+            "market_environment": final_state.get("market_environment"),
             "operating_report": final_state.get("operating_report", ""),
             "metrics_report": final_state.get("metrics_report", ""),
         }

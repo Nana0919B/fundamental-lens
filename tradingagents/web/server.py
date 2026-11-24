@@ -20,6 +20,10 @@ from zoneinfo import ZoneInfo
 from markdown_it import MarkdownIt
 
 from tradingagents.dataflows.files import replace_file
+from tradingagents.dataflows.market_environment import (
+    build_market_environment,
+    validate_market_environment,
+)
 from tradingagents.dataflows.research_analytics import enrich_snapshot
 from tradingagents.dataflows.research_store import ResearchStore
 from tradingagents.dataflows.symbols import resolve_equity_symbol
@@ -160,6 +164,17 @@ def run_job(job_id):
                 persist(JOBS[job_id])
 
         graph_options = {}
+        environment = job.get("market_environment")
+        if environment is None:
+            environment = build_market_environment(
+                config, job["ticker"], job["date"],
+                allow_fetch=not bool(job.get("seed_reports")) and not job.get("retried_at"),
+            )
+        if environment is not None:
+            validate_market_environment(environment, job["ticker"], job["date"])
+            archive.archive_market_environment(environment)
+            update(job_id, market_environment=environment, market_environment_consumed=False)
+            graph_options["market_environment"] = environment
         from tradingagents.dataflows.trendradar_adapter import (
             validate_news_context,
         )
@@ -228,6 +243,9 @@ def run_job(job_id):
             reports=reports,
             rating=rating,
             macro_consumed=bool(job.get("macro_context")),
+            market_environment_consumed=bool(
+                environment and state.get("market_environment", {}).get("snapshot_id") == environment["snapshot_id"]
+            ),
         )
     except Exception as exc:
         log.exception("Research job %s failed", job_id)
@@ -251,6 +269,8 @@ def retry_job(job_id):
             for key in ("fundamentals_report", "operating_report", "metrics_report", "news_report")
         }
         snapshot = job.get("research_snapshot")
+        if job.get("market_environment") is not None:
+            validate_market_environment(job["market_environment"], job["ticker"], job["date"])
         complete_analysts = all(isinstance(text, str) and text.strip() for text in seeds.values())
         if job.get("date") != today() and not (snapshot and complete_analysts):
             raise ValueError("历史失败任务缺少完整分析报告，请新建研究")
@@ -315,6 +335,9 @@ def create_macro_reanalysis(source_id):
             "seed_reports": seeds,
             "macro_consumed": False,
         }
+        if source.get("market_environment") is not None:
+            validate_market_environment(source["market_environment"], source["ticker"], job["date"])
+            job["market_environment"] = deepcopy(source["market_environment"])
         if source.get("news_context") is not None:
             job["news_context"] = deepcopy(source["news_context"])
         JOBS[job["id"]] = job
@@ -410,7 +433,7 @@ class Handler(BaseHTTPRequestHandler):
                             for k, v in job.items()
                             if k not in (
                                 "data", "reports", "peers_data", "research_snapshot",
-                                "news_context", "seed_reports", "macro_context", "macro_update",
+                                "news_context", "seed_reports", "macro_context", "macro_update", "market_environment", "market_environment_update",
                             )
                         },
                         "company_name": (
@@ -449,7 +472,8 @@ class Handler(BaseHTTPRequestHandler):
             if not file.exists() and not (job.get("status") == "completed" and job.get("reports")):
                 return self.send({"error": "该任务尚无完整导出文件"}, 404)
             display = display_reports(JOBS[job_id])
-            state = {**display, "trade_date": JOBS[job_id]["date"]}
+            state = {**display, "trade_date": JOBS[job_id]["date"],
+                     "market_environment": job.get("market_environment_update") or job.get("market_environment")}
             html = render_report(JOBS[job_id]["ticker"], state, None, _report_parts(state))
             return self.send(
                 present_report(html, JOBS[job_id].get("research_snapshot")).encode(),

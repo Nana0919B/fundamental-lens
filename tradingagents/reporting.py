@@ -77,6 +77,9 @@ _SECTIONS = (
     ("V. Portfolio Manager Decision", "5_portfolio", (
         ("Portfolio Manager", "decision.md", ("final_trade_decision",)),
     )),
+    ("VI. Market Environment Evidence", "6_environment", (
+        ("Market Environment", "environment.md", ("market_environment",)),
+    )),
 )
 
 
@@ -89,6 +92,9 @@ def _report_parts(final_state: dict) -> list[tuple[str, str, list[tuple[str, str
             value = final_state
             for key in path:
                 value = (value or {}).get(key)
+            if value and path == ("market_environment",):
+                from tradingagents.dataflows.market_environment import market_environment_report
+                value = market_environment_report(value)
             if value:
                 written.append((agent, filename, value))
         if written:

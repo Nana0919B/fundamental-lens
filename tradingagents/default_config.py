@@ -8,6 +8,10 @@ _TRADINGAGENTS_HOME = os.path.join(os.path.expanduser("~"), ".tradingagents")
 # of the existing default, so users can keep writing plain strings in
 # their .env file.
 _ENV_OVERRIDES = {
+    "TRADINGAGENTS_MARKET_ENVIRONMENT_ENABLED": "market_environment_enabled",
+    "TSP_BASE": "tsp_base_url",
+    "TRADINGAGENTS_MARKET_ENVIRONMENT_TIMEOUT": "market_environment_timeout",
+    "TRADINGAGENTS_MARKET_ENVIRONMENT_MAX_AGE_DAYS": "market_environment_max_age_days",
     "TRADINGAGENTS_TRENDRADAR_ENABLED": "trendradar_enabled",
     "TRADINGAGENTS_TRENDRADAR_DATA_DIR": "trendradar_data_dir",
     "TRADINGAGENTS_TRENDRADAR_SOURCES_FILE": "trendradar_sources_file",
@@ -148,6 +152,10 @@ def build_default_config() -> dict:
         # decrease to reduce token usage in agent prompts.
         "news_article_limit": 20,             # max articles per ticker (ticker-news)
         # Independent optional enrichment; never changes the configured news vendor chain.
+        "market_environment_enabled": True,
+        "tsp_base_url": "http://127.0.0.1:3018",
+        "market_environment_timeout": 5,
+        "market_environment_max_age_days": 7,
         "trendradar_enabled": False,
         "trendradar_data_dir": os.path.join(_TRADINGAGENTS_HOME, "newsradar"),
         "trendradar_timezone": "Asia/Shanghai",

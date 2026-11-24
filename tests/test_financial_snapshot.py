@@ -51,6 +51,7 @@ def make_graph(
     allow_news=False,
     macro_context=None,
     seed_reports=None,
+    market_environment=None,
 ):
     from tradingagents.default_config import build_default_config
     from tradingagents.graph import trading_graph
@@ -109,7 +110,7 @@ def make_graph(
     )
     return TradingAgentsGraph(
         selected or ["fundamentals"], config=config, research_snapshot=snapshot,
-        macro_context=macro_context, seed_reports=seed_reports,
+        macro_context=macro_context, seed_reports=seed_reports, market_environment=market_environment,
     ), seen
 
 

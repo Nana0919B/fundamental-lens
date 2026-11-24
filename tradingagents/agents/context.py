@@ -189,6 +189,9 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
                        ("metrics_report", "Financial metrics analysis")):
         if state.get(key):
             shared += f"\n{title} (analyst conclusions; verify against snapshot facts):\n{state[key]}\n"
+    if state.get("market_environment") is not None:
+        from tradingagents.dataflows.market_environment import market_environment_text
+        shared += market_environment_text(state["market_environment"])
     context = state.get("instrument_context")
     if isinstance(context, str) and context.strip():
         return context + shared

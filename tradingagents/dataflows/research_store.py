@@ -33,11 +33,35 @@ class ResearchStore:
                     macro_payload TEXT NOT NULL, report_payload TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS peer_pools (
                     ticker TEXT PRIMARY KEY, peers TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS market_environments (
+                    id TEXT PRIMARY KEY, ticker TEXT NOT NULL, trade_date TEXT NOT NULL,
+                    retrieved_at TEXT NOT NULL, payload TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS news_snapshots (
                     id TEXT PRIMARY KEY, ticker TEXT NOT NULL, trade_date TEXT NOT NULL,
                     as_of TEXT NOT NULL, payload TEXT NOT NULL);
             """)
             yield db
+
+    def archive_market_environment(self, context):
+        from tradingagents.dataflows.market_environment import validate_market_environment
+
+        validate_market_environment(context, context["ticker"], context["trade_date"])
+        raw = json.dumps(context, ensure_ascii=False, sort_keys=True, allow_nan=False)
+        with self.connect() as db:
+            db.execute("INSERT OR IGNORE INTO market_environments VALUES (?,?,?,?,?)",
+                       (context["snapshot_id"], context["ticker"], context["trade_date"], context["retrieved_at"], raw))
+        return context["snapshot_id"]
+
+    def load_market_environment(self, snapshot_id):
+        from tradingagents.dataflows.market_environment import validate_market_environment
+
+        with self.connect() as db:
+            row = db.execute("SELECT payload FROM market_environments WHERE id=?", (snapshot_id,)).fetchone()
+        if row is None:
+            raise KeyError(snapshot_id)
+        context = json.loads(row[0])
+        validate_market_environment(context, context["ticker"], context["trade_date"])
+        return context
 
     def archive_news_context(self, context):
         from tradingagents.dataflows.trendradar_adapter import validate_news_context
