@@ -132,4 +132,64 @@ async function interactionTests(){
  nodes.get('#content').querySelectorAll=()=>[];
  console.log('Seven panels, escaped evidence, financial units, submission failure/recovery, live completion and selection races passed.');
 }
+
+// A-share environment is the exact archived dataset, with safe values and honest consumption status.
+context.environmentFixture={...fixture,ticker:'600519.SS',market_environment_consumed:true,
+ market_environment:{retrieved_at:'2026-11-20T17:00:00+08:00',cutoff_date:'2026-11-20',
+ coverage:{status:'partial',reason:'',warnings:['行业主线暂无数据']},membership_note:'当前快照回看历史',
+ latest:{date:'2026-11-20',state:'lean_strong',score:63,phase:'ignite',seal_rate:.68,promo_rate:null,index_pct:.012},
+ history:[{date:'2026-11-20',state:'lean_strong',score:63,phase:'ignite'}],
+ mainlines:{concept:[{date:'2026-11-20',rank:1,member:'<script>bad</script>',score:80}],industry:[]}}};
+vm.runInContext('job=environmentFixture;tab=7;draw()',context);
+let environmentHTML=nodes.get('#content').innerHTML;
+assert(environmentHTML.includes('已将本次归档数据传入研究讨论'));
+assert(environmentHTML.includes('偏强')&&environmentHTML.includes('启动')&&environmentHTML.includes('63 / 100'));
+assert(environmentHTML.includes('68%')&&environmentHTML.includes('1.2%'));
+assert(environmentHTML.includes('&lt;script&gt;bad&lt;/script&gt;')&&!environmentHTML.includes('<script>'));
+assert(environmentHTML.includes('当前快照回看历史'));
+vm.runInContext('job.market_environment.coverage.status="stale";draw()',context);
+assert(nodes.get('#content').innerHTML.includes('不作为当前市场判断依据'));
+vm.runInContext('job.market_environment.latest=null;job.market_environment.coverage.status="unavailable";draw()',context);
+assert(nodes.get('#content').innerHTML.includes('资料接入'));
+vm.runInContext('job.market_environment_consumed=false;draw()',context);
+assert(nodes.get('#content').innerHTML.includes('未完成市场环境传递核验'));
+vm.runInContext('delete job.market_environment;draw()',context);
+assert(nodes.get('#content').innerHTML.includes('历史报告不会自动补取新数据'));
+vm.runInContext('job.ticker="AAPL";draw()',context);
+assert(nodes.get('#content').innerHTML.includes('历史报告不会自动补取新数据'));
+vm.runInContext('job.ticker="BTC-USD";draw()',context);
+assert(nodes.get('#content').innerHTML.includes('当前证券类型尚无对应的市场环境数据源'));
+
+// Futu US/HK view uses its own metrics, not A-share sentiment stages.
+context.globalEnvironment={market:'US',source:'Futu OpenAPI',market_timezone:'America/New_York',currency:'USD',primary_symbol:'US.SPY',retrieved_at:'2026-11-23T12:00:00+08:00',cutoff_date:'2026-11-22',coverage:{status:'available',warnings:[]},membership_note:'固定参考样本，不是全市场广度',reference_universe:[{symbol:'US.SPY'}],
+ latest:{date:'2026-11-20',state:'lean_strong',score:66,realized_vol_20d:.18,return_1d:.01,return_20d:.04,drawdown_60d:-.02,breadth_ratio:.75,breadth_sample_size:3,breadth_expected_size:4,trend_score:60,momentum_score:70,breadth_score:75,volatility_score:64},
+ references:[{symbol:'US.SPY',name:'标普 <500> ETF',date:'2026-11-20',close:600,ma20:590,ma60:580,return_1d:.01,return_20d:.04}],history:[]};
+vm.runInContext('job={...fixture,ticker:"AAPL",market_environment:globalEnvironment,market_environment_consumed:true};tab=7;draw()',context);
+let globalHTML=nodes.get('#content').innerHTML;
+assert(globalHTML.includes('美股市场趋势')&&globalHTML.includes('18%')&&globalHTML.includes('66 / 100'));
+assert(globalHTML.includes('标普 &lt;500&gt; ETF'));
+assert(!globalHTML.includes('<th>涨停家数</th>')&&!globalHTML.includes('<small>情绪阶段</small>'));
+vm.runInContext('job.market_environment.latest.score=null;job.market_environment.latest.breadth_ratio=null;job.market_environment.market="HK";job.market_environment.market_timezone="Asia/Hong_Kong";job.ticker="0700.HK";draw()',context);
+assert(nodes.get('#content').innerHTML.includes('港股市场趋势'));
+assert(!nodes.get('#content').innerHTML.includes('null / 100'));
+vm.runInContext('job.market_environment.latest=null;job.market_environment.coverage={status:"unavailable",warnings:[],reason:"请配置 FUTU_API_KEY"};draw()',context);
+assert(nodes.get('#content').innerHTML.includes('富途官方 AppKey'));
+vm.runInContext('job.market_environment_update={...globalEnvironment,refresh_note:"本次补算，原结论未重新生成。",latest:null,coverage:{status:"unavailable",reason:"测试",warnings:[]}};draw()',context);
+assert(nodes.get('#content').innerHTML.includes('已按原研究日期补算市场环境'));
+assert(nodes.get('#content').innerHTML.includes('原研究、交易计划和风险结论未重新生成'));
+assert(!nodes.get('#content').innerHTML.includes('已将本次归档数据传入研究讨论'));
+// Market charts preserve missing periods, signed returns and immutable archive values.
+context.chartEnvironment={market:'US',latest:{date:'2026-11-03'},history:[{date:'2026-11-01',score:0},{date:'2026-11-02',score:null},{date:'2026-11-03',score:100}],references:[{name:'Down <ETF>',symbol:'US.DOWN',date:'2026-11-03',return_20d:-.02},{name:'Up ETF',symbol:'US.UP',date:'2026-11-03',return_20d:.04},{name:'Missing',symbol:'US.NA',date:'2026-11-03',return_20d:null},{name:'Wrong date',symbol:'US.OLD',date:'2026-11-02',return_20d:.99}]};
+const chartArchive=JSON.stringify(context.chartEnvironment);
+const environmentTrend=vm.runInContext('environmentMetric="score";environmentRange=30;environmentTimeline(chartEnvironment)',context);
+assert.equal((environmentTrend.match(/class="env-trend-line"/g)||[]).length,2,'Missing days break the score line');
+assert.equal((environmentTrend.match(/data-env-point=/g)||[]).length,2,'Zero is valid; null is not plotted');
+assert(environmentTrend.includes('选择趋势指标')&&environmentTrend.includes('选择趋势范围'));
+const returnBars=vm.runInContext('environmentReferenceBars(chartEnvironment)',context);
+assert(returnBars.includes('-2%')&&returnBars.includes('+4%')&&returnBars.includes('env-zero-axis'));
+assert(returnBars.includes('Down &lt;ETF&gt;')&&!returnBars.includes('Wrong date'));
+assert(!returnBars.includes('NaN')&&!returnBars.includes('Infinity'));
+assert.equal(JSON.stringify(context.chartEnvironment),chartArchive,'Charts must not mutate research evidence');
+vm.runInContext('environmentMetric="score";environmentRange=30',context);
+vm.runInContext("job=fixture;tab=5",context);
 interactionTests().catch(error=>{console.error(error);process.exitCode=1});

@@ -1,7 +1,8 @@
-const $=s=>document.querySelector(s), tabs=['研究简报','公司资料','经营分析','财务报告','财务指标','新闻分析','比较分析'];
-let selected=null,job=null,tab=0,frequency='annual',statement='income',jobs=[],loading=false;
+const $=s=>document.querySelector(s), tabs=['研究简报','公司资料','经营分析','财务报告','财务指标','新闻分析','比较分析','市场环境'];
+let selected=null,job=null,tab=globalThis.location?.hash==='#market-environment'?7:0,frequency='annual',statement='income',jobs=[],loading=false;
 let selectionRevision=0,submitting=false,chartMode='revenue',toastTimer=null;
 let metricKey='net_margin',financialQuery='',financialRow='';
+let environmentMetric='score',environmentRange=30;
 const jobCache=new Map(), reportCache=new Map();
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>v==null||!Number.isFinite(Number(v))?'—':Number(v).toLocaleString('zh-CN',{maximumFractionDigits:d});
@@ -128,7 +129,7 @@ function researchRail(){
   const r=job.report_html||{},active=['queued','running'].includes(job.status);
   const steps=[['file','财务与经营研究',['fundamentals_report','operating_report','metrics_report'].every(k=>r[k])],['layers','多空观点讨论',Boolean(r.investment_plan)],['shield','风险评估',Boolean(r.final_trade_decision)],['check','形成综合判断',job.status==='completed'&&Boolean(r.final_trade_decision)]];
   const macro=job.macro_context||job.macro_update;
-  const sources=[['Yahoo Finance',job.data?'财务与公司资料':'待获取'],...(macro?[['FRED','宏观指标']]:[]),...(job.news_context?[['TrendRadar','新闻资料']]:[])];
+  const sources=[['Yahoo Finance',job.data?'财务与公司资料':'待获取'],...(macro?[['FRED','宏观指标']]:[]),...(job.news_context?[['TrendRadar','新闻资料']]:[]),...((job.market_environment_update||job.market_environment)?[[(job.market_environment_update||job.market_environment).source,'市场环境']]:[])];
   return `<div class="right-rail"><section class="side-section" id="trend-chart">${trendChart()}</section><section class="side-section"><div class="side-top"><h3>本次研究脉络</h3><span class="mini-label">${job.status==='completed'?'已归档':escape(statusLabel(job.status))}</span></div><div class="process-list">${steps.map(([i,label,done])=>`<div class="process-line"><span>${icon(i,15)}${label}</span><small class="${done?'done':''}">${done?icon('check',13):active?'进行中':'未生成'}</small></div>`).join('')}</div></section><section class="side-section"><div class="side-top"><h3>资料与来源</h3>${icon('layers',15)}</div><div class="source-list">${sources.map(([name,kind])=>`<div class="source-row"><span>${name}</span><small>${kind}</small></div>`).join('')}<div class="source-row"><span>研究日期</span><small>${escape(job.date)}</small></div></div><p class="source-foot">采用本次研究归档的资料。不同期间、单位与供应商口径，请在具体指标中核对。</p><button class="text-button" data-show-sources style="margin-top:15px">查看数据口径 ${icon('arrow',14)}</button></section></div>`;
 }
 function researchCard(title,number,body,footer=''){
@@ -321,7 +322,115 @@ function toast(message){
   clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').hidden=false;
   toastTimer=setTimeout(()=>$('#toast').hidden=true,4000);
 }
+const environmentStates={strong:'强势',lean_strong:'偏强',range:'震荡',lean_weak:'偏弱',weak:'弱势'};
+const environmentPhases={ice:'冰点',ignite:'启动',rally:'主升',climax:'高潮',ebb:'退潮',repair:'修复'};
+const environmentNumber=v=>typeof v==='number'&&Number.isFinite(v);
+function environmentMetricSpecs(c){
+  return c.market==='CN_A'||!c.market?{
+    score:{label:'环境分',score:true},
+    index_pct:{label:'指数涨跌幅',percent:true},
+    seal_rate:{label:'封板率',percent:true},
+  }:{
+    score:{label:'环境分',score:true},
+    return_20d:{label:'20 日收益',percent:true},
+    realized_vol_20d:{label:'年化波动率',percent:true},
+  };
+}
+function environmentChartValue(value,spec){return environmentNumber(value)?(spec.percent?pct(value):num(value,0)):'未提供';}
+function environmentTimeline(c){
+  const specs=environmentMetricSpecs(c),key=specs[environmentMetric]?environmentMetric:'score',spec=specs[key];
+  const rows=(c.history||[]).slice(-(environmentRange===10?10:30));
+  const valid=row=>environmentNumber(row[key])&&(!spec.score||(row[key]>=0&&row[key]<=100));
+  const controls=`<div class="env-chart-controls"><div class="env-segments" role="group" aria-label="选择趋势指标">${Object.entries(specs).map(([id,item])=>`<button type="button" data-env-metric="${id}" aria-pressed="${id===key}">${item.label}</button>`).join('')}</div><div class="env-segments" role="group" aria-label="选择趋势范围">${[10,30].map(n=>`<button type="button" data-env-range="${n}" aria-pressed="${environmentRange===n}">${n} 日</button>`).join('')}</div></div>`;
+  const heading=`<div class="env-chart-heading"><div><h3>市场环境趋势</h3><p>同一份研究归档 · ${rows.length} 个交易日</p></div><span class="env-chart-tag">${escape(spec.label)}</span></div>`;
+  const values=rows.filter(valid).map(r=>r[key]);
+  if(!values.length)return `<section class="card env-trend-card">${heading}${controls}<p class="env-chart-empty">本次归档没有可绘制的${escape(spec.label)}序列。缺失值不会补成零。</p></section>`;
+  const lo=spec.score?0:Math.min(0,...values),max=spec.score?100:Math.max(0,...values),hi=max===lo?lo+1:max,span=hi-lo;
+  const x=i=>rows.length===1?306:48+i*510/(rows.length-1),y=v=>18+(hi-v)/span*174;
+  const bands=spec.score?[[0,30,'弱势','#faefec'],[30,45,'偏弱','#faf5ec'],[45,55,'震荡','#f1f3ee'],[55,70,'偏强','#eef4e9'],[70,100,'强势','#e4efe7']].map(([low,high,label,color])=>`<rect x="48" y="${y(high)}" width="510" height="${y(low)-y(high)}" fill="${color}"/><text class="env-axis-text env-band-label" x="581" y="${y((low+high)/2)+4}">${label}</text>`).join(''):'';
+  const grid=[lo,lo+span/2,hi].map(v=>`<line x1="48" x2="558" y1="${y(v)}" y2="${y(v)}" stroke="#dbe3da" stroke-dasharray="3 4"/><text class="env-axis-text" x="39" y="${y(v)+4}" text-anchor="end">${escape(environmentChartValue(v,spec))}</text>`).join('');
+  const segments=[];let run=[];
+  rows.forEach((row,i)=>{if(valid(row))run.push(`${x(i).toFixed(2)},${y(row[key]).toFixed(2)}`);else if(run.length){segments.push(run);run=[];}});if(run.length)segments.push(run);
+  const lines=segments.map(points=>`<polyline class="env-trend-line" points="${points.join(' ')}"/>`).join('');
+  const dots=rows.map((row,i)=>valid(row)?`<g class="env-chart-point" data-env-point="${i}" tabindex="0" role="img" aria-label="${escape(row.date+'，'+spec.label+' '+environmentChartValue(row[key],spec))}"><title>${escape(row.date+' · '+spec.label+' '+environmentChartValue(row[key],spec))}</title><circle cx="${x(i)}" cy="${y(row[key])}" r="4"/></g>`:'').join('');
+  const ticks=[...new Set([0,Math.floor((rows.length-1)/4),Math.floor((rows.length-1)/2),Math.floor((rows.length-1)*3/4),rows.length-1])].map(i=>`<text class="env-axis-text" x="${x(i)}" y="220" text-anchor="middle">${escape(String(rows[i].date).slice(5))}</text>`).join('');
+  const last=rows.at(-1),zero=lo<0&&hi>0?`<line x1="48" x2="558" y1="${y(0)}" y2="${y(0)}" stroke="#8a9a8e"/>`:'';
+  return `<section class="card env-trend-card">${heading}${controls}<p class="env-chart-readout" id="environment-chart-readout" aria-live="polite">${escape(last.date+' · '+spec.label+' '+environmentChartValue(last[key],spec))}</p><div class="env-trend-plot"><svg viewBox="0 0 650 240" role="img" aria-label="${escape(spec.label+'历史趋势')}"><title>${escape(spec.label)}历史趋势</title><desc>日期按归档交易日排列；缺失值不绘制、不连接。使用键盘聚焦数据点或将鼠标移到数据点查看读数。</desc>${bands}${grid}${zero}${lines}${dots}${ticks}</svg></div><p class="env-chart-foot">${spec.score?'背景色对应五档市场强弱；规则分不是上涨概率。':spec.percent?'纵轴使用百分比，保留正负方向。':''} 悬停或聚焦圆点查看当日数值。</p></section>`;
+}
+function environmentDrivers(c){
+  const r=c.latest;
+  const fields=c.market==='CN_A'||!c.market?[['赚钱效应','profit_score'],['投机活跃','speculation_score'],['抗跌能力','resilience_score'],['趋势强度','trend_score']]:[['趋势','trend_score'],['20 日动量','momentum_score'],['参考资产广度','breadth_score'],['波动稳定度','volatility_score']];
+  return `<section class="card env-drivers-card"><div class="env-chart-heading"><div><h3>四维驱动分</h3><p>${escape(r.date)} · 每个维度满分 100</p></div></div><div class="env-driver-list">${fields.map(([label,key])=>{
+    const value=r[key],usable=environmentNumber(value)&&value>=0&&value<=100;
+    return `<div class="env-driver-row"><div><span>${label}</span><strong>${usable?num(value,0):'—'}<small>${usable?' / 100':''}</small></strong></div><div class="env-driver-track" ${usable?`role="meter" aria-label="${label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${value}"`:`aria-label="${label}未提供"`}>${usable?`<span style="width:${value}%"></span>`:'<span class="env-missing-bar"></span>'}</div></div>`;
+  }).join('')}</div><p class="env-chart-foot">各条表示维度分，不是对综合分的贡献。${c.market==='CN_A'||!c.market?'综合权重：赚钱 35%、投机 25%、抗跌 20%、趋势 20%。':'综合权重：趋势 40%、动量 30%、广度 20%、波动 10%。波动稳定度分越高，已实现波动越低。'}</p></section>`;
+}
+function environmentReferenceBars(c){
+  const rows=(c.references||[]).filter(r=>r.date===c.latest.date),valid=rows.filter(r=>environmentNumber(r.return_20d));
+  const extent=Math.max(.01,...valid.map(r=>Math.abs(r.return_20d)));
+  return `<section class="card env-return-card"><div class="env-chart-heading"><div><h3>参考资产 · 20 日收益</h3><p>${escape(c.latest.date)} · 同一观察日 · 前复权口径</p></div><span class="env-chart-tag">零轴对齐</span></div>${rows.length?`<div class="env-return-list">${rows.map(r=>{
+    const value=r.return_20d,usable=environmentNumber(value),width=usable?Math.abs(value)/extent*50:0;
+    return `<div class="env-return-row"><div class="env-return-label"><strong>${escape(r.name)}</strong><span>${escape(r.symbol)}</span></div><div class="env-return-track" role="img" aria-label="${escape(r.name+'，20 日收益 '+(usable?pct(value):'未提供'))}">${usable?`<span class="env-return-bar ${value<0?'negative':'positive'}" style="left:${value<0?50-width:50}%;width:${width}%"></span>`:''}<i class="env-zero-axis"></i></div><strong class="env-return-value ${usable&&value<0?'negative':''}">${usable?(value>0?'+':'')+pct(value):'—'}</strong></div>`;
+  }).join('')}</div><p class="env-chart-foot">横条只比较已归档的 20 日收益，不代表行业排名；未存储的资产历史走势不会补画。</p>`:'<p class="note">当前观察日没有可对齐的参考资产数据。</p>'}</section>`;
+}
+function environmentMainlineBars(rows){
+  if(!rows.length)return '<p class="note">当前观察日暂无主线排名。</p>';
+  return `<div class="env-mainline-bars">${rows.slice(0,5).map(r=>`<div class="env-driver-row"><div><span>${escape(r.member)}</span><strong>${num(r.score,1)}</strong></div><div class="env-driver-track">${environmentNumber(r.score)?`<span style="width:${Math.max(0,Math.min(100,r.score))}%"></span>`:''}</div><small>排名 ${num(r.rank,0)} · 涨停 ${num(r.limit_up_count,0)} 家 · 最高 ${num(r.max_boards,0)} 板</small></div>`).join('')}</div>`;
+}
+function environmentDetails(title,html){return `<details class="card environment-details"><summary>${escape(title)}</summary>${html}</details>`;}
+
+function environmentView(){
+  const supplemented=Boolean(job.market_environment_update);
+  const c=job.market_environment_update||job.market_environment;
+  const market=c?.market||(/\.(SS|SH|SZ)$/.test(job.ticker)?'CN_A':/\.HK$/.test(job.ticker)?'HK':'US');
+  const subtitle=market==='CN_A'?'A 股市场强弱 · 情绪周期 · 行业与概念主线':`${market==='HK'?'港股':'美股'}市场趋势 · 动量 · 波动 · 参考资产广度`;
+  const header=moduleHeader('市场环境',subtitle,`<span class="period-tag">研究日期 ${escape(job.date)}</span>`);
+  if(!c){
+    const applicable=/\.(SS|SH|SZ|HK)$/.test(job.ticker)||/^[A-Z][A-Z0-9]*(?:-[A-Z]|\.[AB])?$/.test(job.ticker);
+    return header+card('市场环境资料',`<p class="note">${applicable?(['queued','running'].includes(job.status)?'正在准备本次市场环境资料。':'本次研究未归档市场环境；历史报告不会自动补取新数据。'):'当前证券类型尚无对应的市场环境数据源。'}</p>`);
+  }
+  const coverage=c.coverage||{},r=c.latest;
+  const labels={available:'资料可用',partial:'资料部分可用',stale:'资料已过期',unavailable:'资料不可用'};
+  const received=!supplemented&&job.market_environment_consumed;
+  const flow=supplemented?'已按原研究日期补算市场环境；原研究、交易计划和风险结论未重新生成。':received?(r&&['available','partial'].includes(coverage.status)?'已将本次归档数据传入研究讨论、交易计划和风险评估流程。':'已将资料缺失或过期说明传入研究与风险评估；不作为当前市场判断依据。'):['queued','running'].includes(job.status)?'已冻结资料，研究与风险评估尚未全部完成。':'本次研究未完成市场环境传递核验，不宣称已参与综合判断。';
+  let html=header+`<div class="environment-provenance">`+card('研究与风险评估依据',`<p>${escape(flow)}</p><p class="note">${escape(labels[coverage.status]||'状态未知')} · 采集时间 ${escape(c.retrieved_at)} · 截止 ${escape(c.cutoff_date)}</p>${c.refresh_note?`<p class="note">${escape(c.refresh_note)}</p>`:''}${coverage.reason?`<p class="note warn">${escape(coverage.reason)}</p>`:''}${(coverage.warnings||[]).map(w=>`<p class="note">${escape(w)}</p>`).join('')}`)+`</div>`;
+  if(!r)return html+card('资料接入',`<p class="note">${market==='CN_A'?'请检查本机面板服务、API Token 权限，以及面板中的日线数据和市场环境计算状态。':'请检查富途官方 AppKey、签名私钥文件和对应市场的行情权限。'}新建研究后采集；本页不会重新取数或改写历史结论。</p>`);
+  if(market!=='CN_A')return html+internationalEnvironmentBody(c);
+  const facts=[['市场状态',environmentStates[r.state]||'—','五档市场强弱'],['情绪分',num(r.score,0)+' / 100','规则评分'],['情绪阶段',environmentPhases[r.phase]||'未提供','六阶段情绪周期'],['观察日期',r.date,'最新完整交易日']];
+  html+=`<div class="environment-facts">${facts.map(([label,value,note])=>stat(label,escape(value),note)).join('')}</div>`;
+  html+=`<div class="environment-chart-grid">${environmentTimeline(c)}${environmentDrivers(c)}</div>`;
+  html+=environmentDetails('查看市场指标明细',table(['涨停家数','跌停家数','连板高度','封板率','晋级率','指数涨跌幅'],[[num(r.limit_up,0),num(r.limit_down,0),num(r.max_consecutive,0),pct(r.seal_rate),pct(r.promo_rate),pct(r.index_pct)]]));
+  html+=environmentDetails('查看历史数据明细',table(['日期','市场状态','情绪分','情绪阶段'],(c.history||[]).slice(-10).reverse().map(x=>[x.date,environmentStates[x.state]||'—',num(x.score,0),environmentPhases[x.phase]||'未提供'])));
+  html+='<div class="environment-mainlines">'+[['concept','概念主线'],['industry','行业主线']].map(([kind,label])=>{
+    const rows=(c.mainlines?.[kind]||[]).filter(x=>x.date===r.date);
+    return card(label,environmentMainlineBars(rows));
+  }).join('')+'</div>';
+  return html+card('数据口径',`<p class="note">来源：tick-stock-panel。市场状态和情绪阶段为规则计算，评分不代表上涨概率，也不直接映射买卖评级或仓位。盘中研究使用此前的完整交易日环境，交易日收盘后仍需等待面板计算完成。缺失值显示为 —。</p><p class="note">${escape(c.membership_note)}</p><p class="note">主线排名不证明当前个股属于该主线；历史序列是当前修订值，不是严格的历史时点数据。页面与本次研究使用同一份冻结资料。</p>`);
+}
+function internationalEnvironmentBody(c){
+  const r=c.latest,showScore=v=>v==null?'—':num(v,0)+' / 100';
+  const facts=[['市场状态',environmentStates[r.state]||'未提供','五档环境强弱'],['环境分',showScore(r.score),'规则评分'],['年化已实现波动率',pct(r.realized_vol_20d),'最近 20 个日收益'],['观察日期',r.date,'最新完整交易日']];
+  let html=`<div class="environment-facts">${facts.map(([label,value,note])=>stat(label,escape(value),note)).join('')}</div>`;
+  html+=`<div class="environment-chart-grid">${environmentTimeline(c)}${environmentDrivers(c)}</div>`;
+  html+=environmentDetails('查看市场指标明细',table(['基准','当日收益','20 日收益','60 日高点回撤','样本中高于 MA20 的比例','可对齐参考资产'],[[c.primary_symbol,pct(r.return_1d),pct(r.return_20d),pct(r.drawdown_60d),pct(r.breadth_ratio),`${r.breadth_sample_size} / ${r.breadth_expected_size}`]]));
+  html+=environmentReferenceBars(c);
+  html+=environmentDetails('查看参考资产明细',table(['参考资产','代码','观察日期',`前复权价格 · ${c.currency}`,'20 日均线','60 日均线','当日收益','20 日收益'],(c.references||[]).map(x=>[x.name,x.symbol,x.date,num(x.close),num(x.ma20),num(x.ma60),pct(x.return_1d),pct(x.return_20d)])));
+  html+=environmentDetails('查看历史数据明细',table(['日期','市场状态','环境分','20 日收益','年化已实现波动率','参考资产数量'],(c.history||[]).slice(-10).reverse().map(x=>[x.date,environmentStates[x.state]||'未提供',showScore(x.score),pct(x.return_20d),pct(x.realized_vol_20d),`${x.breadth_sample_size} / ${x.breadth_expected_size}`])));
+  html+=card('数据口径',`<p class="note">来源：${escape(c.source)}。${escape(c.membership_note)}港美股不使用 A 股涨停、封板率或连板情绪阶段。</p><p class="note">只使用 ${escape(c.market_timezone)} 时区的完整日线，并预留收盘确认时间。前复权价格用于计算日收益和趋势；已实现波动率为最近 20 个日收益的样本标准差乘 √252，不是隐含波动率。</p><p class="note">评分是透明规则，不代表上涨概率，不直接决定评级或仓位。缺失参考资产不会填零；少于两只可对齐资产时不计算广度和环境分。页面与研究使用同一份归档，历史日线为当前修订值，不代表严格的历史时点数据。</p><details><summary>评分规则与参考样本</summary><p class="note">趋势：价格高于 MA20 计 60 分，高于 MA60 计 40 分；动量：50 + 500 × 20 日收益，限制在 0–100；广度：参考样本高于 MA20 的比例 × 100；波动：100 − 200 × 年化已实现波动率，限制在 0–100。综合权重：趋势 40%、动量 30%、广度 20%、波动 10%。</p><p class="note">分档：≥70 强势、≥55 偏强、≥45 震荡、≥30 偏弱、其余弱势。样本：${escape((c.reference_universe||[]).map(x=>x.symbol).join('、'))}。</p></details>`);
+  return html;
+}
 function bindContent(){
+  $('#content').querySelectorAll('[data-env-metric]').forEach(b=>b.addEventListener('click',()=>{environmentMetric=b.dataset.envMetric;draw();}));
+  $('#content').querySelectorAll('[data-env-range]').forEach(b=>b.addEventListener('click',()=>{environmentRange=Number(b.dataset.envRange);draw();}));
+  $('#content').querySelectorAll('[data-env-point]').forEach(point=>{
+    const show=()=>{
+      const c=job.market_environment_update||job.market_environment;if(!c)return;
+      const specs=environmentMetricSpecs(c),key=specs[environmentMetric]?environmentMetric:'score',row=(c.history||[]).slice(-(environmentRange===10?10:30))[Number(point.dataset.envPoint)];
+      const readout=$('#environment-chart-readout');if(row&&readout)readout.textContent=row.date+' · '+specs[key].label+' '+environmentChartValue(row[key],specs[key]);
+    };
+    point.addEventListener('pointerenter',show);point.addEventListener('focus',show);
+  });
+
   $('#tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=Number(b.dataset.tab);draw();});
   $('#retry-research')?.addEventListener('click',async e=>{
     const id=job.id;e.currentTarget.disabled=true;
@@ -360,10 +469,11 @@ function draw(){
   $('#export-report').hidden=job.status!=='completed'||!Object.keys(job.report_html||{}).length;
   $('#tabs').innerHTML=tabs.map((label,i)=>`<button class="${tab===i?'active':''}" aria-pressed="${tab===i}" data-tab="${i}">${label}${i===5&&(job.macro_update||job.macro_context)?'<span class="tab-indicator"></span>':''}</button>`).join('');
   $('#overview').hidden=!job.data;$('#overview').innerHTML=job.data?financialOverview():'';
-  $('#footer-source').textContent='资料来源：'+(job.data?.source||'待获取')+(job.macro_context||job.macro_update?' · FRED':'')+' · '+job.date;
+  $('#footer-source').textContent='资料来源：'+(job.data?.source||'待获取')+(job.macro_context||job.macro_update?' · FRED':'')+((job.market_environment_update||job.market_environment)?' · '+(job.market_environment_update||job.market_environment).source:'')+' · '+job.date;
   let html='';
   if(tab===0)html=briefView();
-  else if(tab===5){html=newsView();
+  else if(tab===7){html=environmentView();
+  }else if(tab===5){html=newsView();
   }else if(!job.data){
     html=empty(job.data_status==='loading'?'正在加载公司资料和财务表格，请稍候…':'尚无结构化数据。发起新分析可同时获取公司资料、财务报表和指标。');
   }else if(tab===1){
@@ -384,7 +494,7 @@ function draw(){
   bindContent();requestAnimationFrame(updateTabHint);
 }
 function chooseStudy(id){
-  tab=0;chartMode='revenue';financialQuery='';financialRow='';setSidebar(false);$('#tabs').scrollLeft=0;$('#detail-dialog').close();$('#research-dialog').close();
+  tab=0;chartMode='revenue';environmentMetric='score';environmentRange=30;financialQuery='';financialRow='';setSidebar(false);$('#tabs').scrollLeft=0;$('#detail-dialog').close();$('#research-dialog').close();
   window.scrollTo({top:0,behavior:'smooth'});return select(id);
 }
 async function select(id){
