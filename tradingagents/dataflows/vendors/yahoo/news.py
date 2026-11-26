@@ -1,9 +1,7 @@
 """yfinance-based news data fetching functions."""
 
 import contextlib
-import os
 import logging
-from pathlib import Path
 from datetime import UTC, datetime
 
 import yfinance as yf
@@ -14,16 +12,11 @@ from tradingagents.dataflows.date_window import coverage_gap, in_window
 from tradingagents.dataflows.errors import VendorUnavailableError
 from tradingagents.dataflows.symbols import normalize_symbol
 from tradingagents.dataflows.vendors.yahoo.common import yf_retry
+from tradingagents.dataflows.vendors.yahoo.transport import session_options
 
 
 def _session_options():
-    """curl_cffi does not inherit requests' configured CA bundle automatically."""
-    bundle = os.getenv("REQUESTS_CA_BUNDLE") or os.getenv("SSL_CERT_FILE")
-    if bundle and Path(bundle).is_file():
-        from curl_cffi.requests import Session
-
-        return {"session": Session(impersonate="chrome", verify=bundle)}
-    return {}
+    return session_options()
 
 
 def _extract_article_data(article: dict) -> dict:

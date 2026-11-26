@@ -33,8 +33,13 @@ from tradingagents.default_config import build_default_config
 from tradingagents.report_brief import make_company_brief
 from tradingagents.report_html import render_report
 from tradingagents.reporting import _report_parts, write_report_tree
+from tradingagents.web import backtest_api
 from tradingagents.web.bootstrap import initialize_shared_data
 from tradingagents.web.presentation import present_report, readable_evidence
+from tradingagents.web.valuation import (
+    calculate as calculate_valuation,
+    prepare as prepare_valuation,
+)
 
 ROOT = Path(__file__).parent / "static"
 STORE = Path(build_default_config()["results_dir"]) / "web"
@@ -432,7 +437,7 @@ class Handler(BaseHTTPRequestHandler):
                             k: v
                             for k, v in job.items()
                             if k not in (
-                                "data", "reports", "peers_data", "research_snapshot",
+                                "data", "reports", "peers_data", "research_snapshot", "valuation", "historical_context",
                                 "news_context", "seed_reports", "macro_context", "macro_update", "market_environment", "market_environment_update",
                             )
                         },
@@ -493,13 +498,22 @@ class Handler(BaseHTTPRequestHandler):
                 "company", {}
             ).get("symbol")
             archive = ResearchStore(STORE / "research.sqlite3")
+            result["valuation_setup"] = prepare_valuation(result)
             result["versions"] = archive.history(ticker) if ticker else []
             result["display_evidence"] = readable_evidence(result.get("research_snapshot") or {})
             result["report_html"] = {
                 k: MARKDOWN.render(v) for k, v in display_reports(result).items()
             }
             return self.send(result)
-        files = {"/": "index.html", "/app.js": "app.js", "/style.css": "style.css"}
+        if path == "/api/valuation-backtests":
+            return self.send(backtest_api.records(STORE))
+        if path.startswith("/api/valuation-backtests/"):
+            try:
+                return self.send(backtest_api.read(STORE, path.rsplit("/", 1)[-1]))
+            except ValueError as exc:
+                return self.send({"error": str(exc)}, 404)
+        files = {"/": "index.html", "/app.js": "app.js", "/style.css": "style.css",
+                 "/backtest": "backtest.html", "/backtest.js": "backtest.js", "/backtest.css": "backtest.css"}
         if path not in files:
             return self.send({"error": "页面不存在"}, 404)
         file = ROOT / files[path]
@@ -518,6 +532,54 @@ class Handler(BaseHTTPRequestHandler):
         }
         if not self.trusted() or (origin and origin not in allowed):
             return self.send({"error": "请求来源不允许"}, 403)
+        if self.path.startswith("/api/valuation-backtests/") and self.path.endswith("/research"):
+            try:
+                length = int(self.headers.get("Content-Length", 0))
+                if not self.headers.get("Content-Type", "").startswith("application/json") or not 0 < length <= 4096:
+                    raise ValueError("请求必须为有效 JSON")
+                payload = json.loads(self.rfile.read(length))
+                record = backtest_api.research_record(STORE, self.path.split("/")[-2], payload.get("ticker"), payload.get("date"))
+                with LOCK:
+                    if record["id"] not in JOBS:
+                        JOBS[record["id"]] = record
+                        persist(record)
+                return self.send({"id": record["id"], "url": "/?job=" + record["id"] + "#valuation"}, 201)
+            except (ValueError, TypeError, AttributeError) as exc:
+                return self.send({"error": str(exc)}, 400)
+        if self.path == "/api/valuation-backtests":
+            try:
+                if not self.headers.get("Content-Type", "").startswith("application/json"):
+                    raise ValueError("请求必须为 JSON")
+                length = int(self.headers.get("Content-Length", 0))
+                if not 0 < length <= 4096:
+                    raise ValueError("请求大小无效")
+                row = backtest_api.create(STORE, json.loads(self.rfile.read(length)))
+                return self.send({"id": row["id"], "status": row["status"]}, 202)
+            except (ValueError, TypeError) as exc:
+                return self.send({"error": str(exc)}, 400)
+        if self.path.startswith("/api/jobs/") and self.path.endswith("/valuation"):
+            job_id = self.path.split("/")[-2]
+            with LOCK:
+                job = deepcopy(JOBS.get(job_id))
+            if job is None:
+                return self.send({"error": "任务不存在"}, 404)
+            try:
+                if not self.headers.get("Content-Type", "").startswith("application/json"):
+                    raise ValueError("请求必须为 JSON")
+                length = int(self.headers.get("Content-Length", 0))
+                if not 0 < length <= 32768:
+                    raise ValueError("请求大小无效")
+                payload = json.loads(self.rfile.read(length))
+                result = calculate_valuation(job, payload)
+                result["id"] = uuid.uuid4().hex
+                folder = STORE / "valuations" / job_id
+                folder.mkdir(parents=True, exist_ok=True)
+                replace_file(folder / (result["id"] + ".json"), lambda p: Path(p).write_text(
+                    json.dumps(result, ensure_ascii=False, allow_nan=False), encoding="utf-8"))
+                update(job_id, valuation=result)
+                return self.send(result)
+            except (ValueError, TypeError, OverflowError) as exc:
+                return self.send({"error": str(exc)}, 400)
         if self.path.startswith("/api/jobs/") and self.path.endswith("/reanalyze-macro"):
             try:
                 job = create_macro_reanalysis(self.path.split("/")[-2])

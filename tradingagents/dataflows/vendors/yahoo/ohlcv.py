@@ -9,6 +9,7 @@ from tradingagents.dataflows.errors import NoMarketDataError
 from tradingagents.dataflows.files import replace_file
 from tradingagents.dataflows.symbols import normalize_symbol, safe_ticker_component
 from tradingagents.dataflows.vendors.yahoo.common import raise_for_empty, yf_retry
+from tradingagents.dataflows.vendors.yahoo.transport import session_options
 
 logger = logging.getLogger(__name__)
 
@@ -209,7 +210,7 @@ def load_ohlcv(symbol: str, as_of_date: str, fill_gaps: bool = True) -> pd.DataF
     if data is None:
         # yf.download catches every error, a rate limit included, and returns
         # an empty frame. Ticker.history raises the rate limit, so it is retried.
-        downloaded = yf_retry(lambda: yf.Ticker(canonical).history(
+        downloaded = yf_retry(lambda: yf.Ticker(canonical, **session_options()).history(
             start=start_str,
             end=end_str,
             auto_adjust=True,

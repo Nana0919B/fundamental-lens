@@ -15,6 +15,7 @@ from tradingagents.dataflows.vendors.yahoo.common import (
     raise_for_empty,
     yf_retry,
 )
+from tradingagents.dataflows.vendors.yahoo.transport import session_options
 
 # Quote currencies Yahoo gives in a minor unit, and the main unit of each.
 _MAIN_UNIT = {"GBp": "GBP", "GBX": "GBP", "ZAc": "ZAR", "ILA": "ILS"}
@@ -38,7 +39,7 @@ def get_fundamentals(
     if withheld:
         return withheld
 
-    info = yf_retry(lambda: yf.Ticker(canonical).info)
+    info = yf_retry(lambda: yf.Ticker(canonical, **session_options()).info)
     if not info:
         raise_for_empty(ticker, canonical, "fundamentals")
 
@@ -112,7 +113,7 @@ def _statement(ticker, freq, as_of_date, title, quarterly_attr, annual_attr) -> 
         return withheld
     what = title.lower()
     attr = quarterly_attr if freq.lower() == "quarterly" else annual_attr
-    data = yf_retry(lambda: getattr(yf.Ticker(canonical), attr))
+    data = yf_retry(lambda: getattr(yf.Ticker(canonical, **session_options()), attr))
     if data is None or data.empty:
         raise_for_empty(ticker, canonical, f"{what} data")
     return f"# {title} data for {canonical} ({freq})\n" + data.to_csv()
@@ -154,7 +155,7 @@ def get_insider_transactions(
     withheld = withhold_undisclosed_trades(as_of_date, canonical)
     if withheld:
         return withheld
-    data = yf_retry(lambda: yf.Ticker(canonical).insider_transactions)
+    data = yf_retry(lambda: yf.Ticker(canonical, **session_options()).insider_transactions)
 
     # Empty is normal here (many valid symbols have no insider filings),
     # so report it plainly rather than treating the symbol as invalid.
@@ -168,4 +169,4 @@ def get_insider_transactions(
 
 def get_company_profile(ticker: str) -> dict:
     """Yahoo's current profile for ``ticker``: name, sector, industry and the like."""
-    return yf_retry(lambda: yf.Ticker(normalize_symbol(ticker)).info) or {}
+    return yf_retry(lambda: yf.Ticker(normalize_symbol(ticker), **session_options()).info) or {}

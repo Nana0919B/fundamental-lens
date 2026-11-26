@@ -1,0 +1,1168 @@
+{
+  "schema_version": 1,
+  "selection_note": "按行业选择知名大型代表，非严格市值第一或完整指数成分；事后选股存在幸存者偏差。",
+  "companies": {
+    "0700.HK": {
+      "name": "腾讯控股",
+      "industry": "资讯科技",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-08",
+          "accn": "0700-annual2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+          "sha256": "95b0652da8294527d150a56a9de293627b53e73b4a4c21202c153ea6eb4e9134",
+          "retrieved_at": "2026-11-26T13:56:27.949950+00:00",
+          "financial_currency": "CNY",
+          "revenue": 660257000000.0,
+          "debt": 358112000000.0,
+          "shares": 9224914953,
+          "evidence": {
+            "revenue": {
+              "val": 660257000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            },
+            "ebit": {
+              "val": 208099000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            },
+            "cash": {
+              "val": 132519000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            },
+            "debt": {
+              "val": 358112000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            },
+            "shares": {
+              "val": 9224914953,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            },
+            "other_claims": {
+              "val": 80348000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0700-annual2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800667.pdf",
+              "pdf_pages": [
+                124,
+                126,
+                127,
+                236,
+                237
+              ],
+              "derivation": "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。"
+            }
+          },
+          "warnings": [
+            "IFRS营业利润；债务含借款、票据和租赁；其他权益为少数股东权益账面值；股数采用已发行总数，含奖励计划及待注销股份，尚未逐期调整回购。未计投资组合价值。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0941.HK": {
+      "name": "中国移动",
+      "industry": "电讯",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-11",
+          "accn": "0941-2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+          "sha256": "2f4ca6b6480b58880ce41e0587629319a8e92de6a52df91925929db75f6a6e76",
+          "retrieved_at": "2026-11-26T13:51:21.251256+00:00",
+          "financial_currency": "CNY",
+          "revenue": 1040759000000.0,
+          "debt": 88442000000.0,
+          "shares": 21517317437,
+          "evidence": {
+            "revenue": {
+              "val": 1040759000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            },
+            "ebit": {
+              "val": 142590000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            },
+            "cash": {
+              "val": 167309000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            },
+            "debt": {
+              "val": 88442000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            },
+            "shares": {
+              "val": 21517317437,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            },
+            "other_claims": {
+              "val": 4507000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-11",
+              "accn": "0941-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0411/2025041100488.pdf",
+              "pdf_pages": [
+                94,
+                96,
+                97,
+                160
+              ],
+              "derivation": "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。"
+            }
+          },
+          "warnings": [
+            "债务采用资产负债表租赁负债；股数为A股与H股总数；不把银行存款及理财全部视为可分配现金。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0291.HK": {
+      "name": "华润啤酒",
+      "industry": "必需性消费",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-17",
+          "accn": "0291-2024",
+          "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+          "sha256": "1293d36df71fa60cb0cdc039a7c8c0fe69c4775f7a1b0c0b7620b7ca81efaec1",
+          "retrieved_at": "2026-11-26T13:51:29.021294+00:00",
+          "financial_currency": "CNY",
+          "revenue": 38635000000.0,
+          "debt": 1999000000.0,
+          "shares": 3244176905,
+          "evidence": {
+            "revenue": {
+              "val": 38635000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            },
+            "ebit": {
+              "val": 6728000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            },
+            "cash": {
+              "val": 3816000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            },
+            "debt": {
+              "val": 1999000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            },
+            "shares": {
+              "val": 3244176905,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            },
+            "other_claims": {
+              "val": 3893000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-17",
+              "accn": "0291-2024",
+              "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0417/2025041700745.pdf",
+              "pdf_pages": [
+                317,
+                319,
+                320,
+                367,
+                388
+              ],
+              "derivation": "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。"
+            }
+          },
+          "warnings": [
+            "EBIT=税前利润+财务成本−联营合营收益；其他收入未全部做经常性调整；股数依据股本附注并与EPS分母无变动情况核对。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0883.HK": {
+      "name": "中国海洋石油",
+      "industry": "能源",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-08",
+          "accn": "0883-2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+          "sha256": "bc3b2b5748eb74c750039b0518cc5f81fb5ae9f44b5bdee4a4dafd345d7247df",
+          "retrieved_at": "2026-11-26T13:56:18.530023+00:00",
+          "financial_currency": "CNY",
+          "revenue": 420506000000.0,
+          "debt": 91887000000.0,
+          "shares": 47529953984,
+          "evidence": {
+            "revenue": {
+              "val": 420506000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            },
+            "ebit": {
+              "val": 184705000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            },
+            "cash": {
+              "val": 81284000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            },
+            "debt": {
+              "val": 91887000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            },
+            "shares": {
+              "val": 47529953984,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            },
+            "other_claims": {
+              "val": 101628000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-04-08",
+              "accn": "0883-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0408/2025040800613.pdf",
+              "pdf_pages": [
+                88,
+                90,
+                91,
+                141
+              ],
+              "derivation": "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。"
+            }
+          },
+          "warnings": [
+            "直接采用经营活动利润；其他权益扣少数股东权益与弃置准备账面值，未模拟弃置现金流时间分布；合计A/H股数。油价周期与资源耗竭未单独建模。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "2899.HK": {
+      "name": "紫金矿业",
+      "industry": "原材料",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-25",
+          "accn": "2899-2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+          "sha256": "79e6bf3d4421f3ea9a5acd3b9a8799211b53b87bf62969465d46715654f33327",
+          "retrieved_at": "2026-11-26T13:50:40.083908+00:00",
+          "financial_currency": "CNY",
+          "revenue": 303639957153,
+          "debt": 149100601735,
+          "shares": 26577888940,
+          "evidence": {
+            "revenue": {
+              "val": 303639957153,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            },
+            "ebit": {
+              "val": 45887363638,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            },
+            "cash": {
+              "val": 31690884267,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            },
+            "debt": {
+              "val": 149100601735,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            },
+            "shares": {
+              "val": 26577888940,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            },
+            "other_claims": {
+              "val": 39550879598,
+              "end": "2024-12-31",
+              "filed": "2025-04-25",
+              "accn": "2899-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0425/2025042500897.pdf",
+              "pdf_pages": [
+                5,
+                189,
+                190,
+                191,
+                192
+              ],
+              "derivation": "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。"
+            }
+          },
+          "warnings": [
+            "EBIT=营业利润+财务费用−投资收益−公允价值变动；债务含全部一年内到期非流动负债，属保守代理口径；其他权益扣少数股东及其他权益工具账面值。非市场价值评估。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0669.HK": {
+      "name": "创科实业",
+      "industry": "非必需性消费",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-03-27",
+          "accn": "0669-2024",
+          "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+          "sha256": "f065fe572553b60925ec80df71393c4df71dd28e227c678b7b49ee96af0df752",
+          "retrieved_at": "2026-11-26T13:57:30.168042+00:00",
+          "financial_currency": "USD",
+          "revenue": 14621616000,
+          "debt": 2106947000,
+          "shares": 1832304941,
+          "evidence": {
+            "revenue": {
+              "val": 14621616000,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            },
+            "ebit": {
+              "val": 1270295000,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            },
+            "cash": {
+              "val": 1232347000,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            },
+            "debt": {
+              "val": 2106947000,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            },
+            "shares": {
+              "val": 1832304941,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            },
+            "other_claims": {
+              "val": 0,
+              "end": "2024-12-31",
+              "filed": "2025-03-27",
+              "accn": "0669-2024",
+              "url": "https://www.ttigroup.com/sites/default/files/2025-03/ar2024_0.pdf",
+              "pdf_pages": [
+                102,
+                103,
+                104,
+                165,
+                166
+              ],
+              "derivation": "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。"
+            }
+          },
+          "warnings": [
+            "EBIT=联营前税前利润+财务成本−利息收入；债务含租赁；原报美元按历史汇率转港币。发布日由HKEX年报2025032700726核验。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0002.HK": {
+      "name": "中电控股",
+      "industry": "公用事业",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-02-24",
+          "accn": "0002-results2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+          "sha256": "4ffbcf1cc88ff50988ef8898a9c8e756aa029f5ce5ac79c753eb9325ee582451",
+          "retrieved_at": "2026-11-26T13:58:42.040913+00:00",
+          "financial_currency": "HKD",
+          "revenue": 90964000000.0,
+          "debt": 65154000000.0,
+          "shares": 2526450570,
+          "evidence": {
+            "revenue": {
+              "val": 90964000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            },
+            "ebit": {
+              "val": 14903000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            },
+            "cash": {
+              "val": 4976000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            },
+            "debt": {
+              "val": 65154000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            },
+            "shares": {
+              "val": 2526450570,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            },
+            "other_claims": {
+              "val": 14659000000.0,
+              "end": "2024-12-31",
+              "filed": "2025-02-24",
+              "accn": "0002-results2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0224/2025022400141.pdf",
+              "pdf_pages": [
+                19,
+                21,
+                22,
+                34,
+                37
+              ],
+              "derivation": "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。"
+            }
+          },
+          "warnings": [
+            "其他权益扣少数股东、弃置及退休负债账面值，并按已披露2025年1月新发永续债HK$3.9bn作扣减；不对永续赎回条款估值，不滚动同期现金变动。债务只取列示借款，租赁尚未全量核对，属于模型试验。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "1211.HK": {
+      "name": "比亚迪股份",
+      "industry": "非必需性消费",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-03-24",
+          "accn": "1211-2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+          "sha256": "e9118b340a4963b2eb2783f122262d622fa1b638a9a1771c294331f90f7c7c17",
+          "retrieved_at": "2026-11-26T13:55:36.878492+00:00",
+          "financial_currency": "CNY",
+          "revenue": 777102455000,
+          "debt": 40459600000,
+          "shares": 2909265855,
+          "evidence": {
+            "revenue": {
+              "val": 777102455000,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            },
+            "ebit": {
+              "val": 48878845000,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            },
+            "cash": {
+              "val": 102256542000,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            },
+            "debt": {
+              "val": 40459600000,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            },
+            "shares": {
+              "val": 2909265855,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            },
+            "other_claims": {
+              "val": 28331547000,
+              "end": "2024-12-31",
+              "filed": "2025-03-24",
+              "accn": "1211-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0324/2025032401228.pdf",
+              "pdf_pages": [
+                58,
+                125,
+                126,
+                127,
+                263,
+                295
+              ],
+              "derivation": "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。"
+            }
+          },
+          "warnings": [
+            "EBIT剔除投资、公允价值与财务费用；其他权益为永续债与少数股东账面值，非永续债条款经济价值；A/H总股数只按拆股调整，2025年增发未滚动。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "1177.HK": {
+      "name": "中国生物制药",
+      "industry": "医疗保健",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-29",
+          "accn": "1177-2024",
+          "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+          "sha256": "802702d3ece58d824f4cf3efe5e6eb99f083814605dafaa92dcac631d21d2770",
+          "retrieved_at": "2026-11-26T13:55:12.629034+00:00",
+          "financial_currency": "CNY",
+          "revenue": 28866159000,
+          "debt": 9710546000,
+          "shares": 17924160787,
+          "evidence": {
+            "revenue": {
+              "val": 28866159000,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            },
+            "ebit": {
+              "val": 5191320000,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            },
+            "cash": {
+              "val": 6231523000,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            },
+            "debt": {
+              "val": 9710546000,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            },
+            "shares": {
+              "val": 17924160787,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            },
+            "other_claims": {
+              "val": 10813281000,
+              "end": "2024-12-31",
+              "filed": "2025-04-29",
+              "accn": "1177-2024",
+              "url": "https://www.en.sbpgroup.com/userfiles/files/Anno-Equity/E25021232-Sino%20Bio-AR24.pdf",
+              "pdf_pages": [
+                77,
+                79,
+                80,
+                84,
+                151,
+                152
+              ],
+              "derivation": "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。"
+            }
+          },
+          "warnings": [
+            "持续经营EBIT=税前利润−净财务收入−联营亏损；发行股数扣期末库存股；其他权益用少数股东账面值。停止经营及投资资产未做SOTP，转换债只扣债务账面分量。",
+            "其他权益要求采用已披露账面值作试验性扣减，不代表经济价值；现金只计所列现金等价物，未把全部投资组合当现金。"
+          ]
+        }
+      ]
+    },
+    "0005.HK": {
+      "name": "汇丰控股",
+      "industry": "金融业",
+      "exclusion": "模型不适用：银行须用股利/剩余收益与监管资本框架，经营企业FCFF不能套算。"
+    },
+    "1109.HK": {
+      "name": "华润置地",
+      "industry": "地产建筑",
+      "exclusion": "暂不纳入策略：开发物业、投资物业重估及合联营需要NAV/SOTP核对，当前统一FCFF缺少适配。"
+    },
+    "0001.HK": {
+      "name": "长和",
+      "industry": "综合企业",
+      "exclusion": "暂不纳入策略：合联营及分部EBIT与合并收入口径不同，需要SOTP；不能将分部利润直接套入合并FCFF。"
+    },
+    "1308.HK": {
+      "name": "海丰国际",
+      "industry": "工业",
+      "snapshots": [
+        {
+          "end": "2024-12-31",
+          "filed": "2025-04-02",
+          "accn": "1308-2024",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+          "sha256": "1e0be55b7bbbe02ff27734e9c488c842c256b3f62ccea815721952ee010e2e2c",
+          "retrieved_at": "2026-11-26T14:07:27.755865+00:00",
+          "financial_currency": "USD",
+          "revenue": 3058059000,
+          "debt": 388821000,
+          "shares": 2687119908,
+          "evidence": {
+            "revenue": {
+              "val": 3058059000,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            },
+            "ebit": {
+              "val": 1015842000,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            },
+            "cash": {
+              "val": 136093000,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            },
+            "debt": {
+              "val": 388821000,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            },
+            "shares": {
+              "val": 2687119908,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            },
+            "other_claims": {
+              "val": 17268000,
+              "end": "2024-12-31",
+              "filed": "2025-04-02",
+              "accn": "1308-2024",
+              "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0402/2025040201777.pdf",
+              "pdf_pages": [
+                61,
+                63,
+                64,
+                109,
+                130,
+                134
+              ],
+              "derivation": "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。"
+            }
+          },
+          "warnings": [
+            "EBIT=税前利润+财务成本−合联营利润−银行利息收入；现金只取现金等价物，不含超过三个月非质押定期存款608.401百万美元；其他权益为少数股东权益账面值。航运周期、船舶残值和运价未独立建模；股数采用已发行总数。",
+            "其他权益账面值是试验假设，不是经济价值估计。"
+          ]
+        }
+      ]
+    }
+  },
+  "classification_source": "https://www.hsi.com.hk/static/uploads/contents/en/dl_centre/factsheets/industrye.pdf"
+}

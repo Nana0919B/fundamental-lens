@@ -2,7 +2,9 @@
 
 import math
 from datetime import datetime
-from tradingagents.dataflows.symbols import normalize_symbol, equity_market
+
+from tradingagents.dataflows.symbols import equity_market, normalize_symbol
+from tradingagents.dataflows.vendors.yahoo.transport import session_options
 
 
 def number(value):
@@ -30,7 +32,7 @@ def company_data(ticker):
     import yfinance as yf
 
     ticker = normalize_symbol(ticker)
-    item = yf.Ticker(ticker)
+    item = yf.Ticker(ticker, **session_options())
     errors = []
     try:
         info = item.info or {}
@@ -145,7 +147,7 @@ def peer_data(ticker):
 
     ticker = normalize_symbol(ticker)
     try:
-        info = yf.Ticker(ticker).info or {}
+        info = yf.Ticker(ticker, **session_options()).info or {}
         keys = [
             "industry",
             "mostRecentQuarter",

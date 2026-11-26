@@ -1,5 +1,5 @@
-const $=s=>document.querySelector(s), tabs=['研究简报','公司资料','经营分析','财务报告','财务指标','新闻分析','比较分析','市场环境'];
-let selected=null,job=null,tab=globalThis.location?.hash==='#market-environment'?7:0,frequency='annual',statement='income',jobs=[],loading=false;
+const $=s=>document.querySelector(s), tabs=['研究简报','公司资料','经营分析','财务报告','财务指标','新闻分析','比较分析','市场环境','内在价值'];
+let selected=new URLSearchParams(globalThis.location?.search||'').get('job')||null,job=null,tab=globalThis.location?.hash==='#valuation'?8:globalThis.location?.hash==='#market-environment'?7:0,frequency='annual',statement='income',jobs=[],loading=false;
 let selectionRevision=0,submitting=false,chartMode='revenue',toastTimer=null;
 let metricKey='net_margin',financialQuery='',financialRow='';
 let environmentMetric='score',environmentRange=30;
@@ -20,7 +20,7 @@ function companyExtras(){const p=job.data?.profile||{},officers=p.companyOfficer
 function filingPanel(){const f=job.data?.filings;if(!f)return '';return card('原始报告、附注与修订文件',(f.documents||[]).map(d=>`<p><a href="${escape(d.url)}" target="_blank" rel="noopener noreferrer">${escape(d.form)} · 报告期 ${escape(d.period)} · 披露 ${escape(d.filed)}${d.amendment?' · 修订文件':''} ↗</a></p>`).join('')+`<p class="note">${escape(f.note)} 此处提供原文入口，尚未自动抽取附注、产品及地区拆分。</p>`);}
 function calculatedMetrics(){const a=job.research_snapshot?.analytics;if(!a)return '';const defs=a.definitions||{},history=a.history||[];return card('统一公式 · 历史财务指标',table(['年度',...Object.values(defs).map(d=>d.label)],history.map(h=>[h.period,...Object.entries(defs).map(([k,d])=>d.unit==='ratio'?pct(h.values[k]):d.unit==='currency'?money(h.values[k]):num(h.values[k]))])))+card('TTM 与同比 / 环比',table(['TTM 项目','数值'],Object.entries(a.ttm?.values||{}).map(([k,v])=>[k,money(v)]))+`<p class="note">${escape(a.ttm?.note)}</p>`+table(['指标','报告期','比较期','口径','增长率'],(a.growth||[]).map(g=>[g.field,g.period,g.base_period,g.basis,pct(g.value)+(g.note?'（'+g.note+'）':'')])) )+`<details class="card"><summary>计算公式与口径（版本 ${escape(a.formula_version)}）</summary>${table(['指标','公式','单位'],Object.values(defs).map(d=>[d.label,d.formula,d.unit]))}<p class="note">${(a.limitations||[]).map(escape).join('<br>')}</p></details>`;}
 function alignedComparison(){const c=job.research_snapshot?.comparison;if(!c)return '';return card('比较口径与样本分位',table(['公司','行业','财报时间戳','期间对齐','行业标签一致'],c.rows.map(r=>[r.symbol,r.industry||'—',r.financial_period?new Date(r.financial_period*1000).toISOString().slice(0,10):'—',r.period_aligned?'是':'否 / 未知',r.same_industry?'是':'否 / 未知']))+table(['指标','可比样本数','所选样本分位'],c.distributions.map(d=>[d.metric,d.sample_size,d.percentile==null?'样本不足或口径不符':num(d.percentile)+'%']))+`<p class="note">${escape(c.basis)}<br>${escape(c.currency_policy)}</p>`);}
-function source(){const d=job.data;return d?`<p class="note">来源：${escape(d.source)} · 获取时间 ${escape(new Date(d.retrieved_at).toLocaleString())}<br>${job.imported?'历史报告的数据可能与后来补充的资料不同。':'页面与智能体使用同一份研究数据。'}研究日期：${escape(job.date)}。<br>${escape(d.market?.label||'')} ${escape(d.market?.coverage_note||'')}<br>${escape(d.period_note)} ${escape((d.errors||[]).join('；'))}</p>`:'';}
+function source(){const d=job.data;return d?`<p class="note">来源：${escape(d.source)} · 获取时间 ${escape(new Date(d.retrieved_at).toLocaleString())}<br>${job.historical_context?'历史估值快照：未生成或回放当年的AI文字研究。':job.imported?'历史报告的数据可能与后来补充的资料不同。':'页面与智能体使用同一份研究数据。'}研究日期：${escape(job.date)}。<br>${escape(d.market?.label||'')} ${escape(d.market?.coverage_note||'')}<br>${escape(d.period_note)} ${escape((d.errors||[]).join('；'))}</p>`:'';}
 
 function report(key){return displayReport(job.report_html?.[key])||'<p class="note">报告尚未生成。完整分析需要数分钟，完成后自动显示。</p>';}
 function specialistReport(key,title){const body=job.report_html?.[key];const pending=['queued','running'].includes(job.status);return card(title,body?`<div class="prose">${displayReport(body)}</div>`:`<p class="note">${pending?'智能体正在基于本次财务数据生成独立分析，完成后自动展示。':'本次报告尚无此项智能体分析；请重新发起研究以生成结论、变化解释和风险提示。'}</p>`);}
@@ -472,7 +472,8 @@ function draw(){
   $('#footer-source').textContent='资料来源：'+(job.data?.source||'待获取')+(job.macro_context||job.macro_update?' · FRED':'')+((job.market_environment_update||job.market_environment)?' · '+(job.market_environment_update||job.market_environment).source:'')+' · '+job.date;
   let html='';
   if(tab===0)html=briefView();
-  else if(tab===7){html=environmentView();
+  else if(tab===8){html=valuationView();
+  }else if(tab===7){html=environmentView();
   }else if(tab===5){html=newsView();
   }else if(!job.data){
     html=empty(job.data_status==='loading'?'正在加载公司资料和财务表格，请稍候…':'尚无结构化数据。发起新分析可同时获取公司资料、财务报表和指标。');
@@ -491,7 +492,7 @@ function draw(){
   const openDetails=[...$('#content').querySelectorAll('details[open]')].map(d=>d.querySelector('summary')?.textContent);
   $('#content').innerHTML=html+evidencePanel()+(tab===3?filingPanel():'')+source();
   $('#content').querySelectorAll('details').forEach(d=>{if(openDetails.includes(d.querySelector('summary')?.textContent))d.open=true;});
-  bindContent();requestAnimationFrame(updateTabHint);
+  bindContent();bindValuation();requestAnimationFrame(updateTabHint);
 }
 function chooseStudy(id){
   tab=0;chartMode='revenue';environmentMetric='score';environmentRange=30;financialQuery='';financialRow='';setSidebar(false);$('#tabs').scrollLeft=0;$('#detail-dialog').close();$('#research-dialog').close();
@@ -607,3 +608,102 @@ document.addEventListener('keydown',e=>{
 });
 refresh();
 setInterval(()=>{if(jobs.some(j=>['running','queued'].includes(j.status))||job?.data_status==='loading'||['running','queued'].includes(job?.status))refresh();},4000);
+
+// Valuation drafts survive tab switches and are scoped to the selected research.
+const valuationDrafts=new Map();
+const valuationNames={bear:'悲观',base:'基准',bull:'乐观'};
+function valuationInput(label,path,value,scale=1){
+  return `<label class="valuation-field">${escape(label)}<input type="number" step="any" ${job?.historical_context&&['revenue','cash','debt','shares','market_price','forecast_start'].includes(path)?'readonly':''} data-v-path="${escape(path)}" data-v-scale="${scale}" value="${value==null?'':escape(value/scale)}"></label>`;
+}
+function valuationView(){
+  const setup=job.valuation_setup;
+  if(!setup)return empty('估值数据尚未加载。');
+  if(setup.missing.length)return card('内在价值 · 资料待补充',`<p>${escape(setup.missing.join('；'))}</p><p class="note">当前不生成估值，避免使用缺失数据。</p>`);
+  if(!valuationDrafts.has(job.id))valuationDrafts.set(job.id,structuredClone(setup.saved?.inputs||setup.inputs));
+  const p=valuationDrafts.get(job.id), r=job.valuation||setup.saved;
+  if(p.method==='company_fcf_bridge')return reviewedValuationView(p,r,setup);
+  let html=card('内在价值 · FCFF 经营预测',`<p>将经营预测转换为企业价值、普通股股东价值和每股价值。金额输入为百万 ${escape(setup.currency)}；收益率输入为百分比。</p><p class="note">数据时间：${escape(setup.retrieved_at)}。预测参数是研究假设；参考价为归档价格。当前表单修改后，需要点击计算才会更新下方结果。</p>`);
+  if(job.backtest_origin)html+=card('历史回测 · 同一份研究估值',`<p>该估值使用 ${escape(job.date)} 之前公开的财报。${r?.input_digest===job.backtest_origin.input_digest?'当前输入与原回测完全一致。':'当前为修改后的事后研究版本，与原回测输入不同。'}修改预测假设会保存事后研究版本，原回测保持不变。历史财报、股数与参考价格不可改写。</p><p>统一引擎 ${escape(r?.version||setup.version)} · 默认假设不是当年已归档的AI预测。</p><a class="button" href="/backtest?id=${escape(job.backtest_origin.id)}">返回关联回测 ↗</a><button class="button" type="button" id="backtest-research-assumptions">用已保存的预测假设回测后续区间</button><p class="note">仅传递增长、利润率、再投资、税率和折现率等预测假设；财报、股数和行情逐期更新。起点不会早于本研究日。请先保存表单修改。</p><p role="status" id="backtest-research-status"></p>`);
+  html+=`<form id="valuation-form"><div class="card"><h3>估值基准与股东价值调整</h3><div class="valuation-grid">`;
+  for(const [key,label,scale] of [['revenue','年度收入基数（百万）',1e6],['cash','现金与纳入估值的投资（百万）',1e6],['operating_cash','经营必需/不可分配现金（百万）',1e6],['debt','有息债务（百万）',1e6],['other_claims','优先股及其他权益要求（百万，必填）',1e6],['shares','发行在外股数（百万股）',1e6],['dilution','摊薄倍数（≥1）',1],['market_price','参考股价',1],['forecast_start','预测首年',1]])html+=valuationInput(label,key,p[key],scale);
+  html+=`</div><p class="note">${p.years} 年预测。其他权益要求须显式填写；如使用转股后股数，请避免再次扣除同一优先股或可转债价值。</p></div>`;
+  for(const name of ['bear','base','bull']){
+    const s=p.scenarios[name];
+    html+=`<details class="card" ${name==='base'?'open':''}><summary>${valuationNames[name]}情景 · 逐年经营假设</summary><div class="table-wrap"><table><thead><tr><th>预测年度</th><th>收入增长 %</th><th>营业利润率 %</th></tr></thead><tbody>`;
+    s.growth.forEach((g,i)=>{html+=`<tr><td>${p.forecast_start+i}</td><td>${valuationInput('增长 '+(i+1),`scenarios.${name}.growth.${i}`,g,.01)}</td><td>${valuationInput('利润率 '+(i+1),`scenarios.${name}.margins.${i}`,s.margins[i],.01)}</td></tr>`;});
+    html+=`</tbody></table></div><div class="valuation-grid">`;
+    for(const [key,label] of [['da_ratio','折旧摊销 / 收入 %'],['capex_ratio','资本开支 / 收入 %'],['nwc_ratio','新增营运资本 / 新增收入 %'],['tax_rate','正营业利润税率 %'],['wacc','WACC %'],['terminal_growth','永续增长率 %']])html+=valuationInput(label,`scenarios.${name}.${key}`,s[key],.01);
+    html+='</div></details>';
+  }
+  html+=`<div class="card"><label class="valuation-field">假设依据与调整说明（必填）<textarea id="valuation-rationale" rows="5" maxlength="6000" placeholder="说明经营恢复路径、WACC、现金可分配性、优先股/摊薄处理，以及与经营报告的关系">${escape(p.rationale)}</textarea></label><p class="note">计算会保存一个新的估值版本，原始研究快照不变。</p><button class="button" type="submit">计算并保存估值</button><p role="status" id="valuation-status"></p></div></form>`;
+  if(r){
+    html+=card('三情景 · 每股内在价值',`<p class="note">以下为上次计算保存的结果 · ${escape(r.created_at)} · ${escape(r.currency)}。负股权残值不代表可交易的负股价。</p>`+table(['情景','每股价值','对归档参考价差异','企业价值（百万）','普通股价值（百万）','终值占比'],Object.entries(r.scenarios).map(([k,v])=>[valuationNames[k],v.price>0?fixed(v.price,2):'残值≤0（'+fixed(v.price,2)+'）',pct(v.upside),fixed(v.enterprise_value/1e6),fixed(v.equity_value/1e6),pct(v.terminal_share)]))+`<p>${escape(r.inputs.rationale)}</p><button type="button" class="button" id="valuation-download">下载本次估值 JSON</button>`);
+    const sn=r.sensitivity;
+    html+=card('敏感性 · 基准情景每股价值',`<p class="note">行：WACC；列：永续增长率。中间单元格等于基准估值；— 表示不满足模型条件。</p><div class="table-wrap"><table class="valuation-matrix"><thead><tr><th>WACC / g</th>${sn.growths.map(g=>`<th>${pct(g)}</th>`).join('')}</tr></thead><tbody>${sn.prices.map((row,i)=>`<tr><th>${pct(sn.waccs[i])}</th>${row.map((value,j)=>`<td class="${i===2&&j===2?'valuation-center':''}">${fixed(value,2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`);
+    const rv=r.reverse;
+    html+=card('反向 DCF · 当前参考价要求怎样的盈利能力',rv.status==='solved'?`<p>保持基准情景其余条件不变，逐年营业利润率需要整体调整 <strong>${pct(rv.margin_shift)}</strong>（百分点口径），最后一年达到 <strong>${pct(rv.implied_terminal_margin)}</strong>。</p><p>反算价格：${fixed(rv.reproduced_price,2)}；归档参考价：${fixed(rv.target_price,2)} ${escape(r.currency)}。</p><p class="note">${escape(rv.basis)}</p>`:`<p>${escape(rv.reason)}</p>`);
+    html+=`<details class="card"><summary>现金流预测与企业价值到每股价值</summary>`;
+    for(const [name,v] of Object.entries(r.scenarios))html+=`<h4>${valuationNames[name]} · 金额百万 ${escape(r.currency)}</h4>`+table(['年度','收入','EBIT','税','折旧','资本开支','营运资本增加','FCFF','折现值'],v.rows.map(row=>[row.year,...['revenue','ebit','tax','da','capex','delta_nwc','fcff','pv'].map(k=>fixed(row[k]/1e6))]))+`<p class="note">${escape(v.warning||'')} 稳定期 FCFF：${fixed(v.terminal_fcff/1e6)}；终值现值：${fixed(v.terminal_pv/1e6)}。</p>`;
+    html+=`<p>FCFF = EBIT − 正利润税额 + 折旧 − 资本开支 − 营运资本增加。普通股价值 = 企业价值 + 现金 − 经营必需现金 − 债务 − 其他权益要求。每股价值 = 普通股价值 ÷（股数 × 摊薄倍数）。</p><p class="note">计算版本 ${escape(r.version)} · 输入校验 ${escape(r.input_digest.slice(0,16))}</p></details>`;
+  }
+  html+=`<details class="card"><summary>来源、假设与模型边界</summary>`+table(['输入','历史值','来源字段','期间'],Object.entries(setup.evidence).map(([k,e])=>[k,num(e.value),e.field,e.period||'缺失']))+`<ul>${(r?.warnings||setup.warnings).map(w=>`<li>${escape(w)}</li>`).join('')}</ul></details>`;
+  return html;
+}
+function bindValuation(){
+  $('#backtest-research-assumptions')?.addEventListener('click',async()=>{
+    const button=$('#backtest-research-assumptions'),status=$('#backtest-research-status');button.disabled=true;
+    try{
+      const origin=job.backtest_origin.parameters;
+      const payload={tickers:[job.ticker],start:job.date,end:origin.end,inspect_date:job.date,capital:origin.capital,safety_margin:origin.safety_margin,cost_bps:origin.cost_bps,research_job_id:job.id};
+      const result=await api('/api/valuation-backtests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      location.href='/backtest?id='+result.id;
+    }catch(error){status.textContent=error.message;button.disabled=false;}
+  });
+  const form=$('#valuation-form');if(!form)return;
+  form.querySelectorAll('[data-v-path]').forEach(el=>el.addEventListener('input',()=>{
+    const p=valuationDrafts.get(job.id),parts=el.dataset.vPath.split('.');let target=p;
+    for(const part of parts.slice(0,-1))target=target[part];
+    target[parts.at(-1)]=el.value.trim()===''?null:Number(el.value)*Number(el.dataset.vScale);
+  }));
+  $('#valuation-rationale').addEventListener('input',e=>{valuationDrafts.get(job.id).rationale=e.target.value;});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();const id=job.id,button=form.querySelector('[type=submit]'),status=$('#valuation-status');button.disabled=true;status.textContent='正在计算并保存…';
+    try{const result=await api('/api/jobs/'+encodeURIComponent(id)+'/valuation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(valuationDrafts.get(id))});
+      if(job.id===id){job.valuation=result;job.valuation_setup.saved=result;draw();$('#valuation-status').textContent='已计算并保存。';}
+    }catch(err){status.textContent=err.message;}finally{button.disabled=false;}
+  });
+  $('#valuation-download')?.addEventListener('click',()=>{
+    const r=job.valuation||job.valuation_setup.saved,url=URL.createObjectURL(new Blob([JSON.stringify(r,null,2)],{type:'application/json'}));
+    const a=document.createElement('a');a.href=url;a.download=job.ticker+'-valuation-'+r.id+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+}
+
+function reviewedValuationView(p,r,setup){
+  const pref=p.preferred,labels=valuationNames;
+  let html=card(escape(job.ticker)+' 内在价值 · 已核实条款与过渡期',`<p>估值日 <strong>${escape(p.valuation_date)}</strong> · 参考收盘价 <strong>${fixed(p.market_price,2)} ${escape(setup.currency)}</strong>（${escape(p.market_price_date||'')}）。财务基准 ${escape(p.balance_date)}，预测至 ${p.forecast_start+p.years-1} 年。</p><p class="note">本页补充最新 SEC / 公司披露，不覆盖原研究归档。事实已核验，未来现金流仍是有依据的情景预测。每股价值是估值日现值，不是未来某日的目标价；下方金额以百万美元输入。</p>`);
+  if(r){
+    html+=card('每股内在价值与当前股价',table(['情景','每股内在价值（美元）','对参考股价差异','现有普通股内在总值（亿美元）','企业经营价值（亿美元）'],Object.entries(r.scenarios).map(([k,v])=>[labels[k],v.price>0?fixed(v.price,2):'残值≤0',pct(v.upside),fixed(v.equity_value/1e8,2),fixed(v.enterprise_value/1e8,2)]))+`<p class="note">现有普通股总值 = 每股价值 × ${fixed(r.inputs.shares/1e6,3)} 百万现有普通股；强制转股后权益池还包括优先股持有人的权益。保存于 ${escape(r.created_at)}。参数修改后须点击“计算并保存估值”。</p><button class="button" id="valuation-download" type="button">下载本次估值 JSON</button>`);
+    html+=card('已核实优先股 · 转股摊薄与剩余股息',`<p>${fixed(pref.count/1e6,2)} 百万股优先股，年股息 ${pct(pref.coupon)}，每股清算优先额 ${num(pref.liquidation_per_share)} 美元，${escape(pref.conversion_date)} 正常强制转换。每股优先股换 ${pref.min_ratio}–${pref.max_ratio} 股普通股，取决于转换前规定的 20 个交易日平均 VWAP：高于 171.5854 美元用 5.8280，低于 142.9797 美元用 6.9940，中间区间为 1000 ÷ VWAP。</p><p>主表按${pref.selected_ratio===pref.max_ratio?'最大':'所选'}转股比例 ${pref.selected_ratio} 计入 <strong>${fixed(r.scenarios.base.conversion_shares/1e6,4)} 百万新增普通股</strong>，合计 ${fixed(r.scenarios.base.effective_shares/1e6,4)} 百万股。优先股清算本金不再扣减。</p>`+table(['剩余支付日','现金股息（百万）','现值（百万）'],r.scenarios.base.dividend_schedule.map(d=>[d.date,fixed(d.amount/1e6,3),fixed(d.pv/1e6,3)]))+table(['情景','最大转股摊薄价格','最小转股摊薄价格'],Object.entries(r.scenarios).map(([k,v])=>[labels[k],fixed(v.conversion_price_range[0],2),fixed(v.conversion_price_range[1],2)]))+`<p class="note">股息按合同正常现金支付假设，尚未宣告的未来股息不标作已宣告。提前转换、基本面变更、反摊薄或股票支付股息需重新估值。</p>`);
+    html+=`<details class="card"><summary>2026 过渡年度 · 已披露、估计与未来期间分开</summary>`+table(['情景','全年公司 FCF 预测','前三季度实绩','Q4 隐含 FCF','季末至估值日估计 FCF','估值日后剩余 FCFF','剩余 FCFF 现值'],Object.entries(r.scenarios).map(([k,v])=>[labels[k],...['full_year_company_fcf','ytd_company_fcf','q4_company_fcf','estimated_elapsed_fcf','remaining_fcff','remaining_pv'].map(f=>fixed(v.transition[f]/1e6,2))]))+`<p class="note">单位百万美元。${escape(r.scenarios.base.transition.note)} 10 月 15 日已付优先股股息 ${fixed(p.paid_preferred_dividends/1e6,2)} 百万美元从净现金滚动中扣除。债务归还同时减少现金和债务，不重复影响净现金。</p></details>`;
+    const sn=r.sensitivity;
+    html+=card('敏感性 · WACC 与永续增长率',`<div class="table-wrap"><table class="valuation-matrix"><thead><tr><th>WACC / g</th>${sn.growths.map(g=>`<th>${pct(g)}</th>`).join('')}</tr></thead><tbody>${sn.prices.map((row,i)=>`<tr><th>${pct(sn.waccs[i])}</th>${row.map((v,j)=>`<td class="${i===2&&j===2?'valuation-center':''}">${fixed(v,2)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="note">中间单元格为基准每股估值。WACC 为正常税盾下长期利率，显式期对尚未实现的税盾加回利差。优先股现金股息使用独立折现率。</p>`);
+    const rv=r.reverse;
+    html+=card('反向 DCF · 当前股价隐含的现金流要求',rv.status==='solved'?`<p>要支持 ${fixed(rv.target_price,2)} 美元，未来公司 FCF 需要达到基准路径的 <strong>${fixed(rv.fcf_multiplier,2)} 倍</strong>。</p>`+table(['预测年度','隐含公司 FCF（亿美元）'],rv.implied_company_fcf.map((v,i)=>[p.forecast_start+i,fixed(v/1e8,2)]))+`<p class="note">${escape(rv.basis)} 反算股价 ${fixed(rv.reproduced_price,2)}。</p>`:`<p>${escape(rv.reason)}</p>`);
+    html+=`<details class="card"><summary>逐年现金流与权益分配明细</summary>`;
+    for(const [name,v] of Object.entries(r.scenarios))html+=`<h4>${labels[name]} · 百万美元</h4>`+table(['年度','公司 FCF','利息费用','利息收入','利息税率','员工股权成本','调整后 FCFF','现值'],v.rows.map(row=>[row.year,...['company_fcf','interest','interest_income'].map(k=>fixed(row[k]/1e6,2)),pct(row.interest_tax_rate),...['equity_comp','fcff','pv'].map(k=>fixed(row[k]/1e6,2))]))+`<p class="note">终值现值 ${fixed(v.terminal_pv/1e6,2)}，终值占比 ${pct(v.terminal_share)}；转换后权益池 ${fixed(v.equity_pool/1e6,2)}，其中现有普通股 ${fixed(v.equity_value/1e6,2)}、转换所得股份 ${fixed(v.converted_preferred_equity_value/1e6,2)}。</p>`;
+    html+='</details>';
+  }
+  html+=`<form id="valuation-form"><details class="card"><summary>编辑估值基准与转股参数</summary><div class="valuation-grid">`;
+  for(const [key,label,scale] of [['cash','季末可用现金与投资（百万）',1e6],['debt','季末披露有息债务（百万）',1e6],['operating_cash','经营必需现金（百万）',1e6],['other_claims','其他权益要求，不含已转股本金（百万）',1e6],['shares','现有普通股（百万股）',1e6],['market_price','参考股价',1],['preferred.selected_ratio','采用的优先股转股比例',1]])html+=valuationInput(label,key,key==='preferred.selected_ratio'?pref.selected_ratio:p[key],scale);
+  html+='</div></details>';
+  for(const name of ['bear','base','bull']){
+    const s=p.scenarios[name];html+=`<details class="card"><summary>编辑${labels[name]}现金流情景</summary><div class="table-wrap"><table><thead><tr><th>年度</th><th>公司 FCF</th><th>利息费用</th><th>利息收入</th><th>员工股权成本</th><th>利息税率 %</th></tr></thead><tbody>`;
+    s.company_fcf.forEach((value,i)=>{html+=`<tr><td>${p.forecast_start+i}</td>`+['company_fcf','interest','interest_income','equity_comp','interest_tax_rate'].map(key=>`<td>${valuationInput(key+' '+(p.forecast_start+i),`scenarios.${name}.${key}.${i}`,s[key][i],key==='interest_tax_rate'?.01:1e6)}</td>`).join('')+'</tr>';});
+    html+='</tbody></table></div><div class="valuation-grid">';
+    for(const [key,label,scale] of [['fy_company_fcf','2026 全年公司 FCF（百万）',1e6],['stub_interest','Q4 利息费用（百万）',1e6],['stub_interest_income','Q4 利息收入（百万）',1e6],['stub_equity_comp','Q4 员工股权成本（百万）',1e6],['wacc','WACC %',.01],['terminal_growth','永续增长 %',.01],['terminal_normalization','终值前去除临时现金释放（百万）',1e6],['preferred_discount_rate','优先股股息折现率 %',.01]])html+=valuationInput(label,`scenarios.${name}.${key}`,s[key],scale);
+    html+='</div></details>';
+  }
+  html+=`<div class="card"><label class="valuation-field">估值依据与情景解释<textarea id="valuation-rationale" rows="6" maxlength="6000">${escape(p.rationale)}</textarea></label><p class="note">每次保存新增版本；历史数据及前次估值保留。</p><button class="button" type="submit">计算并保存估值</button><p role="status" id="valuation-status"></p></div></form>`;
+  html+=card('已核实来源与假设边界',table(['输入','数值','期间','性质'],(p.verified_inputs||[]).map(e=>[e.label,num(e.value),e.date,e.kind]))+`<p>${escape(p.discount_basis?.note||'')}</p><ol>${(p.sources||[]).map(source=>`<li><a href="${escape(source.url)}" target="_blank" rel="noopener">${escape(source.label)}</a> · ${escape(source.date)}</li>`).join('')}</ol><ul>${(r?.warnings||[]).map(w=>`<li>${escape(w)}</li>`).join('')}</ul>`);
+  return html;
+}

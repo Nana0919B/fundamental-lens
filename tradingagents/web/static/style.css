@@ -545,3 +545,9 @@ footer { padding-top: 15px; display: flex; justify-content: space-between; gap: 
   .environment-provenance .card { padding: 14px 17px; }
   .environment-details.card { padding: 15px 17px; }
 }
+
+.valuation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:18px 0}
+.valuation-field{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--muted,#64716d)}
+.valuation-field input,.valuation-field textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccd8d2;border-radius:7px;background:#fff;color:#193d30;font:inherit}
+.valuation-field textarea{min-height:110px}.valuation-matrix .valuation-center{background:#d2e9dc;font-weight:700;outline:2px solid #6d9c82}
+#valuation-status{color:#96552f}#valuation-form summary{cursor:pointer;font-weight:600}

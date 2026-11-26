@@ -11,6 +11,7 @@ from tradingagents.dataflows.errors import NoMarketDataError, VendorError
 from tradingagents.dataflows.symbols import normalize_symbol
 from tradingagents.dataflows.vendors.yahoo.common import price_text, raise_for_empty, yf_retry
 from tradingagents.dataflows.vendors.yahoo.ohlcv import _assert_ohlcv_not_stale, load_ohlcv
+from tradingagents.dataflows.vendors.yahoo.transport import session_options
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ def get_YFin_data_online(
     # end_date row (and the current day when end_date is today). Request one day
     # past end_date so the requested range is actually inclusive (#986/#987).
     end_inclusive = (end_dt + relativedelta(days=1)).strftime("%Y-%m-%d")
-    data = yf_retry(lambda: yf.Ticker(canonical).history(start=start_date, end=end_inclusive))
+    data = yf_retry(lambda: yf.Ticker(canonical, **session_options()).history(start=start_date, end=end_inclusive))
 
     # Empty result means the symbol is unknown/delisted. Raise a typed error
     # instead of returning prose: the routing layer turns it into a single
@@ -266,7 +267,7 @@ def get_stockstats_indicator(
 def get_closes(symbol: str, start_date: str, end_date: str) -> pd.Series:
     """Daily closes from ``start_date`` up to, not including, ``end_date``."""
     canonical = normalize_symbol(symbol)
-    history = yf_retry(lambda: yf.Ticker(canonical).history(start=start_date, end=end_date))
+    history = yf_retry(lambda: yf.Ticker(canonical, **session_options()).history(start=start_date, end=end_date))
     return history["Close"] if history is not None and "Close" in history else pd.Series(dtype=float)
 
 

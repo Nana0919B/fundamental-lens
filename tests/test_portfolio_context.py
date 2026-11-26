@@ -125,7 +125,7 @@ def _bare_graph(tmp_path):
     from tradingagents.memory import TradingMemoryLog
 
     graph = object.__new__(TradingAgentsGraph)
-    graph.config = {"memory_log_path": str(tmp_path / "m.md"), "max_debate_rounds": 1,
+    graph.config = {"memory_log_path": str(tmp_path / "m.md"), "data_cache_dir": str(tmp_path / "cache"), "max_debate_rounds": 1,
                     "max_risk_discuss_rounds": 1}
     graph.memory_log = TradingMemoryLog(graph.config)
     graph.propagator = Propagator()
