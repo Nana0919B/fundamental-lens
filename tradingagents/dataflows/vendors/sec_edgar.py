@@ -21,6 +21,7 @@ import json
 import logging
 import math
 import os
+import re
 import time
 from datetime import date, datetime
 from pathlib import Path
@@ -274,7 +275,7 @@ def get_filing_documents(ticker: str, as_of_date: str) -> dict:
     """Original filings/amendments, reusing the EDGAR identity and JSON cache.
 
     Links point to original documents (including notes); no claim is made that
-    notes or segment tables have been extracted. Recent submissions only.
+    notes or segment tables have been extracted. Includes archived submission indexes for historical observations.
     """
     from urllib.parse import quote
     if ticker.upper().endswith(('.HK','.SS','.SZ')):
@@ -284,20 +285,36 @@ def get_filing_documents(ticker: str, as_of_date: str) -> dict:
     if not cik:
         return {'source':'SEC EDGAR','documents':[], 'note':'该代码未匹配 SEC 披露主体；非美股请查当地交易所。'}
     data = _cached_json(f'https://data.sec.gov/submissions/CIK{cik}.json', f'submissions-{cik}.json')
-    recent = data.get('filings',{}).get('recent',{})
-    documents=[]
-    for i, form in enumerate(recent.get('form',[])):
-        if form not in ('10-K','10-K/A','10-Q','10-Q/A','20-F','20-F/A','40-F','40-F/A'): continue
-        def field(name):
-            values=recent.get(name,[])
-            return values[i] if i<len(values) else ''
-        filed=field('filingDate')
-        if not filed or filed>as_of_date: continue
-        accession=field('accessionNumber'); primary=field('primaryDocument')
-        if not accession or not primary: continue
-        documents.append({'form':form,'filed':filed,'period':field('reportDate'),
-                          'accession':accession,'amendment':form.endswith('/A'),
-                          'url':f'https://www.sec.gov/Archives/edgar/data/{int(cik)}/{accession.replace("-", "")}/{quote(primary, safe="")}'})
-        if len(documents)>=16: break
+    recent = data.get('filings', {}).get('recent', {})
+    batches = [recent]
+    # Old observations need archived submission indexes, not today's recent list.
+    if not any(f in ('10-K', '20-F', '40-F') and d < as_of_date
+               for f, d in zip(recent.get('form', []), recent.get('filingDate', []), strict=False)):
+        for entry in data.get('filings', {}).get('files', []):
+            if entry.get('filingFrom', '9999') >= as_of_date:
+                continue
+            name = entry.get('name', '')
+            if not re.fullmatch(r'CIK[0-9]+-submissions-[0-9]+\.json', name):
+                continue
+            batches.append(_cached_json(f'https://data.sec.gov/submissions/{name}', name))
+    documents = []
+    for batch in batches:
+        for i, form in enumerate(batch.get('form', [])):
+            if form not in ('10-K','10-K/A','10-Q','10-Q/A','20-F','20-F/A','40-F','40-F/A'):
+                continue
+            def field(name, batch=batch, i=i):
+                values = batch.get(name, [])
+                return values[i] if i < len(values) else ''
+            filed = field('filingDate')
+            if not filed or filed >= as_of_date:
+                continue
+            accession, primary = field('accessionNumber'), field('primaryDocument')
+            if not accession or not primary:
+                continue
+            documents.append({'form': form, 'filed': filed, 'period': field('reportDate'),
+                              'accession': accession, 'amendment': form.endswith('/A'),
+                              'url': f'https://www.sec.gov/Archives/edgar/data/{int(cik)}/{accession.replace("-", "")}/{quote(primary, safe="")}'})
+    documents = sorted({d['accession']: d for d in documents}.values(),
+                       key=lambda d: (d['filed'], d['accession']), reverse=True)[:16]
     return {'source':'SEC EDGAR','cik':cik,'documents':documents,
-            'note':'原文包含附注和经营披露；仅列最近提交，修订文件单独列出。修订并不自动替换 Yahoo 表格。'}
+            'note':'原文包含附注和经营披露；按观察日前披露过滤，必要时读取历史提交索引；修订文件单独列出。修订并不自动替换 Yahoo 表格。'}

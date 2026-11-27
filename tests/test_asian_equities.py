@@ -87,7 +87,7 @@ def test_real_post_handler_passes_canonical_asian_codes_to_worker(
     monkeypatch.setattr(server, "STORE", tmp_path)
     calls = []
     monkeypatch.setattr(
-        server, "POOL", SimpleNamespace(submit=lambda fn, job_id: calls.append(job_id))
+        server, "POOL", SimpleNamespace(submit=lambda *args: calls.append(args[2]))
     )
     body = json.dumps(
         {"ticker": ticker, "market": market, "peers": ["600519.SH", "600519"]}

@@ -296,3 +296,53 @@ def test_archived_retry_replays_all_four_analysts_without_current_vendor_data(mo
     assert rating == "Hold" and len(seen) == 8
     for key, report in seeds.items():
         assert state[key] == report
+
+
+def test_historical_company_graph_uses_same_analysts_without_live_tools(monkeypatch, tmp_path, snapshot):
+    import yfinance
+
+    from tradingagents.graph import trading_graph
+    from tradingagents.web.point_in_time import NOTICE, VERSION, digest
+
+    monkeypatch.setattr(yfinance, 'Ticker', lambda *a, **kw: pytest.fail('Live vendor accessed'))
+    snapshot['as_of_date'] = '2020-03-20'
+    snapshot['company']['statements']['annual']['income']['periods'] = ['2019-09-30']
+    docs = [{'filed': '2020-01-29', 'period': '2019-12-31', 'excerpts': [{'text': 'Historical business evidence'}]}]
+    snapshot['company']['filings'] = {'documents': docs}
+    snapshot['peers'] = []
+    snapshot['point_in_time'] = {'version': VERSION, 'evidence_digest': digest(docs), 'notice': NOTICE, 'facts': []}
+    monkeypatch.setattr(trading_graph, 'is_historical', lambda d: True)
+    graph, seen = make_graph(monkeypatch, tmp_path, snapshot,
+                            selected=['fundamentals', 'operating', 'metrics', 'news'],
+                            seed_reports={'news_report': 'Historical news unavailable; no current news substituted'})
+    graph.config.update(trendradar_enabled=False, market_environment_enabled=False)
+    state, _ = graph.propagate('AAPL', '2020-03-20')
+    assert len(seen) == 11
+    assert all(state[k] for k in ('fundamentals_report', 'operating_report', 'metrics_report', 'investment_plan'))
+    assert 'Historical business evidence' in seen[0]
+    assert 'later outcomes' in seen[-1]
+    assert not (tmp_path / 'memory.md').exists()
+
+
+def test_pause_stops_graph_before_next_model_step(monkeypatch, tmp_path, snapshot):
+    from tradingagents.web.server import PauseRequested
+    graph, seen = make_graph(monkeypatch, tmp_path, snapshot)
+    boundaries = []
+    def stop_after_analyst():
+        boundaries.append(True)
+        if len(boundaries) == 2:
+            raise PauseRequested()
+    graph.pause_check = stop_after_analyst
+    with pytest.raises(PauseRequested):
+        graph.propagate('AAPL', snapshot['as_of_date'])
+    assert len(seen) == 1
+    assert not (tmp_path / 'memory.md').exists()
+
+
+def test_pause_capable_graph_completes_normally(monkeypatch, tmp_path, snapshot):
+    graph, seen = make_graph(monkeypatch, tmp_path, snapshot)
+    graph.pause_check = lambda: None
+    state, rating = graph.propagate('AAPL', snapshot['as_of_date'])
+    assert rating == 'Hold'
+    assert state['final_trade_decision']
+    assert len(seen) == 9

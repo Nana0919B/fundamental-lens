@@ -12,20 +12,20 @@ import math
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
-VERSION = "research-fcff-backtest-2.0"
+VERSION = "research-fcff-backtest-3.0"
 CIKS = {"AAPL": "0000320193", "MSFT": "0000789019", "NVDA": "0001045810"}
 REVENUE = ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet"]
 RULES = {
     "valuation_entrypoint": "tradingagents.web.valuation.calculate",
     "assumptions_entrypoint": "tradingagents.web.valuation.prepare",
-    "policy_version": "research-defaults-1.0",
+    "policy_version": "history-sector-2.0",
 }
 LIMITATIONS = [
     "使用研究页同一 prepare/calculate 入口、逐年营收/利润率及再投资假设结构，完整保存三情景、敏感性与反向DCF。",
-    "统一默认研究假设：增长2%/5%/8%，五年利润率过渡至4%/8%/12%；WACC12%/10%/9%，终值增长2%。这些假设不是历史事实或分析师共识。",
+    "history-sector-2.0：用当时可见营收和利润率历史生成行业情景，增长逐年衰减；稳定期再投资=g/ROIC。WACC仍12%/10%/9%，不调买卖规则。参数为研究者预设，不是当年共识。",
     "这是今天定义的研究假设在历史公开数据上的回放，不是当年归档的AI文字分析；没有调用今日新闻、共识或模型记忆。",
-    "仅使用原始年度申报/财报，披露次日起可用；尚未使用季度更新。历史股数只按拆股调整，年报间不推断回购或新发股数。",
-    "美股现金全额计入、其他权益要求0、摊薄1为显式默认假设；港股扣除所列其他权益账面值；未逐公司核验受限现金、租赁、期权、优先股等附注。",
+    "仅使用原始年度申报/财报，披露次日起可用；尚未使用季度更新。历史股数按拆股及明确归档配售调整，配售同时计入净募集现金；其余年报间资本变动不推断。",
+    "按行业计提经营现金，非经营投资独立计入并施加情景折扣；其他权益采用可见账面代理，未见标准字段仍为零代理且有警告。并非已全面核定经济价值。",
     "沿用研究页整年折现和终值再投资算法；未建模历史估值日至完整预测年的过渡现金流。",
     "月末收盘决策，下一交易日开盘执行；悲观价值×(1−安全边际)买入，高于乐观价值卖出，全仓/现金，不加杠杆。",
     "费用包含佣金和滑点；现金无利息，除息日按前一日持仓记分红、不再投资；期末按收盘计价，不强平。",
@@ -284,6 +284,23 @@ def annual_snapshots(facts, supplemental=None):
             shortdebt = get("short_debt", ["ShortTermBorrowings", "CommercialPaper"], optional=True)
             if shortdebt is None:
                 warnings.append("未披露短期借款标准项，按 0 假设，可能高估股权价值")
+            minority = get(
+                "noncontrolling_interest",
+                ["MinorityInterest", "MinorityInterestInJointVentures"],
+                optional=True,
+            )
+            preferred = get("preferred_equity", ["PreferredStockValue"], optional=True)
+            if minority is not None or preferred is not None:
+                evidence["other_claims"] = {
+                    **original,
+                    "val": max(0, minority or 0) + max(0, preferred or 0),
+                    "tag": "derived: noncontrolling + preferred book values",
+                    "unit": "USD",
+                }
+            if minority is None or preferred is None:
+                warnings.append(
+                    "少数股东/优先权益未全部取得独立标准字段；未见项为显式零代理，不等于已核实不存在。"
+                )
             shares = get("shares", ["CommonStockSharesOutstanding"], unit="shares")
             if revenue <= 0 or shares <= 0:
                 raise ValueError("营收或股数无效")
@@ -354,6 +371,9 @@ def historical_value(snapshots, rows, day, ticker="UNKNOWN", template=None):
         return {"date": day, "error": "缺少当时行情"}
     native_factor = split_factor(rows, day)
     native_shares = latest["shares"] * split_factor(rows, latest["end"], day)
+    if "placement_shares" in latest["evidence"]:
+        placement = latest["evidence"]["placement_shares"]
+        native_shares += placement["val"] * split_factor(rows, placement["end"], day)
     native_price = available_prices[-1]["close"] * native_factor
     try:
         job, engine = calculate_history(recent, day, native_shares, native_price, ticker, template)
@@ -487,7 +507,7 @@ def run_ticker(ticker, p, cache):
     if is_hk:
         from tradingagents.web.backtest_hk import load
 
-        snapshots, all_rows, provenance = load(ticker, cache)
+        snapshots, all_rows, provenance = load(ticker, cache, p["end"])
     else:
         facts, all_rows, provenance = load_sources(ticker, cache)
     supplemental, supplement_errors = {}, {}
@@ -555,10 +575,22 @@ def run_ticker(ticker, p, cache):
 
 def run(payload, cache):
     p = validate(payload)
+    from tradingagents.web import valuation_policy
+
+    rules = {
+        **RULES,
+        "policy_implementation_sha256": hashlib.sha256(
+            Path(valuation_policy.__file__).read_bytes()
+        ).hexdigest(),
+    }
+    if any(t.endswith(".HK") for t in p["tickers"]):
+        from tradingagents.web.backtest_hk import MANIFEST
+
+        rules["reviewed_input_manifest_sha256"] = hashlib.sha256(MANIFEST.read_bytes()).hexdigest()
     result = {
         "version": VERSION,
         "parameters": p,
-        "rules": RULES,
+        "rules": rules,
         "limitations": LIMITATIONS
         + (
             [

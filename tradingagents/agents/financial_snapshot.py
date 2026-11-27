@@ -25,6 +25,7 @@ def snapshot_context(snapshot, *, full=False):
     company = snapshot["company"]
     evidence = {
         "snapshot_id": snapshot["id"],
+        "temporal_boundary": snapshot.get("point_in_time", {}).get("notice", ""),
         "as_of_date": snapshot["as_of_date"],
         "source": company.get("source"),
         "retrieved_at": company.get("retrieved_at"),

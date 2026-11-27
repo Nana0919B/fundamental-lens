@@ -159,7 +159,10 @@ class TradingAgentsGraph:
                         'industry': profile.get('industry')}
         else:
             identity = resolve_instrument_identity(ticker)
-        return build_instrument_context(ticker, asset_type, identity, trade_date)
+        context = build_instrument_context(ticker, asset_type, identity, trade_date)
+        if snapshot and snapshot.get("point_in_time"):
+            context += "\nHistorical reconstruction: use only supplied pre-cutoff evidence. Never introduce later outcomes from model memory. Unsupported events and assumptions must be labelled unknown. " + snapshot["point_in_time"]["notice"]
+        return context
 
     def _memory_as_of(self, trade_date) -> str | None:
         """Point-in-time cutoff for past-context lessons (#1251).
@@ -350,7 +353,16 @@ class TradingAgentsGraph:
         snapshot = getattr(self, "research_snapshot", None)
         # A failed archived run can finish after midnight without fetching newer
         # evidence. Require every analyst report so no dated tools are rerun.
+        point_in_time = bool(snapshot and snapshot.get("point_in_time"))
+        if point_in_time:
+            from tradingagents.dataflows.point_in_time import validate_snapshot
+            validate_snapshot(snapshot, company_name, trade_date)
+            if (self.seed_reports.get("news_report") is None or self.config.get("trendradar_enabled")
+                    or self.config.get("market_environment_enabled", True) or self.macro_context
+                    or self.market_environment or self.news_context):
+                raise ValueError("Historical research requires isolated news and environment inputs")
         archived_replay = (
+            (self.config.get("frozen_resume") and bool(self.seed_reports.get("news_report"))) or
             set(getattr(self, "seed_reports", {}))
             == {"fundamentals_report", "operating_report", "metrics_report", "news_report"}
             and set(self.selected_analysts) == {"fundamentals", "operating", "metrics", "news"}
@@ -358,7 +370,7 @@ class TradingAgentsGraph:
         if snapshot is not None and (
             snapshot['company']['symbol'] != company_name
             or snapshot['as_of_date'] != trade_date
-            or (is_historical(trade_date) and not archived_replay)
+            or (is_historical(trade_date) and not archived_replay and not point_in_time)
         ):
             raise ValueError("Current financial snapshot must match the ticker and today's run date")
         state = self.propagator.create_initial_state(
@@ -417,6 +429,8 @@ class TradingAgentsGraph:
         does not end the run: the analysts' work is kept, the lessons already in
         the log are used, and the report says what could not be settled.
         """
+        if (getattr(self, "research_snapshot", None) or {}).get("point_in_time"):
+            return {"past_context": "", "memory_note": "历史重建不读取或结算今日研究记忆"}
         note = ""
         try:
             # Another run settling the same log does the work; this one goes on.
@@ -461,6 +475,8 @@ class TradingAgentsGraph:
         """Record a finished run: its state log, and its decision in the memory log
         for reflection on the next same-ticker run. propagate() and the CLI both end here."""
         self._log_state(trade_date, final_state)
+        if (getattr(self, "research_snapshot", None) or {}).get("point_in_time"):
+            return
         decision = final_state.get("final_trade_decision")
         if not decision:
             logger.warning("No final decision for %s on %s; nothing added to the memory log",
@@ -484,7 +500,18 @@ class TradingAgentsGraph:
 
         # None resumes an existing checkpoint; init_agent_state starts fresh (#1249).
         graph_input = self.checkpoint_input(init_agent_state)
-        if self.debug:
+        if getattr(self, "pause_check", None):
+            final_state = {}
+            # Stream values at graph superstep boundaries; closing the stream
+            # waits for in-flight parallel work before reporting a stable pause.
+            stream = self.graph.stream(graph_input, **{**args, "stream_mode": "values"})
+            try:
+                for state in stream:
+                    final_state = state
+                    self.pause_check()
+            finally:
+                stream.close()
+        elif self.debug:
             # A state repeats the messages before it, so each prints once (#1027).
             final_state, printed = {}, set()
             for messages, state in self.stream_run(graph_input, **args):

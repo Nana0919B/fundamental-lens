@@ -6,6 +6,7 @@
   <title>FundAnalyst · 公司研究工作台</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23205c48%22/%3E%3Cpath%20d%3D%22M10%2024V8h14M10%2015h10%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%223%22/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/valuation.css">
 </head>
 <body>
   <button class="sidebar-shade" id="sidebar-shade" aria-label="关闭导航" hidden></button>
@@ -17,10 +18,11 @@
     <div class="side-label">工作空间</div>
     <button class="side-nav active" id="research-home">公司研究</button>
     <a class="side-nav" href="/backtest">历史估值回测 ↗</a>
+    <button class="side-nav" id="show-library">资料库</button>
     <button class="side-nav" id="show-sources">资料与来源</button>
     <div class="side-label history-label"><span>最近研究 <small id="history-count"></small></span><button class="icon-button" data-new-research aria-label="新建研究">＋</button></div>
     <nav id="history" aria-label="历史研究"></nav>
-    <div class="local"><div id="connection-state"><i></i> 本地研究工作台</div><p>研究资料保存在本机</p></div>
+    <div class="local"><div id="connection-state"><i></i> 研究工作台</div><p>研究与归档统一在资料库管理</p></div>
   </aside>
   <main>
     <header class="topbar">
@@ -51,7 +53,7 @@
       <label class="field">股票市场<select id="market"><option value="auto">自动识别</option><option value="hk">港股</option><option value="cn">沪深 A 股</option><option value="us">美股</option></select></label>
       <label class="field">股票代码<input id="ticker" placeholder="MSFT / 00700 / 600519 / 000001" required maxlength="32" autocomplete="off"></label>
       <label class="field">比较公司 <span>可选，最多 5 家</span><button type="button" id="load-peers" class="text-button">载入同行池</button><input id="peers" placeholder="例如 GOOGL, AMZN" maxlength="180" autocomplete="off"></label>
-      <p class="form-note">使用已配置的模型服务，每次研究会产生模型调用。支持港股及沪深 A 股；自动识别时，1–5 位数字为港股，6 开头六位为沪股，0/3 开头六位为深股。分析日期为今日，完整流程通常需要数分钟。</p>
+      <p class="form-note">使用已配置的模型服务，每次研究会产生模型调用。支持港股及沪深 A 股；自动识别时，1–5 位数字为港股，6 开头六位为沪股，0/3 开头六位为深股。分析日期为今日，完整流程通常需要数分钟。研究完成后将自动核实原始披露并生成公司专属估值；该步骤可能额外需要数分钟。当前自动估值支持有 SEC 披露的普通经营公司，其他市场或未覆盖的资本结构会显示待补充事项。</p>
       <div id="form-error" class="notice error-notice" role="alert" hidden></div>
       <div class="dialog-actions"><button type="button" class="button" data-close-dialog="research-dialog">取消</button><button id="submit" type="submit" class="button primary">发起分析 ↗</button></div>
     </form>
@@ -59,6 +61,7 @@
   <dialog id="detail-dialog" class="dialog" aria-labelledby="detail-title"><div class="dialog-header"><h2 id="detail-title"></h2><button class="icon-button" data-close-dialog="detail-dialog" aria-label="关闭详情">×</button></div><div id="detail-content" class="dialog-body"></div></dialog>
   <dialog id="search-dialog" class="dialog compact" aria-labelledby="search-title"><div class="dialog-header"><h2 id="search-title">查找研究</h2><button class="icon-button" data-close-dialog="search-dialog" aria-label="关闭搜索">×</button></div><div class="dialog-body"><input id="search-input" class="search-input" placeholder="输入公司名称或股票代码" aria-label="查找已有研究" autocomplete="off"><div id="search-results"></div></div></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
+  <script src="/valuation.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

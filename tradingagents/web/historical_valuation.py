@@ -43,6 +43,18 @@ def research_job(recent, day, native_shares, native_price, ticker):
         return s["evidence"].get(key, {}).get("val")
 
     ordered = list(reversed(recent))
+    # Comparative columns are available only at the containing report's filing date.
+    if "previous_revenue" in latest["evidence"]:
+        previous = latest["evidence"]["previous_revenue"]
+        if previous["end"] not in {s["end"] for s in ordered}:
+            ordered.append(
+                {
+                    "end": previous["end"],
+                    "revenue": previous["val"],
+                    "evidence": {"ebit": latest["evidence"]["previous_ebit"]},
+                }
+            )
+        ordered.sort(key=lambda s: s["end"], reverse=True)
     statements = {
         "annual": {
             "income": {
@@ -72,7 +84,7 @@ def research_job(recent, day, native_shares, native_price, ticker):
     }
     cash = sum(
         latest["evidence"].get(k, {}).get("val", 0)
-        for k in ("cash", "short_investments", "long_investments")
+        for k in ("cash", "short_investments", "long_investments", "placement_cash")
     )
     company = {
         "symbol": ticker,
@@ -88,6 +100,9 @@ def research_job(recent, day, native_shares, native_price, ticker):
             "sharesOutstanding": native_shares,
             "currentPrice": native_price,
             "valuationOtherClaims": latest["evidence"].get("other_claims", {}).get("val"),
+            "valuationNonOperatingAssets": latest["evidence"]
+            .get("non_operating_assets", {})
+            .get("val", 0),
         },
         "statements": statements,
     }

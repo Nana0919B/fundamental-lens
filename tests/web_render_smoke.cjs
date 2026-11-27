@@ -12,7 +12,8 @@ function harness(fetchImpl=()=>new Promise(()=>{})) {
  }
  const document={body:node(),addEventListener(name,fn){events[name]=fn},createElement:node,
   querySelector(s){if(!nodes.has(s))nodes.set(s,node());return nodes.get(s)},getElementById(id){return this.querySelector('#'+id)}};
- const context=vm.createContext({document,window:{addEventListener(){},scrollTo(){}},fetch:fetchImpl,setInterval(){},setTimeout(){return 1},clearTimeout(){},requestAnimationFrame:fn=>fn(),console,Date,encodeURIComponent});
+ const context=vm.createContext({document,window:{addEventListener(){},scrollTo(){}},fetch:fetchImpl,setInterval(){},setTimeout(){return 1},clearTimeout(){},requestAnimationFrame:fn=>fn(),console,Date,encodeURIComponent,URLSearchParams,structuredClone});
+ vm.runInContext(fs.readFileSync('tradingagents/web/static/valuation.js','utf8'),context);
  vm.runInContext(fs.readFileSync('tradingagents/web/static/app.js','utf8'),context);
  return {context,nodes,events};
 }
@@ -192,4 +193,59 @@ assert(!returnBars.includes('NaN')&&!returnBars.includes('Infinity'));
 assert.equal(JSON.stringify(context.chartEnvironment),chartArchive,'Charts must not mutate research evidence');
 vm.runInContext('environmentMetric="score";environmentRange=30',context);
 vm.runInContext("job=fixture;tab=5",context);
+// A saved valuation date must win over the older research archive and form drafts.
+context.dateResult={inputs:{valuation_date:'2026-11-26',market_price_date:'2026-11-25T21:00:02+00:00',market_price:164.53}};
+context.dateStudy={date:'2026-11-24'};
+let comparison=vm.runInContext('getValuationPanel().comparison(dateResult,dateStudy)',context);
+assert.equal(comparison.date,'2026-11-26');assert.equal(comparison.price,164.53);
+assert.equal(comparison.quoteDate,'2026-11-25T21:00:02+00:00');
+context.dateResult={inputs:{market_price:135.98},historical_context:{as_of_date:'2020-03-23'}};
+comparison=vm.runInContext('getValuationPanel().comparison(dateResult,dateStudy)',context);
+assert.equal(comparison.date,'2020-03-23');assert.equal(comparison.quoteDate,'2020-03-23');
+context.dateResult={inputs:{market_price:100}};
+comparison=vm.runInContext('getValuationPanel().comparison(dateResult,dateStudy)',context);
+assert.equal(comparison.quoteDate,null,'Do not invent an historical quote date from the study date');
 interactionTests().catch(error=>{console.error(error);process.exitCode=1});
+
+const autoContext=harness().context;
+// Automated estimates must not reuse industry-policy explanations or historical dates.
+autoContext.autoStudy={...fixture,automatic_valuation:{status:'running',phase:'核实附注'},valuation_setup:{missing:['待核实'],inputs:{}}};
+assert(!vm.runInContext('job=autoStudy;valuationView()',autoContext).includes('id="valuation-form"')); // unresolved evidence cannot become an editable default DCF
+assert(vm.runInContext('getValuationPanel().status()',autoContext).includes('正在处理'));
+autoContext.autoResult={inputs:{automatic_research:{},scenarios:{base:{growth:[.1]},bull:{growth:[.2]}}},policy_audit:{}};
+assert(vm.runInContext('getValuationPanel().dateChooser(autoResult)',autoContext).includes('切换日期将运行公司研究与自动估值'));
+assert.strictEqual(vm.runInContext("job={ticker:'MSFT'};getValuationPanel().explanation(autoResult)",autoContext),'');
+autoContext.contingentResult={currency:'USD',inputs:{automatic_research:{contingent_claims:[{label:'Guarantee <test>',maximum_exposure:200,trigger:'Conditional default',treatment:'Incremental net loss only',basis:'Not probability',source_id:'S1',quote:'Original evidence <script>',stress:[{loss_fraction:.25,per_share_reduction:5}]}]}},scenarios:{bear:{price:70},base:{price:100},bull:{price:140}}};
+const contingentBefore=JSON.stringify(autoContext.contingentResult);
+const contingentHTML=vm.runInContext('getValuationPanel().contingent(contingentResult)',autoContext);
+assert(contingentHTML.includes('条件估值')&&contingentHTML.includes('不是发生概率'));
+assert(contingentHTML.includes('95.00')&&contingentHTML.includes('65.00')&&contingentHTML.includes('135.00'));
+assert(contingentHTML.includes('&lt;script&gt;')&&!contingentHTML.includes('<script>'));
+assert.equal(JSON.stringify(autoContext.contingentResult),contingentBefore);
+
+// Results are the primary content; editing and technical explanations stay opt-in.
+const compactInputs={method:'operating_fcff',assumption_policy:'history-sector-2.0',years:5,forecast_start:2021,revenue:100,cash:10,debt:5,shares:10,operating_cash:1,other_claims:0,dilution:1,market_price:20,rationale:'Company forecast assumptions',scenarios:{}};
+for(const name of ['bear','base','bull'])compactInputs.scenarios[name]={growth:[.1,.05],margins:[.2,.2],da_ratio:.03,capex_ratio:.04,nwc_ratio:.1,tax_rate:.25,wacc:.1,terminal_growth:.02};
+const compactResult={inputs:compactInputs,currency:'USD',version:'test',input_digest:'test-digest',scenarios:Object.fromEntries(['bear','base','bull'].map((name,i)=>[name,{price:10+i*5,upside:-.5+i*.25,equity_value:100+i*50,enterprise_value:95+i*50,rows:[],terminal_fcff:10,terminal_pv:70,terminal_share:.7}])),sensitivity:{growths:[.02],waccs:[.1],prices:[[15]]},reverse:{status:'no_solution',reason:'Not solved within range'},warnings:[]};
+autoContext.compactJob={...fixture,valuation:compactResult,valuation_setup:{inputs:compactInputs,saved:compactResult,missing:[],currency:'USD',evidence:{},warnings:[]}};
+const compactHTML=vm.runInContext('job=compactJob;valuationView()',autoContext);
+assert.equal((compactHTML.match(/<article class="valuation-price /g)||[]).length,3);
+assert(compactHTML.indexOf('valuation-price-grid')<compactHTML.indexOf('id="valuation-form"'));
+assert(/<details class="card valuation-fold" ><summary>调整估值假设/.test(compactHTML));
+assert(!vm.runInContext('getValuationPanel().dateChooser(autoResult)',autoContext).includes('href="/backtest'));
+assert(compactHTML.includes('观察日期')&&compactHTML.includes('更新估值'));
+
+// An unavailable/broken valuation module cannot stop the original research tabs.
+const isolation=harness().context;
+isolation.fixture=structuredClone(fixture);
+vm.runInContext('window.createValuationPanel=undefined;valuationPanel=undefined;job=fixture;tab=1;draw()',isolation);
+assert(vm.runInContext('document.querySelector("#content").innerHTML.length>0',isolation));
+vm.runInContext('console={...console,error(){}};tab=8;draw()',isolation);
+assert(vm.runInContext('document.querySelector("#content").innerHTML.includes("内在价值暂不可用")',isolation));
+vm.runInContext('tab=2;draw()',isolation);
+assert(!vm.runInContext('document.querySelector("#content").innerHTML.includes("内在价值暂不可用")',isolation));
+// Valuation progress never replaces controls on completed company-analysis tabs.
+isolation.fixture.automatic_valuation={status:'running',phase:'valuation-only-progress'};
+vm.runInContext('tab=1;draw()',isolation);
+assert(!vm.runInContext('document.querySelector("#content").innerHTML.includes("valuation-only-progress")',isolation));
+assert.notEqual(vm.runInContext('document.querySelector("#progress").textContent',isolation),'valuation-only-progress');

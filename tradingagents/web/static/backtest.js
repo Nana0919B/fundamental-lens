@@ -45,7 +45,7 @@ function render(row){
   if(!Array.from($('tickers').options).some(o=>o.value===selection))$('tickers').add(new Option(selection,selection));
   $('tickers').value=selection;
   $('comparison').innerHTML=table(['股票 / 行业','策略总收益','买入持有总收益','策略年化','买入持有年化','策略最大回撤','持有最大回撤','成交次数'],row.result.results.map(r=>[esc(r.ticker+' '+(r.name||'')+' '+(r.industry||'')),pct(r.strategy.total_return),pct(r.benchmark.total_return),pct(r.strategy.cagr),pct(r.benchmark.cagr),pct(r.strategy.max_drawdown),pct(r.benchmark.max_drawdown),r.trades.length]));
-  if(currency==='HKD')$('comparison').insertAdjacentHTML('afterbegin','<p class="error">行业迁移试验：沿用研究默认增长和利润率，现金、投资及其他权益采用已列明的代理口径。以下是模型试算，不是完成公司专项核实的目标价；未买入不等于市场一定高估。</p>');
+  if(currency==='HKD')$('comparison').insertAdjacentHTML('afterbegin','<p class="error">行业迁移试验：采用本次记录的政策版本；现金、投资及其他权益的处理以归档来源与假设为准。以下是模型试算，不是完成公司专项核实的目标价；未买入不等于市场一定高估。</p>');
   $('comparison').innerHTML+=Object.entries(row.result.excluded||{}).map(([t,v])=>`<p class="muted">${esc(t)} ${esc(v.name)} · ${esc(v.industry)}：${esc(v.exclusion)}</p>`).join('');
   $('tabs').innerHTML=row.result.results.map((r,i)=>`<button data-index="${i}">${esc(r.ticker)}</button>`).join('');
   $('tabs').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>detail(Number(b.dataset.index))));
@@ -58,7 +58,7 @@ async function load(id, token){
   try{const row=await api('/api/valuation-backtests/'+id);if(token!==generation)return;
     if(['queued','running'].includes(row.status)){message('正在获取历史数据并回测；首次运行可能需要数分钟，可关闭页面后回来查看。');$('run').disabled=true;timer=setTimeout(()=>load(id,token),2000);return;}
     $('run').disabled=false;
-    if(row.result){render(row);const errors=Object.entries(row.result.errors).map(([k,v])=>k+': '+v).join('；');message(errors?'部分数据失败：'+errors:(row.result.version.startsWith('research-')?'统一研究引擎验证完成；每个历史估值可直接在研究页打开。':'这是旧版独立模型记录，请重新运行以使用研究页统一引擎。'),!!errors);}else message(row.error||'任务未完成',true);
+    if(row.result){render(row);const errors=Object.entries(row.result.errors).map(([k,v])=>k+': '+v).join('；');message(errors?'部分数据失败：'+errors:(row.result.version.startsWith('research-')?'统一研究引擎验证完成；规则未按收益调参，每个历史估值可直接在研究页打开。':'这是旧版独立模型记录，请重新运行以使用研究页统一引擎。'),!!errors);}else message(row.error||'任务未完成',true);
     await loadHistory(id);
   }catch(e){$('run').disabled=false;message(e.message,true);}
 }

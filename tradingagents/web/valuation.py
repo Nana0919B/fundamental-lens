@@ -8,9 +8,9 @@ import math
 from copy import deepcopy
 from datetime import date, datetime
 
-VERSION = "fcff-2.1"
+VERSION = "fcff-3.2"
 SCENARIOS = ("bear", "base", "bull")
-ASSUMPTION_POLICY = "research-defaults-1.0"
+ASSUMPTION_POLICY = "history-sector-2.0"
 SCHEMA_VERSION = 1
 
 
@@ -59,6 +59,8 @@ def prepare(job):
         ("debt", "totalDebt"),
         ("shares", "sharesOutstanding"),
         ("market_price", "currentPrice"),
+        ("non_operating_assets", "valuationNonOperatingAssets"),
+        ("other_claims", "valuationOtherClaims"),
     ]:
         evidence[key] = {
             "value": profile.get(field),
@@ -114,7 +116,7 @@ def prepare(job):
     )
     warnings = [
         "预填参数是可编辑的研究假设，不是分析师共识或模型已证实的预测。WACC 为直接假设，未自动估计 CAPM。",
-        "现金与债务使用同一供应商概览；现金默认全部可分配，请填写经营必需现金，核对受限现金、租赁及其他负债口径。",
+        "现金、可用存款、非经营资产分别核对；经营现金按政策或显式输入扣除，受限资产不能当成可分配现金。",
         "其他权益要求必须明确填写；优先股账面面值不能代替经济价值，可转债/优先股应选择扣除或转股摊薄，避免重复计算。",
         "股数是快照发行在外股数；摊薄倍数为显式假设，不使用历史加权平均股数替代。",
         "预测从下一完整年度开始，以当前年度末为简化估值基准；未建模剩余年度过渡现金流。价格和财报是归档数据，不是实时行情。",
@@ -166,7 +168,7 @@ def prepare(job):
                 (
                     "其他权益要求为已披露账面值代理，未按市场经济价值核定；同研究页可编辑。"
                     if profile.get("valuationOtherClaims") is not None
-                    else "其他权益要求0、现金全额可分配、摊薄倍数1为统一默认假设，未逐公司核验附注；同研究页可编辑。"
+                    else "其他权益要求0、摊薄倍数1为显式默认假设，未逐公司核验附注；同研究页可编辑。"
                 ),
                 "历史每股单位已还原至估值当日；年度预测仍使用研究页的整年折现近似，未建模过渡年度。",
             ]
@@ -177,7 +179,53 @@ def prepare(job):
             "period": as_of,
             "source": company.get("source", "original filings"),
         }
+    from tradingagents.web.valuation_policy import build
+
+    policy = build(company, job.get("ticker") or company.get("symbol", ""))
+    if policy:
+        inputs["operating_cash"] = min(
+            inputs["cash"] or 0, (revenue or 0) * policy["operating_cash_ratio"]
+        )
+        inputs["non_operating_assets"] = profile.get("valuationNonOperatingAssets", 0)
+        if not (context and context.get("forecast_template")):
+            inputs.update(scenarios=policy["scenarios"], rationale=policy["rationale"])
+        warnings = [w for w in warnings if not w.startswith("终值沿用")]
+        warnings.append(
+            "稳定期以税后经营利润扣除g/ROIC所需再投资；ROIC是行业研究假设，不以高增长期资本支出永久外推。"
+        )
+        warnings.extend(policy["warnings"])
+        warnings.append(
+            "增长/利润率规则仅使用归档经营数据，不读取股价或回测收益；行业边界为研究者预设，并非历史行业共识。"
+        )
+        warnings.append(
+            "非经营资产与现金分列，资产折扣为显式估计；其他股东权益仍采用来源所列代理，不代表完整的条款市场价值。"
+        )
+    elif not (context and context.get("forecast_template")):
+        inputs["assumption_policy"] = "generic-defaults-1.0"
+        warnings.append("该公司尚未匹配行业政策，使用通用预填参数；不代表公司专属预测。")
+    from tradingagents.web.company_research import build as company_plan
+
+    researched = None if job.get("automatic_valuation") else company_plan(job)
+    if researched:
+        inputs = researched["inputs"]
+        policy = {"audit": researched["audit"]}
+        warnings = researched["warnings"]
+        for key in ("revenue", "cash", "debt", "shares", "market_price", "other_claims", "non_operating_assets"):
+            evidence[key] = {"value": inputs[key], "field": "公司研究核实：" + key,
+                             "period": inputs["balance_date"], "source": "SEC 10-Q / 公司业绩会；见公司研究依据"}
+    from tradingagents.web.automatic_valuation import prepared as automatic_prepared
+    automatic = automatic_prepared(job)
+    if automatic:
+        inputs = automatic["inputs"]
+        currency = automatic["currency"]
+        evidence = automatic["evidence"]
+        policy = {"audit": automatic["audit"]}
+        warnings = automatic["warnings"]
+        missing = []
+    elif job.get("automatic_valuation") and not job.get("valuation"):
+        missing = job["automatic_valuation"].get("gaps") or ["公司专属估值尚未完成自动核实，暂不使用通用参数试算"]
     return {
+        "policy_audit": policy["audit"] if policy else None,
         "version": VERSION,
         "currency": currency,
         "evidence": evidence,
@@ -208,6 +256,8 @@ def validate(payload):
         p[key] = numeric(p.get(key), key, 1, 1e15)
     for key in ("cash", "debt", "operating_cash", "other_claims"):
         p[key] = numeric(p.get(key), key, 0, 1e15)
+    if "non_operating_assets" in p:
+        p["non_operating_assets"] = numeric(p["non_operating_assets"], "非经营资产", 0, 1e15)
     if p["operating_cash"] > p["cash"]:
         raise ValueError("经营必需现金不能超过现金总额")
     p["dilution"] = numeric(p.get("dilution"), "摊薄倍数", 1, 10)
@@ -238,20 +288,48 @@ def validate(payload):
             ("terminal_growth", -0.05, 0.08),
         ]:
             s[key] = numeric(s.get(key), key, lo, hi)
+        for key in ("da_ratios", "capex_ratios"):
+            if key in s:
+                if not isinstance(s[key], list) or len(s[key]) != n:
+                    raise ValueError(f"{key} 须包含 {n} 年")
+                s[key] = [numeric(v, key, 0, 1) for v in s[key]]
+        if "terminal_roic" in s:
+            s["terminal_roic"] = numeric(s["terminal_roic"], "稳定期ROIC", 0.01, 1)
+            if not 0 <= s["terminal_growth"] < s["terminal_roic"]:
+                raise ValueError("稳定期增长必须非负且小于稳定期ROIC")
+        if "asset_haircut" in s:
+            s["asset_haircut"] = numeric(s["asset_haircut"], "非经营资产折扣", 0, 1)
         if s["wacc"] - s["terminal_growth"] < 0.005 - 1e-12:
             raise ValueError("WACC 必须至少高于永续增长率 0.5 个百分点")
+    if "capital_structure" in p:
+        from tradingagents.web.capital_structure import validate_capital
+        p = validate_capital(p)
+    if "research_bridge" in p:
+        from tradingagents.web.company_research import validate_bridge
+        p = validate_bridge(p)
+    if p.get("automatic_research", {}).get("contingent_claims"):
+        def canonical_numbers(value):
+            if isinstance(value, dict):
+                return {k: canonical_numbers(v) for k, v in value.items()}
+            if isinstance(value, list):
+                return [canonical_numbers(v) for v in value]
+            if isinstance(value, float) and value.is_integer():
+                return int(value)
+            return value
+        p["automatic_research"]["contingent_claims"] = canonical_numbers(p["automatic_research"]["contingent_claims"])
     return p
 
 
 def project(p, s):
-    revenue = p["revenue"]
+    revenue = s.get("revenue_base", p["revenue"]) if p.get("research_bridge") else p["revenue"]
     rows = []
     for index, (growth, margin) in enumerate(zip(s["growth"], s["margins"], strict=False)):
         previous = revenue
         revenue *= 1 + growth
         ebit = revenue * margin
         tax = max(ebit, 0) * s["tax_rate"]
-        da, capex = revenue * s["da_ratio"], revenue * s["capex_ratio"]
+        da = revenue * s.get("da_ratios", [s["da_ratio"]] * p["years"])[index]
+        capex = revenue * s.get("capex_ratios", [s["capex_ratio"]] * p["years"])[index]
         delta_nwc = (revenue - previous) * s["nwc_ratio"]
         fcff = ebit - tax + da - capex - delta_nwc
         pv = fcff / (1 + s["wacc"]) ** (index + 1)
@@ -276,16 +354,31 @@ def project(p, s):
         + terminal_revenue * (s["da_ratio"] - s["capex_ratio"])
         - (terminal_revenue - revenue) * s["nwc_ratio"]
     )
+    terminal_reinvestment = None
+    if s.get("terminal_roic") is not None:
+        nopat = terminal_ebit - max(terminal_ebit, 0) * s["tax_rate"]
+        terminal_reinvestment = nopat * s["terminal_growth"] / s["terminal_roic"]
+        terminal_fcff = nopat - terminal_reinvestment
     if terminal_fcff <= 0:
         raise ValueError("稳定期 FCFF 非正，无法使用持续经营永续增长终值；请复核恢复假设")
     terminal = terminal_fcff / (s["wacc"] - s["terminal_growth"])
     terminal_pv = terminal / (1 + s["wacc"]) ** p["years"]
     enterprise = sum(r["pv"] for r in rows) + terminal_pv
-    equity = enterprise + p["cash"] - p["operating_cash"] - p["debt"] - p["other_claims"]
+    investment_value = p.get("non_operating_assets", 0) * (1 - s.get("asset_haircut", 0))
+    equity = (
+        enterprise
+        + p["cash"]
+        - p["operating_cash"]
+        + investment_value
+        - p["debt"]
+        - p["other_claims"]
+    )
     price = equity / (p["shares"] * p["dilution"])
-    return {
+    result = {
         "rows": rows,
         "terminal_fcff": terminal_fcff,
+        "terminal_reinvestment": terminal_reinvestment,
+        "non_operating_asset_value": investment_value,
         "terminal_pv": terminal_pv,
         "enterprise_value": enterprise,
         "equity_value": equity,
@@ -296,6 +389,14 @@ def project(p, s):
         if equity < 0
         else None,
     }
+
+    if p.get("research_bridge"):
+        from tradingagents.web.company_research import adjust
+        result = adjust(p, s, result)
+    if p.get("capital_structure"):
+        from tradingagents.web.capital_structure import adjust as adjust_capital
+        result = adjust_capital(p, result)
+    return result
 
 
 def reverse(p, s):
@@ -361,11 +462,25 @@ def calculate(job, payload):
     else:
         p = validate(payload)
         project_fn, reverse_fn = project, reverse
+    if p.get("capital_structure") and not prepared["inputs"].get("capital_structure"):
+        raise ValueError("优先股条款必须由本份研究的原始证据核实生成")
+    if p.get("automatic_research") or prepared["inputs"].get("automatic_research"):
+        for field in ("method", "schema_version", "tax_basis", "capital_structure", "automatic_research", "revenue", "cash", "debt", "shares", "non_operating_assets", "other_claims", "dilution", "valuation_date", "balance_date", "market_price", "market_price_date", "forecast_start", "years"):
+            if p.get(field) != prepared["inputs"].get(field):
+                raise ValueError("自动核实事实与本研究不匹配，不可改写：" + field)
+    if p.get("research_bridge"):
+        for field in ("research_bridge", "research_basis"):
+            if p[field] != prepared["inputs"].get(field):
+                raise ValueError("公司核实方案与本研究不匹配，不可套用于其他公司或日期")
     historical_context = deepcopy(job.get("historical_context"))
     if historical_context:
         for key in ("revenue", "cash", "debt", "shares", "market_price", "forecast_start"):
             if p.get(key) != prepared["inputs"].get(key):
                 raise ValueError("历史事实输入不可改写：" + key + "；仅可调整预测假设")
+        if "non_operating_assets" in p and p["non_operating_assets"] != prepared["inputs"].get(
+            "non_operating_assets", 0
+        ):
+            raise ValueError("历史事实输入不可改写：non_operating_assets")
         if p != prepared["inputs"]:
             historical_context["assumption_status"] = "edited_retrospective_assumptions"
     results = {key: project_fn(p, p["scenarios"][key]) for key in SCENARIOS}
@@ -410,6 +525,7 @@ def calculate(job, payload):
         "currency": prepared["currency"],
         "inputs": p,
         "historical_context": historical_context,
+        "policy_audit": prepared.get("policy_audit"),
         "evidence": prepared["evidence"],
         "scenarios": results,
         "sensitivity": {"waccs": waccs, "growths": growths, "prices": grid},

@@ -77,3 +77,30 @@ def test_hsi_industry_coverage():
     assert len({v["industry"] for v in catalog().values()}) == 12
     assert catalog()["0669.HK"]["industry"] == "非必需性消费"
     assert catalog()["1308.HK"]["industry"] == "工业"
+
+
+def test_historical_market_reuses_complete_archive(tmp_path, monkeypatch):
+    import json
+
+    import yfinance
+
+    from tradingagents.web.backtest_hk import market
+
+    rows = [
+        {"date": "2025-05-30", "open": 100.0, "close": 101.0, "dividend": 0.0, "split": 0.0},
+        {"date": "2026-01-05", "open": 102.0, "close": 103.0, "dividend": 0.0, "split": 0.0},
+    ]
+    path = tmp_path / "0700.HK-hk-prices-2026-01-06.json"
+    path.write_text(json.dumps(rows))
+
+    def fail(*args, **kwargs):
+        raise AssertionError("Historical archive must not query today")
+
+    monkeypatch.setattr(yfinance, "Ticker", fail)
+    source = []
+    assert market("0700.HK", tmp_path, "2025-12-31", source) == rows
+    assert source[0]["archive"] == str(path)
+    rows[0]["close"] = float("nan")
+    path.write_text(json.dumps(rows))
+    with pytest.raises(ValueError, match="禁止补零"):
+        market("0700.HK", tmp_path, "2025-12-31")

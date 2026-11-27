@@ -60,6 +60,7 @@ def test_background_job_persists_reports_without_exposing_engine_config(monkeypa
 
     monkeypatch.setattr(trading_graph, "TradingAgentsGraph", Graph)
     monkeypatch.setattr(server, "get_filing_documents", lambda *a: {"documents": []})
+    monkeypatch.setattr(server, "queue_automatic_valuation", lambda _: None)
     server.run_job("test")
     assert server.JOBS["test"]["status"] == "completed"
     assert server.JOBS["test"]["reports"]["fundamentals_report"] == "Evidence"

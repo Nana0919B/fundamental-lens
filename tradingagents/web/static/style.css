@@ -546,8 +546,13 @@ footer { padding-top: 15px; display: flex; justify-content: space-between; gap: 
   .environment-details.card { padding: 15px 17px; }
 }
 
-.valuation-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:18px 0}
-.valuation-field{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--muted,#64716d)}
-.valuation-field input,.valuation-field textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccd8d2;border-radius:7px;background:#fff;color:#193d30;font:inherit}
-.valuation-field textarea{min-height:110px}.valuation-matrix .valuation-center{background:#d2e9dc;font-weight:700;outline:2px solid #6d9c82}
-#valuation-status{color:#96552f}#valuation-form summary{cursor:pointer;font-weight:600}
+.history-row { position: relative; padding-right: 25px; }
+.history-menu { position: absolute; right: 0; top: 16px; z-index: 2; }
+.history-menu[open] { z-index: 3; }
+.history-menu summary { cursor: pointer; list-style: none; padding: 5px; font-weight: bold; }
+.history-menu summary::-webkit-details-marker { display: none; }
+.history-menu > div { position: absolute; right: 0; min-width: 90px; padding: 5px; background: white; border: 1px solid #dce3d9; border-radius: 6px; box-shadow: 0 4px 12px #0002; }
+.history-menu button { display: block; width: 100%; padding: 8px; text-align: left; }
+.history-menu button:hover { background: #eaf0e7; }
+.library-row { padding: 16px 0; border-bottom: 1px solid #dce3d9; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.library-row p { margin: 6px 0; }

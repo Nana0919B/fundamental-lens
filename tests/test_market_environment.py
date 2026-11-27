@@ -167,6 +167,7 @@ def test_web_worker_freezes_once_and_retries_with_identical_evidence(monkeypatch
                     **dict.fromkeys(('fundamentals_report', 'operating_report', 'metrics_report', 'news_report'), 'saved'),
                     'final_trade_decision': 'Hold'}, 'Hold'
     monkeypatch.setattr(trading_graph, 'TradingAgentsGraph', Graph)
+    monkeypatch.setattr(server, 'queue_automatic_valuation', lambda _: None)
     server.run_job('cn-run')
     assert job['status'] == 'completed' and job['market_environment_consumed'] is True
     assert len(calls) == 1

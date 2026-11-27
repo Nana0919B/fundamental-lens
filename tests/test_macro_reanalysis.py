@@ -77,7 +77,7 @@ def test_starting_reanalysis_clones_inputs_and_never_fetches_financials(monkeypa
     monkeypatch.setattr(server, "STORE", tmp_path)
     monkeypatch.setattr(server, "today", lambda: "2026-11-13")
     calls = []
-    monkeypatch.setattr(server, "POOL", SimpleNamespace(submit=lambda fn, id: calls.append(id)))
+    monkeypatch.setattr(server, "POOL", SimpleNamespace(submit=lambda *args: calls.append(args[2])))
     job = server.create_macro_reanalysis("parent")
     assert job["id"] != "parent" and calls == [job["id"]]
     assert job["research_snapshot"] == snapshot and job["macro_context"] == macro
@@ -119,7 +119,7 @@ def test_failed_hong_kong_run_can_finish_after_midnight_without_replacing_inputs
     monkeypatch.setattr(server, "STORE", tmp_path)
     monkeypatch.setattr(server, "today", lambda: "2026-11-14")
     calls = []
-    monkeypatch.setattr(server, "POOL", SimpleNamespace(submit=lambda fn, id: calls.append(id)))
+    monkeypatch.setattr(server, "POOL", SimpleNamespace(submit=lambda *args: calls.append(args[2])))
     original = deepcopy(job)
     result = server.retry_job("hk")
     assert result["status"] == "queued" and result["error"] is None
