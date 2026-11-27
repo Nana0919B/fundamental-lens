@@ -30,4 +30,3 @@ def validate_snapshot(snapshot, ticker, day):
         if fact['filed'] >= day or fact['end'] > day:
             raise ValueError('历史研究包含尚未公开的数值')
     return True
-

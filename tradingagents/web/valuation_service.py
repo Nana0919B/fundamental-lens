@@ -94,4 +94,3 @@ class ValuationService:
             self.jobs[job_id] = changed
         submit(job_id)
         return {"id": job_id, "status": "queued"}
-
