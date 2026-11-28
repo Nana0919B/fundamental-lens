@@ -33,8 +33,39 @@ function valuationDateSummary(result){
 }
 function valuationDateChooser(result){
   const c=valuationComparisonContext(result,job);
-  const tickers=[...new Set([job.ticker,'AAPL','MSFT','NVDA','BA','0700.HK','0941.HK','0291.HK','0883.HK','2899.HK','0669.HK','0002.HK','1211.HK','1177.HK','1308.HK'])];
-  return `<section class="card valuation-date-bar"><form id="valuation-date-form"><label class="valuation-field">股票<select id="valuation-date-ticker">${tickers.map(t=>`<option ${t===job.ticker?'selected':''}>${escape(t)}</option>`).join('')}</select></label><label class="valuation-field">观察日期<input id="valuation-date-day" type="date" required min="2013-02-05" value="${escape(c.date||job.date)}"></label><button class="button" type="submit">更新估值</button><p role="status" id="valuation-date-status" aria-live="polite"></p></form><p class="note">在本页查看所选日期的估值与股价。切换日期将运行公司研究与自动估值，仅用观察日前披露；已有同日研究可复用。</p></section>`;
+  const tickers=[...new Set([job.ticker,'META','AMZN','AAPL','MSFT','NVDA','BA','0700.HK','0941.HK','0291.HK','0883.HK','2899.HK','0669.HK','0002.HK','1211.HK','1177.HK','1308.HK'])];
+  return `<section class="card valuation-date-bar"><form id="valuation-date-form"><label class="valuation-field">股票<select id="valuation-date-ticker">${tickers.map(t=>`<option ${t===job.ticker?'selected':''}>${escape(t)}</option>`).join('')}</select></label><label class="valuation-field">观察日期<input id="valuation-date-day" type="date" required min="2013-02-05" value="${escape(c.date||job.date)}"></label><button class="button" type="submit">更新估值</button><p role="status" id="valuation-date-status" aria-live="polite"></p></form><button class="button" type="button" id="valuation-date-compare">多日期对比</button><p class="note">在本页查看所选日期的估值与股价。切换日期将运行公司研究与自动估值，仅用观察日前披露；已有同日研究可复用。</p></section>`;
+}
+function canonicalValue(value){
+  if(Array.isArray(value))return value.map(canonicalValue);
+  if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(k=>[k,canonicalValue(value[k])]));
+  return value;
+}
+function datedComparison(studies){
+  const rows=[...studies].sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.id).localeCompare(String(b.id)));
+  const status={pending:'等待研究完成',queued:'排队中',running:'核实中',needs_review:'需要复核',failed:'未完成',paused:'已暂停',not_applicable:'不适用'};
+  const note=`<p class="note">各行采用该观察日公开资料生成的独立公司预测。股价和每股价值采用同一时点股数单位；跨期拆股会改变每股单位，请优先比较相对股价差异。三情景是估值日现值，不是后续股价预测。手动调整版本不纳入对比。</p>`;
+  const data=rows.map(j=>{
+    const record=j.automatic_valuation||{},r=j.valuation,p=r?.inputs,b=p?.scenarios?.base;
+    const verified=record.status==='completed'&&!j.valuation_setup?.missing?.length&&p?.automatic_research&&r.input_digest&&JSON.stringify(canonicalValue(p))===JSON.stringify(canonicalValue(record.prepared?.inputs));
+    const cell=k=>verified?fixed(r.scenarios[k].price,2):'—';
+    const q=verified?{price:p.market_price,date:p.market_price_date,currency:r.currency}:j.valuation_reference_quote;
+    return [escape(j.date),q?escape(q.date||'—'):'—',q?fixed(q.price,2)+' '+escape(q.currency):'—',cell('bear'),cell('base'),cell('bull'),verified?pct(r.scenarios.base.upside):'—',verified?pct(b.growth[0])+' → '+pct(b.growth.at(-1)):'—',verified?pct(b.margins[0])+' → '+pct(b.margins.at(-1)):'—',verified?pct(b.wacc):'—',verified?'已核实 · 条件估值':escape(status[record.status]||'尚无自动估值')];
+  });
+  return note+table(['观察日','报价日','参考股价','悲观','基准','乐观','基准较股价','估值状态'],data.map(r=>[...r.slice(0,7),r[10]]))+`<h4>基准情景经营假设</h4>`+table(['观察日','收入增长 首年→末年','营业利润率 首年→末年','WACC'],data.map(r=>[r[0],...r.slice(7,10)]))+`<div class="dialog-actions">${rows.map(j=>`<a class="button" href="/?job=${encodeURIComponent(j.id)}#valuation">打开 ${escape(j.date)} 研究</a>`).join('')}</div>`;
+}
+async function showDatedComparison(){
+  const ticker=job.ticker;
+  host.showDetail(ticker+' · 多日期估值对比','<p>正在读取资料库…</p>');
+  try{
+    const listings=await Promise.all(['active','archived'].map(scope=>api('/api/jobs?scope='+scope)));
+    const ids=[...new Set(listings.flatMap(x=>x.jobs).filter(j=>j.ticker===ticker&&!j.historical_context).map(j=>j.id))];
+    const settled=await Promise.allSettled(ids.map(id=>api('/api/jobs/'+encodeURIComponent(id))));
+    if($('#detail-title').textContent!==ticker+' · 多日期估值对比')return;
+    const studies=settled.filter(x=>x.status==='fulfilled').map(x=>x.value);
+    const failed=settled.filter(x=>x.status==='rejected').length;
+    $('#detail-content').innerHTML=(studies.length?datedComparison(studies):'<p>暂无可对比研究。</p>')+(failed?`<p role="status">${failed} 份研究读取失败，请重新打开对比。</p>`:'');
+  }catch(err){if($('#detail-title').textContent===ticker+' · 多日期估值对比')$('#detail-content').textContent=err.message;}
 }
 function valuationModelExplanation(result){
   if(result?.inputs?.automatic_research)return '';
@@ -108,7 +139,7 @@ function valuationView(){
   let html=automaticValuationStatus();
   html+=valuationGuide(setup,p);
   html+=capitalStructureView(p);
-  if(job.backtest_origin)html+=card('历史回测 · 同一份研究估值',`<p>该估值使用 ${escape(job.date)} 之前公开的财报。${r?.input_digest===job.backtest_origin.input_digest?'当前输入与原回测完全一致。':'当前为修改后的事后研究版本，与原回测输入不同。'}修改预测假设会保存事后研究版本，原回测保持不变。历史财报、股数与参考价格不可改写。</p><p>统一引擎 ${escape(r?.version||setup.version)} · 默认假设不是当年已归档的AI预测。</p><button class="button" type="button" id="backtest-research-assumptions">用已保存的预测假设回测后续区间</button><p class="note">仅传递增长、利润率、再投资、税率和折现率等预测假设；财报、股数和行情逐期更新。起点不会早于本研究日。请先保存表单修改。</p><p role="status" id="backtest-research-status"></p>`);
+  if(job.backtest_origin)html+=card('历史试验档案',`<p>该记录来自已暂停的策略回测试验，原始资料与结果已保留。可使用上方日期选择器开展公司研究及多日期估值对比。</p>`);
   const valuationNotes=html,valuationHeader=overviewHeader;html='';
   html+=`<form id="valuation-form"><section class="card valuation-basis"><h3>估值基准与股东价值调整</h3><p class="note">金额：百万 ${escape(setup.currency)}；股数：百万股。显示小数经过简化，未编辑的输入保留原始计算精度。</p><h4>已获取的财务基准</h4><p class="note">${p.automatic_research?'财务基准由原始披露分项汇总，股价使用已归档收盘价。更改事实请重新核实。':p.research_basis?'财务金额及2026预测基数由公司核实方案提供；更改事实需重新核实。各情景采用各自2026收入基数，以下收入显示基准值。':job.historical_context?'历史事实已锁定；更换日期请使用顶部日期选择。':'默认只读。核对来源发现差异时，才启用修正。'}</p>${job.historical_context||p.research_basis||p.automatic_research?'':'<label class="valuation-edit-toggle"><input type="checkbox" id="valuation-edit-facts"> 允许修正财务基准（需在下方说明依据）</label>'}<div class="valuation-grid">`;
   for(const [key,label,scale] of [['revenue','年度收入',1e6],['cash','现金与可用存款 / 证券',1e6],['debt','有息债务',1e6],['shares','发行在外股数',1e6],['market_price','参考股价',1],['forecast_start','预测首年',1],...(p.non_operating_assets!==undefined?[['non_operating_assets','非经营投资（折扣前）',1e6]]:[])])html+=valuationInput(label,key,p[key],scale);
@@ -167,6 +198,7 @@ function bindValuation(){
   });
   $('#valuation-edit-facts')?.addEventListener('change',e=>{if(!job.historical_context)$('#valuation-form').querySelectorAll('[data-v-fact]').forEach(el=>el.readOnly=!e.target.checked);});
   $('#valuation-date-form')?.addEventListener('submit',openDatedValuation);
+  $('#valuation-date-compare')?.addEventListener('click',showDatedComparison);
   $('#valuation-default-policy')?.addEventListener('click',()=>{
     const defaults=job.valuation_setup.inputs,draft=valuationDrafts.get(job.id);
     for(const key of ['scenarios','rationale','assumption_policy'])draft[key]=structuredClone(defaults[key]);draw();
@@ -235,5 +267,5 @@ function reviewedValuationView(p,r,setup){
 
 return Object.freeze({render:valuationView,bind:bindValuation,invalidate:id=>valuationDrafts.delete(id),
  comparison:valuationComparisonContext,status:automaticValuationStatus,dateChooser:valuationDateChooser,
- explanation:valuationModelExplanation,contingent:contingentClaimsView});
+ explanation:valuationModelExplanation,contingent:contingentClaimsView,datedComparison});
 };

@@ -1,8 +1,11 @@
 """Valuation application boundary: immutable research in, valuation-only state out."""
 import json
 import logging
+import math
+import re
 import uuid
 from copy import deepcopy
+from datetime import date
 from pathlib import Path
 
 from tradingagents.dataflows.files import replace_file
@@ -20,6 +23,28 @@ class ValuationService:
         if set(changes) - {"automatic_valuation", "valuation"}:
             raise ValueError("Valuation cannot modify research state")
         self._update(job_id, **changes)
+
+    def reference_quote(self, job):
+        """Expose archived factual prices even when forecasting needs review."""
+        record = job.get("automatic_valuation")
+        if not isinstance(record, dict):
+            return None
+        job_id, run_id = job.get("id", ""), record.get("run_id", "")
+        if not self.store or not all(isinstance(v, str) and re.fullmatch(r"[0-9a-f]{32}", v)
+                                     for v in (job_id, run_id)):
+            return None
+        try:
+            quote = json.loads((self.store / "valuation-research" / job_id / run_id / "quote.json").read_text())
+            price = quote["price"]
+            if isinstance(price, bool) or not math.isfinite(float(price)) or float(price) <= 0:
+                return None
+            if date.fromisoformat(quote["date"]) > date.fromisoformat(job["date"]):
+                return None
+            if not isinstance(quote.get("currency"), str) or not quote["currency"] or not isinstance(quote.get("source"), str) or not quote["source"]:
+                return None
+            return quote
+        except (OSError, ValueError, KeyError, TypeError):
+            return None
 
     @staticmethod
     def calculate(job, payload):

@@ -249,3 +249,17 @@ isolation.fixture.automatic_valuation={status:'running',phase:'valuation-only-pr
 vm.runInContext('tab=1;draw()',isolation);
 assert(!vm.runInContext('document.querySelector("#content").innerHTML.includes("valuation-only-progress")',isolation));
 assert.notEqual(vm.runInContext('document.querySelector("#progress").textContent',isolation),'valuation-only-progress');
+// Date comparison must preserve each date/quote and exclude edited/manual results.
+{
+ const h=harness();
+ const p={market_price:100,market_price_date:'2022-12-29',automatic_research:{plan_digest:'test'},scenarios:{base:{growth:[.1,.03],margins:[.3,.32],wacc:.09}}};
+ h.context.comparisonStudies=[
+  {id:'historical',date:'2022-12-30',automatic_valuation:{status:'completed',prepared:{inputs:structuredClone(p)}},valuation:{currency:'USD',input_digest:'x',inputs:structuredClone(p),scenarios:{bear:{price:80},base:{price:120,upside:.2},bull:{price:160}}}},
+  {id:'pending',date:'2024-12-31',automatic_valuation:{status:'running'},valuation_reference_quote:{date:'2024-12-31',currency:'USD',price:88.88}}
+ ];
+ let html=vm.runInContext('getValuationPanel().datedComparison(comparisonStudies)',h.context);
+ assert(html.includes('2022-12-29')&&html.includes('120.00')&&html.includes('核实中')&&html.includes('88.88'));
+ h.context.comparisonStudies[0].valuation.inputs.market_price=999;
+ html=vm.runInContext('getValuationPanel().datedComparison(comparisonStudies)',h.context);
+ assert(!html.includes('120.00')&&!html.includes('999.00'));
+}

@@ -497,7 +497,8 @@ def test_retry_reviews_exact_saved_forecast_without_refetch(sample, tmp_path, mo
 
     job, plan, docs, quote = sample
     original = deepcopy(plan)
-    av.compile_plan(job, original, docs, quote)  # includes derived scalar aliases, no forecast changes
+    compiled_plan = deepcopy(original)
+    av.compile_plan(job, compiled_plan, docs, quote)  # derived aliases only
     monkeypatch.setattr(av, "saved_evidence", lambda *_: (docs, [], quote))
     monkeypatch.setattr(av, "previous_proposal", lambda *_: {"plan": plan, "run_id": "old"})
     monkeypatch.setattr(av, "collect", lambda *_: pytest.fail("must use archived filings"))
@@ -510,10 +511,158 @@ def test_retry_reviews_exact_saved_forecast_without_refetch(sample, tmp_path, mo
 
     class Reviewer:
         def invoke(self, messages):
-            assert json.loads(messages[-1].content)["plan"] == original
+            assert json.loads(messages[-1].content)["plan"] == compiled_plan
+            if messages[0].content.startswith("你只修复"):
+                return AIMessage(content='{"status":"needs_review","gaps":["genuine missing fact"]}')
             return AIMessage(content=json.dumps({"approved": approved, "gaps": [] if approved else ["genuine missing fact"]}))
 
     result = av.generate(job, tmp_path, llm=Reviewer())
     assert plan == original
-    assert bool(fallback) is not approved
+    assert not fallback  # saved forecasts must never be regenerated to clear review
     assert result["status"] == ("completed" if approved else "needs_review")
+
+
+def test_short_treatment_reports_format_problem_not_missing_evidence(sample):
+    job, plan, docs, quote = sample
+    plan['checks'][0]['treatment'] = '已核实。'
+    with pytest.raises(ValueError, match='处理说明过短'):
+        av.compile_plan(job, plan, docs, quote)
+    plan['checks'][0]['treatment'] = '已核实原文，采用已披露的全部普通股数量。'
+    assert av.compile_plan(job, plan, docs, quote)['inputs']['shares'] > 0
+
+
+def test_invalid_cached_proposal_returns_to_repair_without_bypassing_checks(sample, tmp_path, monkeypatch):
+    job, plan, docs, quote = sample
+    plan['facts']['other_claims'] = []
+    forecast = deepcopy(plan['scenarios'])
+    monkeypatch.setattr(av, 'saved_evidence', lambda *_: (docs, [], quote))
+    monkeypatch.setattr(av, 'previous_proposal', lambda *_: {'plan': plan, 'unresolved_gaps': [], 'run_id': 'old'})
+    def repair(candidate, feedback, *args):
+        assert '缺少原始依据' in feedback[0]
+        assert candidate['scenarios'] == forecast
+        return None, ['still requires independent review']
+    monkeypatch.setattr(av, 'repair_equity_evidence', repair)
+    result = av.generate(job, tmp_path, llm=object())
+    assert result['status'] == 'needs_review'
+    assert (tmp_path / 'replay-validation.json').exists()
+
+
+def test_gap_review_includes_annual_note_beyond_initial_text(sample):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    job, _, docs, _ = sample
+    quote = 'Deferred tax assets are recorded net of tax contingencies in the annual report.'
+    annual = {**docs[0], 'id': 'S3', 'text': ('Earlier report content. ' * 20000) + quote}
+    class Reviewer:
+        def invoke(self, messages):
+            sources = json.loads(messages[-1].content)['sources']
+            assert [s['id'] for s in sources] == ['S1', 'S3']
+            assert quote not in sources[1]['text']
+            assert quote in json.dumps(sources[1]['financial_notes'])
+            return AIMessage(content=json.dumps({'blocking': False, 'resolution': 'The annual note is available and must be considered alongside the quarterly filing.', 'evidence': [{'source_id': 'S3', 'quote': quote}]}))
+    assert not av.review_gap({'gaps': ['S3 net deferred tax overlap']}, [docs[0], annual], Reviewer(), job['date'])['blocking']
+
+
+def test_treatment_repair_cannot_modify_financial_inputs(sample):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    _, plan, _, _ = sample
+    plan['checks'][0]['treatment'] = '已核实。'
+    original = deepcopy(plan)
+    class Editor:
+        def invoke(self, messages):
+            return AIMessage(content=json.dumps({'treatments': {'share_classes': '依据原文采用全部已披露普通股数量，避免遗漏股份类别。'}}))
+    repaired = av.repair_treatments(plan, Editor())
+    assert plan == original
+    assert repaired['facts'] == original['facts']
+    assert repaired['scenarios'] == original['scenarios']
+    for before, after in zip(original['checks'], repaired['checks'], strict=True):
+        assert {k: v for k, v in before.items() if k != 'treatment'} == {k: v for k, v in after.items() if k != 'treatment'}
+    class BadEditor:
+        def invoke(self, messages):
+            return AIMessage(content='{"treatments":{"share_classes":"不得修改财务输入及预测参数。"},"scenarios":{}}')
+    with pytest.raises(ValueError, match='不能修改其他字段'):
+        av.repair_treatments(plan, BadEditor())
+    assert plan == original
+
+
+def test_cached_text_repair_still_requires_independent_review(sample, tmp_path, monkeypatch):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    job, plan, docs, quote = sample
+    plan['checks'][0]['treatment'] = '已核实。'
+    monkeypatch.setattr(av, 'saved_evidence', lambda *_: (docs, [], quote))
+    monkeypatch.setattr(av, 'previous_proposal', lambda *_: {'plan': plan, 'run_id': 'old'})
+    monkeypatch.setattr(av, 'synthesize', lambda *a, **k: pytest.fail('no need to regenerate forecasts for text length'))
+    calls = []
+    class Reviewer:
+        def invoke(self, messages):
+            if messages[0].content.startswith('仅补充'):
+                calls.append('text')
+                return AIMessage(content=json.dumps({'treatments': {'share_classes': '依据已核实原文采用全部普通股数量，避免遗漏股份类别。'}}))
+            calls.append('independent_review')
+            return AIMessage(content='{"approved":true,"gaps":[]}')
+    result = av.generate(job, tmp_path, llm=Reviewer())
+    assert result['status'] == 'completed'
+    assert calls == ['text', 'independent_review']
+    assert (tmp_path / 'candidate-format-repair.json').exists()
+
+
+def test_evidence_patch_cannot_change_forecast_parameters(sample):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    _, plan, docs, _ = sample
+    before = deepcopy(plan)
+    class BadEditor:
+        def invoke(self, messages):
+            return AIMessage(content='{"status":"ready","patch":{"scenarios":{}}}')
+    with pytest.raises(ValueError, match='不能修改预测参数'):
+        av.repair_equity_evidence(plan, ['missing investment'], docs, BadEditor())
+    class Editor:
+        def invoke(self, messages):
+            return AIMessage(content=json.dumps({'status': 'ready', 'patch': {'facts': {'non_operating_assets': before['facts']['non_operating_assets']}, 'equity_reasoning': 'Use the source carrying value once, without duplicating cash investments.'}}))
+    repaired, gaps = av.repair_equity_evidence(plan, ['missing investment'], docs, Editor())
+    assert not gaps
+    assert repaired['scenarios'] == before['scenarios']
+    assert repaired['operating_cash_ratio'] == before['operating_cash_ratio']
+    assert plan == before
+
+
+def test_fact_repair_requires_source_validation_and_new_independent_review(sample, tmp_path, monkeypatch):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    job, plan, docs, quote = sample
+    correct = deepcopy(plan['facts']['non_operating_assets'])
+    plan['facts']['non_operating_assets'][0]['amount'] = 0
+    forecast = deepcopy(plan['scenarios'])
+    monkeypatch.setattr(av, 'saved_evidence', lambda *_: (docs, [], quote))
+    monkeypatch.setattr(av, 'previous_proposal', lambda *_: {'plan': plan, 'run_id': 'old'})
+    monkeypatch.setattr(av, 'synthesize', lambda *a, **k: pytest.fail('do not regenerate forecasts'))
+    calls = []
+    class Reviewer:
+        def invoke(self, messages):
+            payload = json.loads(messages[-1].content)
+            if messages[0].content.startswith('你只修复'):
+                calls.append('source_patch')
+                return AIMessage(content=json.dumps({'status': 'ready', 'patch': {'facts': {'non_operating_assets': correct}}}))
+            approved = payload['plan']['facts']['non_operating_assets'][0]['amount'] == 20
+            calls.append('review_good' if approved else 'review_bad')
+            return AIMessage(content=json.dumps({'approved': approved, 'gaps': [] if approved else ['missing disclosed investment']}))
+    result = av.generate(job, tmp_path, llm=Reviewer())
+    assert result['status'] == 'completed'
+    assert calls == ['review_bad', 'source_patch', 'review_good']
+    assert result['prepared']['inputs']['non_operating_assets'] == 20e6
+    for scenario, fields in forecast.items():
+        for key, value in fields.items():
+            assert result['plan']['scenarios'][scenario][key] == value
+    assert (tmp_path / 'evidence-repair-review.json').exists()

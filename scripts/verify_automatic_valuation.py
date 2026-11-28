@@ -118,7 +118,7 @@ def main():
     with urlopen(args.base_url + "/api/jobs/" + args.job_id, timeout=30) as response:
         job = json.load(response)
     record = job.get("automatic_valuation", {})
-    if record.get("status") != "completed" or record.get("version") not in ("research-auto-1.0", "research-auto-1.1", "research-auto-1.2", "research-auto-1.3"):
+    if record.get("status") != "completed" or record.get("version") not in ("research-auto-1.0", "research-auto-1.1", "research-auto-1.2", "research-auto-1.3", "research-auto-1.3.1", "research-auto-1.3.2", "research-auto-1.3.3", "research-auto-1.3.4"):
         raise ValueError("Only completed compatible automatic plans can be replayed")
     av.VERSION = record["version"]  # preserve archived metadata during replay
     folder = args.store / "valuation-research" / args.job_id / record["run_id"]

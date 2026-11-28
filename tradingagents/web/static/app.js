@@ -653,7 +653,7 @@ let valuationPanel;
 function getValuationPanel(){
   if(!valuationPanel){
     if(typeof window.createValuationPanel!=='function')throw Error('估值模块未加载');
-    valuationPanel=window.createValuationPanel({$,api,select,refresh,draw,card,table,escape,money,num,pct,fixed,empty,getJob:()=>job});
+    valuationPanel=window.createValuationPanel({$,api,select,refresh,draw,card,table,escape,money,num,pct,fixed,empty,showDetail,getJob:()=>job});
   }
   return valuationPanel;
 }

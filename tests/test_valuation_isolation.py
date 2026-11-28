@@ -88,3 +88,19 @@ def test_research_detail_api_survives_valuation_failure(monkeypatch, tmp_path):
     assert data['valuation_setup']['module_error']
     assert 'Preserved business analysis' in data['report_html']['operating_report']
     assert data['status'] == 'completed'
+
+
+@pytest.mark.parametrize('price,day,valid', [(100, '2024-12-30', True),
+                                          (100, '2025-01-01', False), (True, '2024-12-30', False)])
+def test_reference_price_available_without_valuation_but_never_future(tmp_path, price, day, valid):
+    import json
+    job = {'id': 'a' * 32, 'date': '2024-12-31', 'reports': {'operating_report': 'unchanged'},
+           'automatic_valuation': {'status': 'needs_review', 'run_id': 'b' * 32}}
+    original = deepcopy(job)
+    folder = tmp_path / 'valuation-research' / job['id'] / ('b' * 32)
+    folder.mkdir(parents=True)
+    (folder / 'quote.json').write_text(json.dumps({'price': price, 'date': day, 'currency': 'USD', 'source': 'Archived close'}))
+    service = ValuationService(store=tmp_path, jobs={}, lock=None, persist=None, update=None,
+                               check_pause=None, pause_exception=RuntimeError)
+    assert bool(service.reference_quote(job)) is valid
+    assert job == original

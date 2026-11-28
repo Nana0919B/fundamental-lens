@@ -37,6 +37,7 @@ from tradingagents.web import backtest_api
 from tradingagents.web.bootstrap import initialize_shared_data
 from tradingagents.web.presentation import present_report, readable_evidence
 
+BACKTESTS_PAUSED = True  # Keep archives readable; pause new strategy simulations.
 ROOT = Path(__file__).parent / "static"
 STORE = Path(build_default_config()["results_dir"]) / "web"
 POOL = ThreadPoolExecutor(max_workers=1, thread_name_prefix="research")
@@ -689,6 +690,7 @@ class Handler(BaseHTTPRequestHandler):
             ).get("symbol")
             archive = ResearchStore(STORE / "research.sqlite3")
             result["valuation_setup"] = valuation_service().prepare(result)
+            result["valuation_reference_quote"] = valuation_service().reference_quote(result)
             result["versions"] = archive.history(ticker) if ticker else []
             result["display_evidence"] = readable_evidence(result.get("research_snapshot") or {})
             result["report_html"] = {
@@ -749,6 +751,8 @@ class Handler(BaseHTTPRequestHandler):
             except (ValueError, TypeError, AttributeError) as exc:
                 return self.send({"error": str(exc)}, 400)
         if self.path == "/api/valuation-backtests":
+            if BACKTESTS_PAUSED:
+                return self.send({"error": "策略回测暂时停用，已有记录仍可查看；请先使用公司研究与多日期估值对比"}, 409)
             try:
                 if not self.headers.get("Content-Type", "").startswith("application/json"):
                     raise ValueError("请求必须为 JSON")
