@@ -146,6 +146,9 @@ def test_resume_proposal_requires_same_research_and_source_hashes(sample, tmp_pa
     av.save(prior / "candidate-1.json", plan)
     target = tmp_path / "next"
     assert av.previous_proposal(job, docs, target)["plan"] == plan
+    review = {"blocking": False, "resolution": "Source-backed unresolved loss convention", "evidence": [{"source_id": "S1", "quote": docs[0]["text"]}]}
+    av.save(prior / "gap-review-2.json", review)
+    assert av.previous_proposal(job, docs, target)["gap_reviews"] == [review]
     changed = deepcopy(docs)
     changed[0]["sha256"] = "changed"
     assert av.previous_proposal(job, changed, target) is None
@@ -440,3 +443,77 @@ def test_historical_split_after_share_disclosure_cannot_silently_mix_units(sampl
     quote['known_splits'] = [{'date': '2026-11-01', 'ratio': 4}]
     with pytest.raises(ValueError, match='拆股'):
         av.compile_plan(job, plan, documents, quote)
+
+
+def test_shared_contingency_rule_and_source_gap_forwarding(sample):
+    import json
+
+    from langchain_core.messages import AIMessage
+    job, plan, docs, _ = sample
+    compiled = av.compile_plan(job, plan, docs, {"price": 100, "currency": "USD", "date": "2026-11-26"})
+    gap = {"blocking": False, "resolution": "Unknown losses cannot be fabricated", "evidence": [{"source_id": "S1", "quote": docs[0]["text"]}]}
+
+    class Reviewer:
+        def invoke(self, messages):
+            assert messages[0].content == av.CONTINGENCY_CONVENTION
+            payload = json.loads(messages[-1].content)
+            if "plan" in payload:
+                assert payload["source_checked_gap_reviews"] == [gap]
+                assert payload["computed_contingent_stress"] == []
+                assert payload["contingency_convention"] == av.CONTINGENCY_CONVENTION
+                return AIMessage(content='{"approved":true,"gaps":[]}')
+            return AIMessage(content=json.dumps(gap))
+
+    assert av.review_gap({"gaps": ["unknown loss"]}, docs, Reviewer(), job["date"])["blocking"] is False
+    assert av.review_plan(job, plan, compiled, Reviewer(), lambda _: None, [gap])["approved"]
+    assert av.CONTINGENCY_CONVENTION in av.PROMPT
+
+
+def test_archived_evidence_rejects_tampering(sample, tmp_path):
+    import hashlib
+
+    from bs4 import BeautifulSoup
+    job, _, _, _ = sample
+    origin = tmp_path / "old"
+    raw = b'<html><body>Evidence without invented amounts</body></html>'
+    doc = {"id": "S1", "filed": "2026-10-20", "text": av.normalize(BeautifulSoup(raw, "html.parser").get_text(" ", strip=True)), "sha256": hashlib.sha256(raw).hexdigest()}
+    av.save(origin / "result.json", {"binding": av.binding(job), "status": "needs_review"})
+    av.save(origin / "S1.json", doc)
+    (origin / "S1.html").write_bytes(raw)
+    av.save(origin / "quote.json", {"price": 100, "date": "2026-11-26", "currency": "USD"})
+    documents, _, quote = av.saved_evidence(job, tmp_path / "new")
+    assert documents == [doc]
+    assert quote["price"] == 100
+    (origin / "S1.html").write_bytes(b'altered')
+    with pytest.raises(ValueError, match="校验失败"):
+        av.saved_evidence(job, tmp_path / "another")
+
+
+@pytest.mark.parametrize("approved", [True, False])
+def test_retry_reviews_exact_saved_forecast_without_refetch(sample, tmp_path, monkeypatch, approved):
+    import json
+
+    from langchain_core.messages import AIMessage
+
+    job, plan, docs, quote = sample
+    original = deepcopy(plan)
+    av.compile_plan(job, original, docs, quote)  # includes derived scalar aliases, no forecast changes
+    monkeypatch.setattr(av, "saved_evidence", lambda *_: (docs, [], quote))
+    monkeypatch.setattr(av, "previous_proposal", lambda *_: {"plan": plan, "run_id": "old"})
+    monkeypatch.setattr(av, "collect", lambda *_: pytest.fail("must use archived filings"))
+    monkeypatch.setattr(av, "get_quote", lambda *_: pytest.fail("must use archived quote"))
+    fallback = []
+    def synthesize(*args, **kwargs):
+        fallback.append(True)
+        return {"status": "needs_review", "gaps": ["genuine missing fact"]}
+    monkeypatch.setattr(av, "synthesize", synthesize)
+
+    class Reviewer:
+        def invoke(self, messages):
+            assert json.loads(messages[-1].content)["plan"] == original
+            return AIMessage(content=json.dumps({"approved": approved, "gaps": [] if approved else ["genuine missing fact"]}))
+
+    result = av.generate(job, tmp_path, llm=Reviewer())
+    assert plan == original
+    assert bool(fallback) is not approved
+    assert result["status"] == ("completed" if approved else "needs_review")
